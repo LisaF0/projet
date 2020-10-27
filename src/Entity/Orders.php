@@ -49,12 +49,6 @@ class Orders
      */
     private $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=ShoppingCart::class, inversedBy="orders")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $shoppingCart;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -137,15 +131,4 @@ class Orders
         return $this;
     }
 
-    public function getShoppingCart(): ?ShoppingCart
-    {
-        return $this->shoppingCart;
-    }
-
-    public function setShoppingCart(?ShoppingCart $shoppingCart): self
-    {
-        $this->shoppingCart = $shoppingCart;
-
-        return $this;
-    }
 }
