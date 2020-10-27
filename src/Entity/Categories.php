@@ -20,46 +20,29 @@ class Categories
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="children")
+     * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="name")
      */
     private $parent;
 
     /**
      * @ORM\OneToMany(targetEntity=Categories::class, mappedBy="parent")
      */
-    private $children;
+    private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Products::class, inversedBy="Categories")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToMany(targetEntity=Products::class, mappedBy="category")
      */
     private $products;
 
     public function __construct()
     {
-        $this->children = new ArrayCollection();
+        $this->name = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     public function getParent(): ?self
@@ -77,41 +60,59 @@ class Categories
     /**
      * @return Collection|self[]
      */
-    public function getChildren(): Collection
+    public function getName(): Collection
     {
-        return $this->children;
+        return $this->name;
     }
 
-    public function addChild(self $child): self
+    public function addName(self $name): self
     {
-        if (!$this->children->contains($child)) {
-            $this->children[] = $child;
-            $child->setParent($this);
+        if (!$this->name->contains($name)) {
+            $this->name[] = $name;
+            $name->setParent($this);
         }
 
         return $this;
     }
 
-    public function removeChild(self $child): self
+    public function removeName(self $name): self
     {
-        if ($this->children->removeElement($child)) {
+        if ($this->name->removeElement($name)) {
             // set the owning side to null (unless already changed)
-            if ($child->getParent() === $this) {
-                $child->setParent(null);
+            if ($name->getParent() === $this) {
+                $name->setParent(null);
             }
         }
 
         return $this;
     }
 
-    public function getProducts(): ?Products
+    /**
+     * @return Collection|Products[]
+     */
+    public function getProducts(): Collection
     {
         return $this->products;
     }
 
-    public function setProducts(?Products $products): self
+    public function addProduct(Products $product): self
     {
-        $this->products = $products;
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
+            $product->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Products $product): self
+    {
+        if ($this->products->removeElement($product)) {
+            // set the owning side to null (unless already changed)
+            if ($product->getCategory() === $this) {
+                $product->setCategory(null);
+            }
+        }
 
         return $this;
     }

@@ -30,25 +30,40 @@ class Products
     private $name;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text")
      */
     private $description;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $unitprice;
+    private $unitPrice;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $unitstock;
+    private $unitStock;
 
     /**
      * @ORM\Column(type="boolean")
      */
     private $available;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Photos::class, mappedBy="product")
+     */
+    private $photos;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="products")
+     */
+    private $category;
+
+
+    public function __construct()
+    {
+        $this->photos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -84,33 +99,33 @@ class Products
         return $this->description;
     }
 
-    public function setDescription(?string $description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getUnitprice(): ?float
+    public function getUnitPrice(): ?float
     {
-        return $this->unitprice;
+        return $this->unitPrice;
     }
 
-    public function setUnitprice(float $unitprice): self
+    public function setUnitPrice(float $unitPrice): self
     {
-        $this->unitprice = $unitprice;
+        $this->unitPrice = $unitPrice;
 
         return $this;
     }
 
-    public function getUnitstock(): ?int
+    public function getUnitStock(): ?int
     {
-        return $this->unitstock;
+        return $this->unitStock;
     }
 
-    public function setUnitstock(int $unitstock): self
+    public function setUnitStock(int $unitStock): self
     {
-        $this->unitstock = $unitstock;
+        $this->unitStock = $unitStock;
 
         return $this;
     }
@@ -127,45 +142,46 @@ class Products
         return $this;
     }
 
-    public function getPhotos(): ?Photos
+    /**
+     * @return Collection|Photos[]
+     */
+    public function getPhotos(): Collection
     {
         return $this->photos;
     }
 
-    public function setPhotos(?Photos $photos): self
+    public function addPhoto(Photos $photo): self
     {
-        $this->photos = $photos;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Categories[]
-     */
-    public function getCategories(): Collection
-    {
-        return $this->Categories;
-    }
-
-    public function addCategory(Categories $category): self
-    {
-        if (!$this->Categories->contains($category)) {
-            $this->Categories[] = $category;
-            $category->setProducts($this);
+        if (!$this->photos->contains($photo)) {
+            $this->photos[] = $photo;
+            $photo->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeCategory(Categories $category): self
+    public function removePhoto(Photos $photo): self
     {
-        if ($this->Categories->removeElement($category)) {
+        if ($this->photos->removeElement($photo)) {
             // set the owning side to null (unless already changed)
-            if ($category->getProducts() === $this) {
-                $category->setProducts(null);
+            if ($photo->getProduct() === $this) {
+                $photo->setProduct(null);
             }
         }
 
         return $this;
     }
+
+    public function getCategory(): ?Categories
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Categories $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
 }

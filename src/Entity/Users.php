@@ -37,18 +37,19 @@ class Users implements UserInterface
     private $password;
 
     /**
-     * @ORM\ManyToOne(targetEntity=ShipAddress::class, inversedBy="User")
-     */
-    private $shipAddress;
-
-    /**
-     * @ORM\OneToMany(targetEntity=ShipAddress::class, mappedBy="User")
+     * @ORM\OneToMany(targetEntity=ShipAddresses::class, mappedBy="user")
      */
     private $shipAddresses;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Orders::class, mappedBy="user")
+     */
+    private $orders;
 
     public function __construct()
     {
         $this->shipAddresses = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -129,27 +130,15 @@ class Users implements UserInterface
         // $this->plainPassword = null;
     }
 
-    public function getShipAddress(): ?ShipAddress
-    {
-        return $this->shipAddress;
-    }
-
-    public function setShipAddress(?ShipAddress $shipAddress): self
-    {
-        $this->shipAddress = $shipAddress;
-
-        return $this;
-    }
-
     /**
-     * @return Collection|ShipAddress[]
+     * @return Collection|ShipAddresses[]
      */
     public function getShipAddresses(): Collection
     {
         return $this->shipAddresses;
     }
 
-    public function addShipAddress(ShipAddress $shipAddress): self
+    public function addShipAddress(ShipAddresses $shipAddress): self
     {
         if (!$this->shipAddresses->contains($shipAddress)) {
             $this->shipAddresses[] = $shipAddress;
@@ -159,12 +148,42 @@ class Users implements UserInterface
         return $this;
     }
 
-    public function removeShipAddress(ShipAddress $shipAddress): self
+    public function removeShipAddress(ShipAddresses $shipAddress): self
     {
         if ($this->shipAddresses->removeElement($shipAddress)) {
             // set the owning side to null (unless already changed)
             if ($shipAddress->getUser() === $this) {
                 $shipAddress->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Orders[]
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Orders $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Orders $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getUser() === $this) {
+                $order->setUser(null);
             }
         }
 

@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\ShipAddressRepository;
+use App\Repository\ShipAddressesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=ShipAddressRepository::class)
+ * @ORM\Entity(repositoryClass=ShipAddressesRepository::class)
  */
-class ShipAddress
+class ShipAddresses
 {
     /**
      * @ORM\Id
@@ -46,9 +46,18 @@ class ShipAddress
 
     /**
      * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="shipAddresses")
-     * @ORM\JoinColumn(nullable=false)
      */
-    private $User;
+    private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Orders::class, mappedBy="ShipAddress")
+     */
+    private $orders;
+
+    public function __construct()
+    {
+        $this->orders = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -117,14 +126,43 @@ class ShipAddress
 
     public function getUser(): ?Users
     {
-        return $this->User;
+        return $this->user;
     }
 
-    public function setUser(?Users $User): self
+    public function setUser(?Users $user): self
     {
-        $this->User = $User;
+        $this->user = $user;
 
         return $this;
     }
 
+    /**
+     * @return Collection|Orders[]
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Orders $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->setShipAddress($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Orders $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getShipAddress() === $this) {
+                $order->setShipAddress(null);
+            }
+        }
+
+        return $this;
+    }
 }

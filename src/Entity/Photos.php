@@ -20,7 +20,7 @@ class Photos
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=255)
      */
     private $name;
 
@@ -34,6 +34,10 @@ class Photos
      */
     private $path;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Products::class, inversedBy="photos")
+     */
+    private $product;
 
     public function getId(): ?int
     {
@@ -72,6 +76,18 @@ class Photos
     public function setPath(string $path): self
     {
         $this->path = $path;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Products
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Products $product): self
+    {
+        $this->product = $product;
 
         return $this;
     }

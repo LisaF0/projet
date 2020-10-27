@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\ShipAddress;
+use App\Entity\ShoppingCart;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ShipAddress|null find($id, $lockMode = null, $lockVersion = null)
- * @method ShipAddress|null findOneBy(array $criteria, array $orderBy = null)
- * @method ShipAddress[]    findAll()
- * @method ShipAddress[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ShoppingCart|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ShoppingCart|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ShoppingCart[]    findAll()
+ * @method ShoppingCart[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ShipAddressRepository extends ServiceEntityRepository
+class ShoppingCartRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ShipAddress::class);
+        parent::__construct($registry, ShoppingCart::class);
     }
 
     // /**
-    //  * @return ShipAddress[] Returns an array of ShipAddress objects
+    //  * @return ShoppingCart[] Returns an array of ShoppingCart objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class ShipAddressRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?ShipAddress
+    public function findOneBySomeField($value): ?ShoppingCart
     {
         return $this->createQueryBuilder('s')
             ->andWhere('s.exampleField = :val')
