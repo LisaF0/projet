@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OrdersRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,11 +35,6 @@ class Orders
     private $status;
 
     /**
-     * @ORM\OneToOne(targetEntity=Factures::class, mappedBy="orders", cascade={"persist", "remove"})
-     */
-    private $facture;
-
-    /**
      * @ORM\ManyToOne(targetEntity=ShipAddresses::class, inversedBy="orders")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -48,6 +45,22 @@ class Orders
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ProductsOrder::class, mappedBy="orders")
+     */
+    private $ProductsOrder;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Factures::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $facture;
+
+    public function __construct()
+    {
+        $this->ProductsOrder = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,22 +103,6 @@ class Orders
         return $this;
     }
 
-    public function getFacture(): ?Factures
-    {
-        return $this->facture;
-    }
-
-    public function setFacture(Factures $facture): self
-    {
-        $this->facture = $facture;
-
-        // set the owning side of the relation if necessary
-        if ($facture->getOrders() !== $this) {
-            $facture->setOrders($this);
-        }
-
-        return $this;
-    }
 
     public function getShipAddress(): ?ShipAddresses
     {
@@ -130,5 +127,49 @@ class Orders
 
         return $this;
     }
+
+    public function getFacture(): ?Factures
+    {
+        return $this->facture;
+    }
+
+    public function setFacture(Factures $facture): self
+    {
+        $this->facture = $facture;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProductsOrder[]
+     */
+    public function getProductsOrder(): Collection
+    {
+        return $this->ProductsOrder;
+    }
+
+    public function addProductsOrder(ProductsOrder $productsOrder): self
+    {
+        if (!$this->ProductsOrder->contains($productsOrder)) {
+            $this->ProductsOrder[] = $productsOrder;
+            $productsOrder->setOrders($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductsOrder(ProductsOrder $productsOrder): self
+    {
+        if ($this->ProductsOrder->removeElement($productsOrder)) {
+            // set the owning side to null (unless already changed)
+            if ($productsOrder->getOrders() === $this) {
+                $productsOrder->setOrders(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 
 }

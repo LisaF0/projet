@@ -20,14 +20,19 @@ class Categories
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="name")
-     */
-    private $parent;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Categories::class, mappedBy="parent")
+     * @ORM\Column(type="string", length=50)
      */
     private $name;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="subCategories")
+     */
+    private $category;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Categories::class, mappedBy="category")
+     */
+    private $subCategories;
 
     /**
      * @ORM\OneToMany(targetEntity=Products::class, mappedBy="category")
@@ -36,23 +41,35 @@ class Categories
 
     public function __construct()
     {
-        $this->name = new ArrayCollection();
-        $this->products = new ArrayCollection();
+        $this->subCategories = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getParent(): ?self
+    public function getName(): ?string
     {
-        return $this->parent;
+        return $this->name;
     }
 
-    public function setParent(?self $parent): self
+    public function setName(string $name): self
     {
-        $this->parent = $parent;
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getCategory(): ?self
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?self $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }
@@ -60,27 +77,27 @@ class Categories
     /**
      * @return Collection|self[]
      */
-    public function getName(): Collection
+    public function getSubCategories(): Collection
     {
-        return $this->name;
+        return $this->subCategories;
     }
 
-    public function addName(self $name): self
+    public function addSubCategory(self $subCategory): self
     {
-        if (!$this->name->contains($name)) {
-            $this->name[] = $name;
-            $name->setParent($this);
+        if (!$this->subCategories->contains($subCategory)) {
+            $this->subCategories[] = $subCategory;
+            $subCategory->setCategories($this);
         }
 
         return $this;
     }
 
-    public function removeName(self $name): self
+    public function removeSubCategory(self $subCategory): self
     {
-        if ($this->name->removeElement($name)) {
+        if ($this->subCategories->removeElement($subCategory)) {
             // set the owning side to null (unless already changed)
-            if ($name->getParent() === $this) {
-                $name->setParent(null);
+            if ($subCategory->getCategories() === $this) {
+                $subCategory->setCategories(null);
             }
         }
 

@@ -57,12 +57,6 @@ class Factures
      */
     private $linkPDF;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Orders::class, inversedBy="facture", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $orders;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -164,15 +158,4 @@ class Factures
         return $this;
     }
 
-    public function getOrders(): ?Orders
-    {
-        return $this->orders;
-    }
-
-    public function setOrders(Orders $orders): self
-    {
-        $this->orders = $orders;
-
-        return $this;
-    }
 }
