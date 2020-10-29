@@ -29,6 +29,11 @@ class Orders
      */
     private $createdAt;
 
+    const STATUS_ORDER = [
+        0 => "en attente",
+        1 => "validée"
+    ];
+
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -93,7 +98,7 @@ class Orders
 
     public function getStatus(): ?string
     {
-        return $this->status;
+        return self::STATUS_ORDER[$this->status];
     }
 
     public function setStatus(string $status): self
