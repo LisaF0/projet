@@ -30,7 +30,7 @@ class Products
     private $name;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
@@ -55,9 +55,22 @@ class Products
     private $photos;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="products")
+     * @ORM\ManyToOne(targetEntity=Appellations::class, inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $category;
+    private $appellation;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Types::class, inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $type;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Domains::class, inversedBy="products")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $domain;
 
 
     public function __construct()
@@ -172,14 +185,38 @@ class Products
         return $this;
     }
 
-    public function getCategory(): ?Categories
+    public function getAppellation(): ?Appellations
     {
-        return $this->category;
+        return $this->appellation;
     }
 
-    public function setCategory(?Categories $category): self
+    public function setAppellation(?Appellations $appellation): self
     {
-        $this->category = $category;
+        $this->appellation = $appellation;
+
+        return $this;
+    }
+
+    public function getType(): ?Types
+    {
+        return $this->type;
+    }
+
+    public function setType(?Types $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getDomain(): ?Domains
+    {
+        return $this->domain;
+    }
+
+    public function setDomain(?Domains $domain): self
+    {
+        $this->domain = $domain;
 
         return $this;
     }
