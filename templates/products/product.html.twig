@@ -3,7 +3,8 @@
 {% block title %}Hello ProductsController!{% endblock %}
 
 {% block body %}
+    {% block nav %}{{ parent() }}{% endblock %}
 
         <p>{{ product.name }}</p>
-
+    {% block footer %}{{ parent() }}{% endblock %}
 {% endblock %}

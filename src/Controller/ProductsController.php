@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ProductsController extends AbstractController
 {
     /**
-     * @Route("/products", name="products")
+     * @Route("/products", name="products_index")
      */
     public function index(): Response
     {
@@ -24,9 +24,9 @@ class ProductsController extends AbstractController
     }
 
     /**
-     * @Route("/product/{id}", name="product")
+     * @Route("/product/{id}", name="product_detail")
      */
-    public function showProduct(Products $product = null): Response
+    public function detailProduct(Products $product = null): Response
     {
        return $this->render('products/product.html.twig', [
            'product' => $product

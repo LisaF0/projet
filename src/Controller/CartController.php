@@ -12,16 +12,16 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class CartController extends AbstractController
 {
     /**
-     * @Route("/panier", name="cart_index")
+     * @Route("/cart", name="cart_index")
      */
     public function index(SessionInterface $session, ProductsRepository $productRepository)
     {
-        $panier = $session->get('panier', []);
+        $cart = $session->get('cart', []);
 
-        $panierData = [];
+        $cartWithData = [];
 
-        foreach($panier as $id => $quantity){
-            $panierData[] = [
+        foreach($cart as $id => $quantity){
+            $cartWithData[] = [
                 'product' => $productRepository->find($id),
                 'quantity' => $quantity
             ];
@@ -29,50 +29,50 @@ class CartController extends AbstractController
 
         $total = 0;
 
-        foreach($panierData as $item) {
+        foreach($cartWithData as $item) {
             $totalItem = $item['product']->getUnitprice() * $item['quantity'];
             $total += $totalItem;
         }
         
         return $this->render('cart/index.html.twig', [
-            'items' => $panierData,
+            'items' => $cartWithData,
             'total' => $total
         ]);
     }
 
     /**
-     * @Route("/panier/add/{id}", name="cart_add")
+     * @Route("/cart/add/{id}", name="cart_add")
      */
     public function add($id, SessionInterface $session)
     {
-        $panier = $session->get('panier', []);
-        //on récupère le panier de la session, sinon un tableau vide
-        if(!empty($panier[$id])){
+        $cart = $session->get('cart', []);
+        //on récupère le cart de la session, sinon un tableau vide
+        if(!empty($cart[$id])){
             //si j'ai déjà un produit avec cet identifiant dans le panier
-            $panier[$id]++;
+            $cart[$id]++;
             //on rajoute l quantité du produit
         } else {
             // sinon la quantité est égale à 1
-            $panier[$id] = 1;
+            $cart[$id] = 1;
         }
-        $session->set('panier', $panier);
+        $session->set('cart', $cart);
         
         return $this->redirectToRoute("cart_index");
         
     }
 
     /**
-     * @Route("/panier/remove/{id}", name="cart_remove")
+     * @Route("/cart/remove/{id}", name="cart_remove")
      */
     public function remove($id, SessionInterface $session)
     {
-        $panier = $session->get('panier', []);
+        $cart = $session->get('cart', []);
 
-        if(!empty($panier[$id])){
-            unset($panier[$id]);
+        if(!empty($cart[$id])){
+            unset($cart[$id]);
         }
 
-        $session->set('panier', $panier);
+        $session->set('cart', $cart);
 
         return $this->redirectToRoute("cart_index");
     }

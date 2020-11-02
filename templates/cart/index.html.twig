@@ -3,7 +3,7 @@
 {% block title %}Hello CartController!{% endblock %}
 
 {% block body %}
-
+    {% block nav %}{{ parent() }}{% endblock %}
     {% if items | length > 0 %}
         <table class="table">
         <thead>
@@ -19,9 +19,9 @@
             {% for item in items %}
                 <tr>
                     <td>{{ item.product.name }}</td>
-                    <td>{{ item.product.unitprice }}</td>
+                    <td>{{ item.product.unitprice ~ '€' }}</td>
                     <td>{{ item.quantity }}</td>
-                    <td>{{ item.product.unitprice * item.quantity }}</td>
+                    <td>{{ item.product.unitprice * item.quantity ~ '€' }}</td>
                     <td>
                         <a href="{{ path('cart_remove', {'id': item.product.id }) }}" class="btn btn-danger btn-sm">
                             <i class="fas fa-trash"></i>
@@ -33,7 +33,7 @@
         <tfoot>
             <tr>
                 <td colspan="3" class="text-right">Total : </td>
-                <td>{{ total }}</td>
+                <td>{{ total ~ '€'}}</td>
                 <td></td>
             </tr>
         </tfoot>
@@ -41,4 +41,5 @@
     {% else %}
         <p>Votre panier est vide.</p>
     {% endif %}
+    {% block footer %}{{ parent() }}{% endblock %}
 {% endblock %}

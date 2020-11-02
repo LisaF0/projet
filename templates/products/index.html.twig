@@ -3,7 +3,25 @@
 {% block title %}Hello ProductsController!{% endblock %}
 
 {% block body %}
+    {% block nav %}{{ parent() }}{% endblock %}
+    <section>
     {% for product in products %}
-        <p><a href="{{ path('product', {'id':product.id}) }}" >{{ product.name }}</a><a href="{{ path('cart_add', {'id': product.id} ) }}">Ajouter au panier</a></p>
+        <article>
+            <img src="{{ asset('img/chorey-les-beaunes-blanc-2018.jpg')}}" alt="img">
+            <a href="{{ path('product_detail', {'id':product.id}) }}"><h1>{{ product.name }}</h1></a>
+            <p>{{ product.unitprice ~ '€'}}</p>
+            {% if product.unitstock > 0 %}
+                 <p><i class="fas fa-check"></i> Disponible</p>
+            {% else %}
+                <p><i class="fas fa-times"></i> Indisponible</p>
+            {% endif %}
+            
+            <p>
+                <a href="{{ path('cart_add', {'id': product.id} ) }}" type="button" class="btn btn-primary"><i class="fas fa-cart-plus"></i> Ajouter au panier</a>
+            </p>
+        </article>
     {% endfor %}
+    </section>
+    
+    {% block footer %}{{ parent() }}{% endblock %}
 {% endblock %}

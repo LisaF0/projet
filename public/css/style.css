@@ -1,0 +1,17 @@
+article{
+    width: 25vw;
+    border: 1px solid black;
+    padding: 1em;
+    margin: 1em;
+}
+
+section h1{
+    color: black;
+}
+
+section{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    
+}
