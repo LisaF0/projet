@@ -4,6 +4,6 @@
 
 {% block body %}
     {% for product in products %}
-        <li><a href="{{ path('product', {'id':product.id}) }}" >{{ product.name }}</a></li>
+        <p><a href="{{ path('product', {'id':product.id}) }}" >{{ product.name }}</a><a href="{{ path('cart_add', {'id': product.id} ) }}">Ajouter au panier</a></p>
     {% endfor %}
 {% endblock %}
