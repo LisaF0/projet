@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class CartController extends AbstractController
 {
@@ -33,6 +34,7 @@ class CartController extends AbstractController
             $totalItem = $item['product']->getUnitprice() * $item['quantity'];
             $total += $totalItem;
         }
+        dump($cartWithData);
         
         return $this->render('cart/index.html.twig', [
             'items' => $cartWithData,
@@ -56,8 +58,10 @@ class CartController extends AbstractController
             $cart[$id] = 1;
         }
         $session->set('cart', $cart);
+
+        $this->addFlash('success', 'Le produit a été ajouté au panier');
         
-        return $this->redirectToRoute("cart_index");
+        return $this->redirectToRoute("products_index");
         
     }
 
@@ -74,6 +78,26 @@ class CartController extends AbstractController
 
         $session->set('cart', $cart);
 
+        $this->addFlash('warning', 'Le produit a été supprimé du panier');
+
         return $this->redirectToRoute("cart_index");
     }
+
+    
+    /**
+     * @Route("ordered", name="ordered")
+     */
+    public function ordered(SessionInterface $session, ProductsRepository $productRepository)
+    {
+        $cart = $session->get('cart', []);
+        foreach($cart as $id => $quantity){
+            $cartWithData[] = [
+                'product' => $productRepository->find($id),
+                'quantity' => $quantity
+            ];
+        }
+        dd($cartWithData);
+    }
+
+
 }

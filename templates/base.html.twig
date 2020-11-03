@@ -18,12 +18,21 @@
                     <a href="#" class="btn btn-secondary">Login</a>
                     <a href="{{ path('products_index') }}" class="btn btn-secondary">Produits</a>
                     <a href="#" class="btn btn-secondary"><i class="fas fa-user"></i></a>
-                    <a href="#" class="btn btn-secondary"><i class="fas fa-shopping-cart"></i></a>
+                    <a href="{{ path('cart_index') }}" class="btn btn-secondary"><i class="fas fa-shopping-cart"></i></a>
                 </nav>
+                {# this check prevents starting a session when there are no flash messages #}
+                {% if app.request.hasPreviousSession %}
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ label }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}        
+                    {% endfor %}
+                {% endif %}
             {% endblock %}
 
             {% block footer %}{% endblock %}
-            
         {% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
