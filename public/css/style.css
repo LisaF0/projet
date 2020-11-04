@@ -15,3 +15,10 @@ section{
     justify-content: center;
     
 }
+.navbar{
+    justify-content: flex-end;
+}
+
+.navbar a{
+    margin : 0.2em;
+}

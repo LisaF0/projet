@@ -2,13 +2,18 @@
 
 namespace App\Controller;
 
+use App\Entity\Orders;
+use App\Entity\ProductsOrder;
+use App\Entity\ShipAddresses;
+use Doctrine\ORM\EntityManager;
 use App\Repository\ProductsRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CartController extends AbstractController
 {
@@ -83,20 +88,13 @@ class CartController extends AbstractController
         return $this->redirectToRoute("cart_index");
     }
 
-    
+
     /**
-     * @Route("ordered", name="ordered")
+     * @Route("/user/{}", name="user_detail")
      */
-    public function ordered(SessionInterface $session, ProductsRepository $productRepository)
+    public function userDetail()
     {
-        $cart = $session->get('cart', []);
-        foreach($cart as $id => $quantity){
-            $cartWithData[] = [
-                'product' => $productRepository->find($id),
-                'quantity' => $quantity
-            ];
-        }
-        dd($cartWithData);
+        return $this->render('orders/index.html.twig');
     }
 
 

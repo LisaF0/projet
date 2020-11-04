@@ -52,7 +52,7 @@ class Orders
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=ProductsOrder::class, mappedBy="orders")
+     * @ORM\OneToMany(targetEntity=ProductsOrder::class, mappedBy="orders", cascade={"persist"})
      */
     private $ProductsOrder;
 
@@ -65,6 +65,9 @@ class Orders
     public function __construct()
     {
         $this->ProductsOrder = new ArrayCollection();
+        $this->createdAt = new \DateTime();
+        $this->reference = 1;
+        $this->status = 0;
     }
 
     public function getId(): ?int
@@ -157,7 +160,7 @@ class Orders
     {
         if (!$this->ProductsOrder->contains($productsOrder)) {
             $this->ProductsOrder[] = $productsOrder;
-            $productsOrder->setOrders($this);
+            $productsOrder->setOrder($this);
         }
 
         return $this;
@@ -167,8 +170,8 @@ class Orders
     {
         if ($this->ProductsOrder->removeElement($productsOrder)) {
             // set the owning side to null (unless already changed)
-            if ($productsOrder->getOrders() === $this) {
-                $productsOrder->setOrders(null);
+            if ($productsOrder->getOrder() === $this) {
+                $productsOrder->setOrder(null);
             }
         }
 

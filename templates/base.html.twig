@@ -15,10 +15,18 @@
         {% block body %}
             {% block nav %}
                 <nav class="navbar navbar-dark bg-dark">
-                    <a href="#" class="btn btn-secondary">Login</a>
-                    <a href="{{ path('products_index') }}" class="btn btn-secondary">Produits</a>
-                    <a href="#" class="btn btn-secondary"><i class="fas fa-user"></i></a>
-                    <a href="{{ path('cart_index') }}" class="btn btn-secondary"><i class="fas fa-shopping-cart"></i></a>
+                    
+                    <a href="{{ path('products_index') }}" class="btn btn-secondary">Produits <i class="fas fa-wine-bottle"></i></a>
+                    {% if app.user %}
+                        <a href="{{ path('user_detail') }}" class="btn btn-secondary"> {{ app.user.username ~ ' ' }}<i class="fas fa-user"></i></a>
+                    {% endif %}
+                    <a href="{{ path('cart_index') }}" class="btn btn-secondary">Panier <i class="fas fa-shopping-cart"></i></a>
+                    {% if app.user %}
+                        <a href="{{ path('app_logout') }}" class="btn btn-secondary">Se déconnecter <i class="fas fa-sign-out-alt"></i></a>
+                    {% else %}
+                        <a href="{{ path('app_login') }}" class="btn btn-secondary">Se connecter <i class="fas fa-sign-in-alt"></i></a>
+                    {% endif %}
+                    
                 </nav>
                 {# this check prevents starting a session when there are no flash messages #}
                 {% if app.request.hasPreviousSession %}
