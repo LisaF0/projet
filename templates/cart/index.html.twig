@@ -35,14 +35,27 @@
                 <td colspan="3" class="text-right">Total : </td>
                 <td>{{ total ~ '€'}}</td>
                 {% if app.user %}
-                    <td> <a href="{{ path('shipAdd_add') }}" class="btn btn-primary">Commander</a></td>
+                    <td> </td>
                 {% else %}
-                    <td> <a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a></td>
+                    <td> </td>
                 {% endif %}
-                
             </tr>
         </tfoot>
         </table>
+        <p><a href="{{ path('shipAdd_add')}}}">Ajouter une adresse</a></p>
+        <p>
+            Adresse de livraison : <a href="{{ path('shipAdd_choose') }}">Choisir une addresse</a>
+            {# <select name="shipAddress" id="shipAddress"></select> #}
+        
+        </p>
+        <p>Adresse de facturation :</p>
+        <p>Moyen de paiement :</p>
+        {% if app.user %}
+            <p><a href="{{ path('ordered') }}" class="btn btn-primary">Commander</a></p>
+        {% else %}
+            <p><a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a></p>
+        {% endif %}
+        <p></p>
     {% else %}
         <p>Votre panier est vide.</p>
     {% endif %}

@@ -19,6 +19,20 @@ class ShipAddressesRepository extends ServiceEntityRepository
         parent::__construct($registry, ShipAddresses::class);
     }
 
+    /**
+     * @return shipAddresses[] Returns an array of ShipAddresses objects
+     */
+    public function findByUser($user)
+    {
+        return $this->createQueryBuilder('sa')
+            ->andWhere('sa.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+            
+        ;
+    }
+
     // /**
     //  * @return ShipAddresses[] Returns an array of ShipAddresses objects
     //  */

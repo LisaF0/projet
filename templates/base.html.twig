@@ -18,7 +18,7 @@
                     
                     <a href="{{ path('products_index') }}" class="btn btn-secondary">Produits <i class="fas fa-wine-bottle"></i></a>
                     {% if app.user %}
-                        <a href="{{ path('user_detail') }}" class="btn btn-secondary"> {{ app.user.username ~ ' ' }}<i class="fas fa-user"></i></a>
+                        <a href="{{ path('profil_show', {'id': app.user.id}) }}" class="btn btn-secondary"> {{ app.user.username ~ ' ' }}<i class="fas fa-user"></i></a>
                     {% endif %}
                     <a href="{{ path('cart_index') }}" class="btn btn-secondary">Panier <i class="fas fa-shopping-cart"></i></a>
                     {% if app.user %}

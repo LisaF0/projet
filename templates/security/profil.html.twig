@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello OrdersController!{% endblock %}
+
+{% block body %}
+    {% block nav %}{{ parent() }}{% endblock %}
+    {{ form(formUser) }}
+    {% block footer %}{{ parent() }}{% endblock %}
+{% endblock %}
