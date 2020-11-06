@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\Products;
+use App\Entity\Product;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ProductsController extends AbstractController
+class ProductController extends AbstractController
 {
     /**
      * @Route("/products", name="products_index")
@@ -15,7 +15,7 @@ class ProductsController extends AbstractController
     public function index(): Response
     {
         $products = $this->getDoctrine()
-        ->getRepository(Products::class)
+        ->getRepository(Product::class)
         ->findAll();
 
         return $this->render('products/index.html.twig', [
@@ -26,7 +26,7 @@ class ProductsController extends AbstractController
     /**
      * @Route("/product/{id}", name="product_detail")
      */
-    public function detailProduct(Products $product = null): Response
+    public function detailProduct(Product $product = null): Response
     {
        return $this->render('products/product.html.twig', [
            'product' => $product

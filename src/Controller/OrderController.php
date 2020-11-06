@@ -2,33 +2,33 @@
 
 namespace App\Controller;
 
-use App\Entity\Users;
-use App\Entity\Orders;
-use App\Entity\Products;
+use App\Entity\User;
+use App\Entity\Order;
+use App\Entity\Product;
 use App\Form\ChooseAddType;
-use App\Entity\ProductsOrder;
-use App\Entity\ShipAddresses;
-use App\Form\ShipAddressesType;
-use App\Form\UsersType;
-use App\Repository\UsersRepository;
-use App\Repository\ProductsRepository;
+use App\Entity\ProductOrder;
+use App\Entity\ShipAddress;
+use App\Form\ShipAddressType;
+use App\Form\UserType;
+use App\Repository\UserRepository;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\ShipAddressesRepository;
+use App\Repository\ShipAddressRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class OrdersController extends AbstractController
+class OrderController extends AbstractController
 {
     /**
-     * @Route("/commandes", name="orders_index")
+     * @Route("/commandes", name="order_index")
      */
     public function index(): Response
     {
-        return $this->render('orders/index.html.twig', [
-            'controller_name' => 'OrdersController',
+        return $this->render('order/index.html.twig', [
+            'controller_name' => 'OrderController',
         ]);
     }
 
@@ -38,8 +38,8 @@ class OrdersController extends AbstractController
     public function addShipAdd(Request $request, EntityManagerInterface $manager)
     {
 
-        $shipAddress = new ShipAddresses();
-        $form = $this->createForm(ShipAddressesType::class, $shipAddress);
+        $shipAddress = new ShipAddress();
+        $form = $this->createForm(ShipAddressType::class, $shipAddress);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
@@ -51,7 +51,7 @@ class OrdersController extends AbstractController
             return $this->redirectToRoute('cart_index');
         }
 
-        return $this->render('orders/formShipAdd.html.twig', [
+        return $this->render('order/formShipAdd.html.twig', [
             'formShipAdd' => $form->createView(),
         ]);
     }
@@ -59,13 +59,13 @@ class OrdersController extends AbstractController
     /**
      * @Route("/shipChooseForm/", name="shipAdd_choose")
      */
-    public function chooseShipAdd(Request $request, ShipAddressesRepository $sar)
+    public function chooseShipAdd(Request $request, ShipAddressRepository $sar)
     {
-        $order = new Orders();
+        $order = new Order();
         $user = $this->getUser();
         $order->setUser($user);
  
-        $form = $this->createForm(UsersType::class);
+        $form = $this->createForm(UserType::class);
         $form->handleRequest($request);
         // if($form->isSubmitted() && $form->isValid()){
 
@@ -73,7 +73,7 @@ class OrdersController extends AbstractController
         //     return $this->redirectToRoute('ordered');
         // }
 
-        return $this->render('orders/formChooseAdd.html.twig', [
+        return $this->render('order/formChooseAdd.html.twig', [
             'formUser' => $form->createView(),
             'user' => $user
         ]);
@@ -82,27 +82,27 @@ class OrdersController extends AbstractController
     /**
      * @Route("/ordered", name="ordered")
      */
-    public function ordered(SessionInterface $session, ProductsRepository $productRepository, EntityManagerInterface $manager, Request $request)
+    public function ordered(SessionInterface $session, ProductRepository $productRepository, EntityManagerInterface $manager, Request $request)
     {
         $cart = $session->get('cart', []);
-        $order = new Orders();
+        $order = new Order();
         $order->setUser($this->getUser());
-        $shipAddress= new ShipAddresses();
+        $shipAddress= new ShipAddress();
 
         $order->setShipAddress($shipAddress);
 
         
         foreach($cart as $id => $quantity){
-            $productsOrder = new ProductsOrder();
-            $productsOrder->setOrder($order);
+            $productOrder = new ProductOrder();
+            $productOrder->setOrder($order);
             $product = $productRepository->find($id);
             $cartWithData[] = [
                 'product' => $product,
                 'quantity' => $quantity
             ];
-            $productsOrder->setProduct($product);
-            $productsOrder->setQuantity($quantity);
-            $order->addProductsOrder($productsOrder);
+            $productOrder->setProduct($product);
+            $productOrder->setQuantity($quantity);
+            $order->addProductOrder($productOrder);
             $manager->persist($order);
         }
 

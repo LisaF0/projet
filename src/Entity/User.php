@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Repository\UsersRepository;
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,10 +10,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity(repositoryClass=UsersRepository::class)
+ * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-class Users implements UserInterface
+class User implements UserInterface
 {
     /**
      * @ORM\Id
@@ -39,12 +39,12 @@ class Users implements UserInterface
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity=ShipAddresses::class, mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=ShipAddress::class, mappedBy="user", cascade={"persist"})
      */
     private $shipAddresses;
 
     /**
-     * @ORM\OneToMany(targetEntity=Orders::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="user")
      */
     private $orders;
 
@@ -140,7 +140,7 @@ class Users implements UserInterface
         return $this->shipAddresses;
     }
 
-    public function addShipAddress(ShipAddresses $shipAddress): self
+    public function addShipAddress(ShipAddress $shipAddress): self
     {
         if (!$this->shipAddresses->contains($shipAddress)) {
             $this->shipAddresses[] = $shipAddress;
@@ -150,7 +150,7 @@ class Users implements UserInterface
         return $this;
     }
 
-    public function removeShipAddress(ShipAddresses $shipAddress): self
+    public function removeShipAddress(ShipAddress $shipAddress): self
     {
         if ($this->shipAddresses->removeElement($shipAddress)) {
             // set the owning side to null (unless already changed)
@@ -170,7 +170,7 @@ class Users implements UserInterface
         return $this->orders;
     }
 
-    public function addOrder(Orders $order): self
+    public function addOrder(Order $order): self
     {
         if (!$this->orders->contains($order)) {
             $this->orders[] = $order;
@@ -180,7 +180,7 @@ class Users implements UserInterface
         return $this;
     }
 
-    public function removeOrder(Orders $order): self
+    public function removeOrder(Order $order): self
     {
         if ($this->orders->removeElement($order)) {
             // set the owning side to null (unless already changed)

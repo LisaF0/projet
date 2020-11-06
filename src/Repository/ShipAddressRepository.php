@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\ShipAddresses;
+use App\Entity\ShipAddress;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ShipAddresses|null find($id, $lockMode = null, $lockVersion = null)
- * @method ShipAddresses|null findOneBy(array $criteria, array $orderBy = null)
- * @method ShipAddresses[]    findAll()
- * @method ShipAddresses[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method ShipAddress|null find($id, $lockMode = null, $lockVersion = null)
+ * @method ShipAddress|null findOneBy(array $criteria, array $orderBy = null)
+ * @method ShipAddress[]    findAll()
+ * @method ShipAddress[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ShipAddressesRepository extends ServiceEntityRepository
+class ShipAddressRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ShipAddresses::class);
+        parent::__construct($registry, ShipAddress::class);
     }
 
     /**
-     * @return shipAddresses[] Returns an array of ShipAddresses objects
+     * @return shipAddress[] Returns an array of ShipAddress objects
      */
     public function findByUser($user)
     {
@@ -34,7 +34,7 @@ class ShipAddressesRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return ShipAddresses[] Returns an array of ShipAddresses objects
+    //  * @return ShipAddress[] Returns an array of ShipAddress objects
     //  */
     /*
     public function findByExampleField($value)
@@ -51,7 +51,7 @@ class ShipAddressesRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?ShipAddresses
+    public function findOneBySomeField($value): ?ShipAddress
     {
         return $this->createQueryBuilder('s')
             ->andWhere('s.exampleField = :val')

@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Orders;
-use App\Form\UsersType;
-use App\Form\OrdersType;
-use App\Entity\ProductsOrder;
-use App\Entity\ShipAddresses;
+use App\Entity\Order;
+use App\Form\UserType;
+use App\Form\OrderType;
+use App\Entity\ProductOrder;
+use App\Entity\ShipAddress;
 use Doctrine\ORM\EntityManager;
-use App\Repository\ProductsRepository;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,21 +22,21 @@ class CartController extends AbstractController
     /**
      * @Route("/cart", name="cart_index")
      */
-    public function index(SessionInterface $session, ProductsRepository $productRepository, Request $request)
+    public function index(SessionInterface $session, ProductRepository $productRepository, Request $request)
     {
         $cart = $session->get('cart', []);
 
         $cartWithData = [];
-        $newOrder = new Orders();
+        $newOrder = new Order();
         foreach($cart as $id => $quantity){
             $cartWithData[] = [
                 'product' => $productRepository->find($id),
                 'quantity' => $quantity
             ];
-            $productOrder = new ProductsOrder();
+            $productOrder = new ProductOrder();
             $productOrder->setProduct($productRepository->find($id));
             $productOrder->setQuantity($quantity);
-            $newOrder->addProductsOrder($productOrder);
+            $newOrder->addProductOrder($productOrder);
         }
 
         $total = 0;
@@ -49,7 +49,7 @@ class CartController extends AbstractController
 
         
         $newOrder->setUser($this->getUser());
-        $form = $this->createForm(OrdersType::class, $newOrder);
+        $form = $this->createForm(OrderType::class, $newOrder);
         $form->handleRequest($request);
         
         dump($newOrder);
@@ -107,7 +107,7 @@ class CartController extends AbstractController
      */
     public function userDetail()
     {
-        return $this->render('orders/index.html.twig');
+        return $this->render('order/index.html.twig');
     }
 
 

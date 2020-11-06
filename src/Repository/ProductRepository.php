@@ -2,26 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\ProductsOrder;
+use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method ProductsOrder|null find($id, $lockMode = null, $lockVersion = null)
- * @method ProductsOrder|null findOneBy(array $criteria, array $orderBy = null)
- * @method ProductsOrder[]    findAll()
- * @method ProductsOrder[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Product|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Product|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Product[]    findAll()
+ * @method Product[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ProductsOrderRepository extends ServiceEntityRepository
+class ProductRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, ProductsOrder::class);
+        parent::__construct($registry, Product::class);
     }
 
-
     // /**
-    //  * @return ProductsOrder[] Returns an array of ProductsOrder objects
+    //  * @return Product[] Returns an array of Product objects
     //  */
     /*
     public function findByExampleField($value)
@@ -38,7 +37,7 @@ class ProductsOrderRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?ProductsOrder
+    public function findOneBySomeField($value): ?Product
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.exampleField = :val')

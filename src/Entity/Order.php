@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\OrdersRepository;
+use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=OrdersRepository::class)
+ * @ORM\Entity(repositoryClass=OrderRepository::class)
  */
-class Orders
+class Order
 {
     /**
      * @ORM\Id
@@ -40,24 +40,24 @@ class Orders
     private $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity=ShipAddresses::class, inversedBy="orders")
+     * @ORM\ManyToOne(targetEntity=ShipAddress::class, inversedBy="order")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $ShipAddress;
+    private $shipAddress;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="orders")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="order")
      * @ORM\JoinColumn(nullable=false)
      */
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=ProductsOrder::class, mappedBy="orders", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=ProductOrder::class, mappedBy="order", cascade={"persist"})
      */
     private $ProductsOrder;
 
     /**
-     * @ORM\OneToOne(targetEntity=Factures::class, cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Facture::class, cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $facture;
@@ -112,36 +112,36 @@ class Orders
     }
 
 
-    public function getShipAddress(): ?ShipAddresses
+    public function getShipAddress(): ?ShipAddress
     {
-        return $this->ShipAddress;
+        return $this->shipAddress;
     }
 
-    public function setShipAddress(?ShipAddresses $ShipAddress): self
+    public function setShipAddress(?ShipAddress $shipAddress): self
     {
-        $this->ShipAddress = $ShipAddress;
+        $this->shipAddress = $shipAddress;
 
         return $this;
     }
 
-    public function getUser(): ?Users
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?Users $user): self
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getFacture(): ?Factures
+    public function getFacture(): ?Facture
     {
         return $this->facture;
     }
 
-    public function setFacture(Factures $facture): self
+    public function setFacture(Facture $facture): self
     {
         $this->facture = $facture;
 
@@ -156,22 +156,22 @@ class Orders
         return $this->ProductsOrder;
     }
 
-    public function addProductsOrder(ProductsOrder $productsOrder): self
+    public function addProductOrder(ProductOrder $productOrder): self
     {
-        if (!$this->ProductsOrder->contains($productsOrder)) {
-            $this->ProductsOrder[] = $productsOrder;
-            $productsOrder->setOrder($this);
+        if (!$this->ProductsOrder->contains($productOrder)) {
+            $this->ProductsOrder[] = $productOrder;
+            $productOrder->setOrder($this);
         }
 
         return $this;
     }
 
-    public function removeProductsOrder(ProductsOrder $productsOrder): self
+    public function removeProductOrder(ProductOrder $productOrder): self
     {
-        if ($this->ProductsOrder->removeElement($productsOrder)) {
+        if ($this->ProductsOrder->removeElement($productOrder)) {
             // set the owning side to null (unless already changed)
-            if ($productsOrder->getOrder() === $this) {
-                $productsOrder->setOrder(null);
+            if ($productOrder->getOrder() === $this) {
+                $productOrder->setOrder(null);
             }
         }
 

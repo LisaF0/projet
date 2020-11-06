@@ -2,15 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\ShipAddressesRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\FactureRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=ShipAddressesRepository::class)
+ * @ORM\Entity(repositoryClass=FactureRepository::class)
  */
-class ShipAddresses
+class Facture
 {
     /**
      * @ORM\Id
@@ -18,6 +16,16 @@ class ShipAddresses
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $reference;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
 
     /**
      * @ORM\Column(type="string", length=50)
@@ -45,23 +53,37 @@ class ShipAddresses
     private $address;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="shipAddresses")
+     * @ORM\Column(type="string", length=255)
      */
-    private $user;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Orders::class, mappedBy="ShipAddress")
-     */
-    private $orders;
-
-    public function __construct()
-    {
-        $this->orders = new ArrayCollection();
-    }
+    private $linkPDF;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(string $reference): self
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     public function getLastname(): ?string
@@ -124,50 +146,16 @@ class ShipAddresses
         return $this;
     }
 
-    public function getUser(): ?Users
+    public function getLinkPDF(): ?string
     {
-        return $this->user;
+        return $this->linkPDF;
     }
 
-    public function setUser(?Users $user): self
+    public function setLinkPDF(string $linkPDF): self
     {
-        $this->user = $user;
+        $this->linkPDF = $linkPDF;
 
         return $this;
     }
 
-    /**
-     * @return Collection|Orders[]
-     */
-    public function getOrders(): Collection
-    {
-        return $this->orders;
-    }
-
-    public function addOrder(Orders $order): self
-    {
-        if (!$this->orders->contains($order)) {
-            $this->orders[] = $order;
-            $order->setShipAddress($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Orders $order): self
-    {
-        if ($this->orders->removeElement($order)) {
-            // set the owning side to null (unless already changed)
-            if ($order->getShipAddress() === $this) {
-                $order->setShipAddress(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->firstname.'-'.$this->lastname.'-'.$this->city;
-    }
 }

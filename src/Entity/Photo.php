@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\PhotosRepository;
+use App\Repository\PhotoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=PhotosRepository::class)
+ * @ORM\Entity(repositoryClass=PhotoRepository::class)
  */
-class Photos
+class Photo
 {
     /**
      * @ORM\Id
@@ -35,7 +35,7 @@ class Photos
     private $path;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Products::class, inversedBy="photos")
+     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="photo")
      */
     private $product;
 
@@ -80,12 +80,12 @@ class Photos
         return $this;
     }
 
-    public function getProduct(): ?Products
+    public function getProduct(): ?Product
     {
         return $this->product;
     }
 
-    public function setProduct(?Products $product): self
+    public function setProduct(?Product $product): self
     {
         $this->product = $product;
 

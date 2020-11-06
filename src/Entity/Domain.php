@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\TypesRepository;
+use App\Repository\DomainRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=TypesRepository::class)
+ * @ORM\Entity(repositoryClass=DomainRepository::class)
  */
-class Types
+class Domain
 {
     /**
      * @ORM\Id
@@ -25,7 +25,7 @@ class Types
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Products::class, mappedBy="type")
+     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="domain")
      */
     private $products;
 
@@ -33,7 +33,6 @@ class Types
     {
         $this->products = new ArrayCollection();
     }
-
 
 
     public function getId(): ?int
@@ -61,22 +60,22 @@ class Types
         return $this->products;
     }
 
-    public function addProduct(Products $product): self
+    public function addProduct(Product $product): self
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
-            $product->setType($this);
+            $product->setDomain($this);
         }
 
         return $this;
     }
 
-    public function removeProduct(Products $product): self
+    public function removeProduct(Product $product): self
     {
         if ($this->products->removeElement($product)) {
             // set the owning side to null (unless already changed)
-            if ($product->getType() === $this) {
-                $product->setType(null);
+            if ($product->getDomain() === $this) {
+                $product->setDomain(null);
             }
         }
 

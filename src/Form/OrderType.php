@@ -2,12 +2,12 @@
 
 namespace App\Form;
 
-use App\Entity\Users;
-use App\Entity\Orders;
-use App\Entity\ShipAddresses;
-use App\Repository\UsersRepository;
+use App\Entity\User;
+use App\Entity\Order;
+use App\Entity\ShipAddress;
+use App\Repository\UserRepository;
 use Symfony\Component\Form\AbstractType;
-use App\Repository\ShipAddressesRepository;
+use App\Repository\ShipAddressRepository;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -15,13 +15,13 @@ use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-class OrdersType extends AbstractType
+class OrderType extends AbstractType
 {
-    private $ShipAddressesRepository;
+    private $ShipAddressRepository;
     private $security;
-    public function __construct(ShipAddressesRepository $ShipAddressesRepository, Security $security)
+    public function __construct(ShipAddressRepository $ShipAddressRepository, Security $security)
     {
-        $this->ShipAddressesRepository = $ShipAddressesRepository;
+        $this->ShipAddressRepository = $ShipAddressRepository;
         $this->security = $security;
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -31,22 +31,22 @@ class OrdersType extends AbstractType
             // ->add('email')
             // ->add('roles')
             // ->add('password')
-            // ->add('shipAddresses', ChoiceType::class, [
+            // ->add('shipAddress', ChoiceType::class, [
             //     'choice_value' => 'firstname',
-            //     'choice_attr' => function(?ShipAddresses $shipAddresses){
-            //         // return $shipAddresses ? $shipAddresses->getFirstname() : '';
-            //         return $shipAddresses->getFirstname(); 
+            //     'choice_attr' => function(?ShipAddress $shipAddress){
+            //         // return $shipAddress ? $shipAddress->getFirstname() : '';
+            //         return $shipAddress->getFirstname(); 
             //     }
             // ]) 
 
-            // ->add('shipAddresses', EntityType::class, [
-            //     'class' => ShipAddresses::class,
+            // ->add('shipAddress', EntityType::class, [
+            //     'class' => ShipAddress::class,
             //     'choice_label' => 'firstname'             
             // ]) 
             ->add('ShipAddress', EntityType::class, [
-                'class' => ShipAddresses::class,
+                'class' => ShipAddress::class,
                 
-                'choices' => $this->ShipAddressesRepository->findByUser($this->security->getUser())
+                'choices' => $this->ShipAddressRepository->findByUser($this->security->getUser())
             ])
 
         ;
@@ -55,7 +55,7 @@ class OrdersType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Orders::class,
+            'data_class' => Order::class,
         ]);
     }
 }

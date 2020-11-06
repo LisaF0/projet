@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductsOrderRepository;
+use App\Repository\ProductOrderRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=ProductsOrderRepository::class)
+ * @ORM\Entity(repositoryClass=ProductOrderRepository::class)
  */
-class ProductsOrder
+class ProductOrder
 {
     /**
      * @ORM\Id
@@ -23,13 +23,13 @@ class ProductsOrder
     private $quantity;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Orders::class, inversedBy="ProductsOrder")
+     * @ORM\ManyToOne(targetEntity=Order::class, inversedBy="ProductOrder")
      * @ORM\JoinColumn(nullable=false)
      */
     private $order;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Products::class)
+     * @ORM\ManyToOne(targetEntity=Product::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $product;
@@ -51,24 +51,24 @@ class ProductsOrder
         return $this;
     }
 
-    public function getOrder(): ?Orders
+    public function getOrder(): ?Order
     {
         return $this->order;
     }
 
-    public function setOrder(?Orders $order): self
+    public function setOrder(?Order $order): self
     {
         $this->order = $order;
 
         return $this;
     }
 
-    public function getProduct(): ?Products
+    public function getProduct(): ?Product
     {
         return $this->product;
     }
 
-    public function setProduct(?Products $product): self
+    public function setProduct(?Product $product): self
     {
         $this->product = $product;
 

@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\AppellationsRepository;
+use App\Repository\AppellationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=AppellationsRepository::class)
+ * @ORM\Entity(repositoryClass=AppellationRepository::class)
  */
-class Appellations
+class Appellation
 {
     /**
      * @ORM\Id
@@ -25,7 +25,7 @@ class Appellations
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Products::class, mappedBy="appellation")
+     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="appellation")
      */
     private $products;
 
@@ -59,7 +59,7 @@ class Appellations
         return $this->products;
     }
 
-    public function addProduct(Products $product): self
+    public function addProduct(Product $product): self
     {
         if (!$this->products->contains($product)) {
             $this->products[] = $product;
@@ -69,7 +69,7 @@ class Appellations
         return $this;
     }
 
-    public function removeProduct(Products $product): self
+    public function removeProduct(Product $product): self
     {
         if ($this->products->removeElement($product)) {
             // set the owning side to null (unless already changed)

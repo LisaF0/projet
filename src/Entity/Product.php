@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductsRepository;
+use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=ProductsRepository::class)
+ * @ORM\Entity(repositoryClass=ProductRepository::class)
  */
-class Products
+class Product
 {
     /**
      * @ORM\Id
@@ -50,24 +50,24 @@ class Products
     private $available;
 
     /**
-     * @ORM\OneToMany(targetEntity=Photos::class, mappedBy="product")
+     * @ORM\OneToMany(targetEntity=Photo::class, mappedBy="product")
      */
     private $photos;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Appellations::class, inversedBy="products")
+     * @ORM\ManyToOne(targetEntity=Appellation::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
      */
     private $appellation;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Types::class, inversedBy="products")
+     * @ORM\ManyToOne(targetEntity=Type::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
      */
     private $type;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Domains::class, inversedBy="products")
+     * @ORM\ManyToOne(targetEntity=Domain::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
      */
     private $domain;
@@ -163,7 +163,7 @@ class Products
         return $this->photos;
     }
 
-    public function addPhoto(Photos $photo): self
+    public function addPhoto(Photo $photo): self
     {
         if (!$this->photos->contains($photo)) {
             $this->photos[] = $photo;
@@ -173,7 +173,7 @@ class Products
         return $this;
     }
 
-    public function removePhoto(Photos $photo): self
+    public function removePhoto(Photo $photo): self
     {
         if ($this->photos->removeElement($photo)) {
             // set the owning side to null (unless already changed)
@@ -185,36 +185,36 @@ class Products
         return $this;
     }
 
-    public function getAppellation(): ?Appellations
+    public function getAppellation(): ?Appellation
     {
         return $this->appellation;
     }
 
-    public function setAppellation(?Appellations $appellation): self
+    public function setAppellation(?Appellation $appellation): self
     {
         $this->appellation = $appellation;
 
         return $this;
     }
 
-    public function getType(): ?Types
+    public function getType(): ?Type
     {
         return $this->type;
     }
 
-    public function setType(?Types $type): self
+    public function setType(?Type $type): self
     {
         $this->type = $type;
 
         return $this;
     }
 
-    public function getDomain(): ?Domains
+    public function getDomain(): ?Domain
     {
         return $this->domain;
     }
 
-    public function setDomain(?Domains $domain): self
+    public function setDomain(?Domain $domain): self
     {
         $this->domain = $domain;
 

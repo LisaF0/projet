@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Users;
+use App\Entity\User;
 use App\Form\RegistrationFormType;
-use App\Form\UsersType;
+use App\Form\UserType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,7 +44,7 @@ class SecurityController extends AbstractController
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
-        $user = new Users();
+        $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -73,9 +73,9 @@ class SecurityController extends AbstractController
     /**
      * @Route("/profil/{id}", name="profil_show")
      */
-    public function showProfil(Users $user)
+    public function showProfil(User $user)
     {
-        $form = $this->createForm(UsersType::class);
+        $form = $this->createForm(UserType::class);
         // $form->handleRequest($request);
         return $this->render('security/profil.html.twig', [
             'formUser' => $form->createView(),
