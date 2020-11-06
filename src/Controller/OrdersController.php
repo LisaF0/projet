@@ -64,10 +64,7 @@ class OrdersController extends AbstractController
         $order = new Orders();
         $user = $this->getUser();
         $order->setUser($user);
-        // dd($user);
-        // $shipAddresses = $user->getShipAddresses();
-        $shipAddresses = $sar->findByUser($user);
-        // dd($shipAddresses);
+ 
         $form = $this->createForm(UsersType::class);
         $form->handleRequest($request);
         // if($form->isSubmitted() && $form->isValid()){

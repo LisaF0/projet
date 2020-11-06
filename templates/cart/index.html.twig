@@ -45,7 +45,7 @@
         <p><a href="{{ path('shipAdd_add')}}}">Ajouter une adresse</a></p>
         <p>
             Adresse de livraison : <a href="{{ path('shipAdd_choose') }}">Choisir une addresse</a>
-            {# <select name="shipAddress" id="shipAddress"></select> #}
+            {{ form(formSA) }}
         
         </p>
         <p>Adresse de facturation :</p>

@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Orders;
+use App\Form\UsersType;
+use App\Form\OrdersType;
 use App\Entity\ProductsOrder;
 use App\Entity\ShipAddresses;
 use Doctrine\ORM\EntityManager;
@@ -20,17 +22,21 @@ class CartController extends AbstractController
     /**
      * @Route("/cart", name="cart_index")
      */
-    public function index(SessionInterface $session, ProductsRepository $productRepository)
+    public function index(SessionInterface $session, ProductsRepository $productRepository, Request $request)
     {
         $cart = $session->get('cart', []);
 
         $cartWithData = [];
-
+        $newOrder = new Orders();
         foreach($cart as $id => $quantity){
             $cartWithData[] = [
                 'product' => $productRepository->find($id),
                 'quantity' => $quantity
             ];
+            $productOrder = new ProductsOrder();
+            $productOrder->setProduct($productRepository->find($id));
+            $productOrder->setQuantity($quantity);
+            $newOrder->addProductsOrder($productOrder);
         }
 
         $total = 0;
@@ -39,11 +45,18 @@ class CartController extends AbstractController
             $totalItem = $item['product']->getUnitprice() * $item['quantity'];
             $total += $totalItem;
         }
-        dump($cartWithData);
+        // dump($cartWithData);
+
         
+        $newOrder->setUser($this->getUser());
+        $form = $this->createForm(OrdersType::class, $newOrder);
+        $form->handleRequest($request);
+        
+        dump($newOrder);
         return $this->render('cart/index.html.twig', [
             'items' => $cartWithData,
-            'total' => $total
+            'total' => $total,
+            'formSA' => $form->createView(),
         ]);
     }
 

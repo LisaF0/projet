@@ -1,14 +1,8 @@
-{{ form(formUser) }}
-{# 
-{{ form_start(formUser) }} #}
-    {# {{ formUser.shipAddresses }} #}
-    {# <select name="{{ formUser.shipAddresses }}" id="{{ formUser.shipAddresses }}">
-    {% for address in formUser.shipAddresses %}
-        <option value="{{ address.value }}"></option>
-    {% endfor %} 
-</select>
-{{ form_end(formUser) }} #}
-{# le tout ne fonctionne pas ? ça sa marche mais y devrait ya voir afficher que laure dans la liste / ok #}
-{# {{ form(formUser) }} #}
+{# {{ form_row(formUser.shipAddresses) }} #}
 
-    {{ dump(user.shipAddresses) }}
+{{ form_start(formUser) }} 
+    {{ form_row(formUser.shipAddresses) }}
+
+{{ form_end(formUser) }}
+
+

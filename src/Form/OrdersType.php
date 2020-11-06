@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Users;
+use App\Entity\Orders;
 use App\Entity\ShipAddresses;
 use App\Repository\UsersRepository;
 use Symfony\Component\Form\AbstractType;
@@ -14,7 +15,7 @@ use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-class UsersType extends AbstractType
+class OrdersType extends AbstractType
 {
     private $ShipAddressesRepository;
     private $security;
@@ -27,9 +28,9 @@ class UsersType extends AbstractType
     {
         // dd($this->security->getUser());
         $builder
-            ->add('email')
-            ->add('roles')
-            ->add('password')
+            // ->add('email')
+            // ->add('roles')
+            // ->add('password')
             // ->add('shipAddresses', ChoiceType::class, [
             //     'choice_value' => 'firstname',
             //     'choice_attr' => function(?ShipAddresses $shipAddresses){
@@ -42,21 +43,19 @@ class UsersType extends AbstractType
             //     'class' => ShipAddresses::class,
             //     'choice_label' => 'firstname'             
             // ]) 
-            ->add('author', EntityType::class, [
+            ->add('ShipAddress', EntityType::class, [
                 'class' => ShipAddresses::class,
-                'choice_label' => 'firstname',
+                
                 'choices' => $this->ShipAddressesRepository->findByUser($this->security->getUser())
             ])
-       
 
-            
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Users::class,
+            'data_class' => Orders::class,
         ]);
     }
 }
