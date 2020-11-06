@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ProductController extends AbstractController
+class StoreController extends AbstractController
 {
     /**
      * @Route("/products", name="products_index")
@@ -18,7 +18,7 @@ class ProductController extends AbstractController
         ->getRepository(Product::class)
         ->findAll();
 
-        return $this->render('products/index.html.twig', [
+        return $this->render('store/index.html.twig', [
             'products' => $products,
         ]);
     }
@@ -28,7 +28,7 @@ class ProductController extends AbstractController
      */
     public function detailProduct(Product $product = null): Response
     {
-       return $this->render('products/product.html.twig', [
+       return $this->render('store/product.html.twig', [
            'product' => $product
        ]);
     }

@@ -42,7 +42,10 @@
             </tr>
         </tfoot>
         </table>
-        <p><a href="{{ path('shipAdd_add')}}}">Ajouter une adresse</a></p>
+        <p>
+            <a href="">Ajouter une adresse</a>
+            {{ form(formAddShip) }}
+        </p>
         <p>
             Adresse de livraison : <a href="{{ path('shipAdd_choose') }}">Choisir une addresse</a>
             {{ form(formSA) }}
@@ -51,7 +54,7 @@
         <p>Adresse de facturation :</p>
         <p>Moyen de paiement :</p>
         {% if app.user %}
-            <p><a href="{{ path('ordered') }}" class="btn btn-primary">Commander</a></p>
+            <p><a href="#" class="btn btn-primary">Commander</a></p>
         {% else %}
             <p><a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a></p>
         {% endif %}

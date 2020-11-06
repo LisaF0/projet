@@ -1,9 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello OrderController!{% endblock %}
+{% block title %}{{ product.name }}}}{% endblock %}
 
 {% block body %}
     {% block nav %}{{ parent() }}{% endblock %}
-    {{ form(formUser) }}
+
+        <p>{{ product.name }}</p>
     {% block footer %}{{ parent() }}{% endblock %}
 {% endblock %}

@@ -26,28 +26,16 @@ class OrderType extends AbstractType
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // dd($this->security->getUser());
         $builder
-            // ->add('email')
-            // ->add('roles')
-            // ->add('password')
-            // ->add('shipAddress', ChoiceType::class, [
-            //     'choice_value' => 'firstname',
-            //     'choice_attr' => function(?ShipAddress $shipAddress){
-            //         // return $shipAddress ? $shipAddress->getFirstname() : '';
-            //         return $shipAddress->getFirstname(); 
-            //     }
-            // ]) 
 
-            // ->add('shipAddress', EntityType::class, [
-            //     'class' => ShipAddress::class,
-            //     'choice_label' => 'firstname'             
-            // ]) 
             ->add('ShipAddress', EntityType::class, [
                 'class' => ShipAddress::class,
-                
                 'choices' => $this->ShipAddressRepository->findByUser($this->security->getUser())
             ])
+            // ->add('Facture', EntityType::class, [
+            //     'class' => Facture::class,
+
+            // ])
 
         ;
     }

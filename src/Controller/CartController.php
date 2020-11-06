@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\Cart;
 use App\Entity\Order;
 use App\Form\UserType;
+use App\Entity\Product;
 use App\Form\OrderType;
-use App\Entity\ProductOrder;
 use App\Entity\ShipAddress;
+use App\Entity\ProductOrder;
+use App\Form\ShipAddressType;
 use Doctrine\ORM\EntityManager;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,59 +25,77 @@ class CartController extends AbstractController
     /**
      * @Route("/cart", name="cart_index")
      */
-    public function index(SessionInterface $session, ProductRepository $productRepository, Request $request)
+    public function index(SessionInterface $session, ProductRepository $productRepository, Request $request, EntityManagerInterface $manager)
     {
-        $cart = $session->get('cart', []);
-
+        $cart = $session->get('cart', new Cart());
+        //On récupère le panier en session
         $cartWithData = [];
+        
         $newOrder = new Order();
-        foreach($cart as $id => $quantity){
+        // On créer une commande
+        foreach($cart->getContent() as $cartLine){
+            // Pour chaque produit dans le panier
+            // dd($cartLine);
             $cartWithData[] = [
-                'product' => $productRepository->find($id),
-                'quantity' => $quantity
+                'product' => $cartLine['product'],
+                'quantity' => $cartLine['quantity']
             ];
+            // On rempli un tableau key->value avec l'id du produit et la quantité
             $productOrder = new ProductOrder();
-            $productOrder->setProduct($productRepository->find($id));
-            $productOrder->setQuantity($quantity);
+            // On créer un nouvel ligne de commande
+            $productOrder->setProduct($cartLine['product']);
+            // On insert le produit
+            $productOrder->setQuantity($cartLine['quantity']);
+            // Et sa quantité
             $newOrder->addProductOrder($productOrder);
+            // On ajoute la nouvelle ligne de commande à la commande
         }
 
         $total = 0;
 
         foreach($cartWithData as $item) {
+            // Pour chaque item du panier
             $totalItem = $item['product']->getUnitprice() * $item['quantity'];
+            // On récupère le prix total
             $total += $totalItem;
         }
-        // dump($cartWithData);
+      
+        $newOrder->setUser($this->getUser());
+        // On récupère l'utilisateur
+
+        $shipAddress = new ShipAddress();
+        $formAddShip = $this->createForm(ShipAddressType::class, $shipAddress);
+        $formAddShip->handleRequest($request);
+        if($formAddShip->isSubmitted() && $formAddShip->isValid()){
+            $shipAddress = $formAddShip->getData();
+            $shipAddress->setUser($this->getUser());
+            $manager->persist($shipAddress);
+            $manager->flush();
+
+            return $this->redirectToRoute('cart_index');
+        }
+
+        $formSA = $this->createForm(OrderType::class, $newOrder);
+        $formSA->handleRequest($request);
 
         
-        $newOrder->setUser($this->getUser());
-        $form = $this->createForm(OrderType::class, $newOrder);
-        $form->handleRequest($request);
-        
-        dump($newOrder);
+        // dump($newOrder);
         return $this->render('cart/index.html.twig', [
             'items' => $cartWithData,
             'total' => $total,
-            'formSA' => $form->createView(),
+            'formSA' => $formSA->createView(),
+            'formAddShip' => $formAddShip->createView(),
         ]);
     }
 
     /**
-     * @Route("/cart/add/{id}", name="cart_add")
-     */
-    public function add($id, SessionInterface $session)
+    * @Route("/cart/add/{id}", name="cart_add")
+    */
+    public function add(Product $product, SessionInterface $session)
     {
-        $cart = $session->get('cart', []);
-        //on récupère le cart de la session, sinon un tableau vide
-        if(!empty($cart[$id])){
-            //si j'ai déjà un produit avec cet identifiant dans le panier
-            $cart[$id]++;
-            //on rajoute l quantité du produit
-        } else {
-            // sinon la quantité est égale à 1
-            $cart[$id] = 1;
-        }
+
+        $cart = $session->get('cart', new Cart());
+        $cart->add($product);
         $session->set('cart', $cart);
 
         $this->addFlash('success', 'Le produit a été ajouté au panier');
@@ -86,28 +107,16 @@ class CartController extends AbstractController
     /**
      * @Route("/cart/remove/{id}", name="cart_remove")
      */
-    public function remove($id, SessionInterface $session)
+    public function remove(Product $product, SessionInterface $session)
     {
-        $cart = $session->get('cart', []);
-
-        if(!empty($cart[$id])){
-            unset($cart[$id]);
-        }
-
+        $cart = $session->get('cart', new Cart());
+        // dd($cart);
+        $cart->remove($product);
         $session->set('cart', $cart);
 
         $this->addFlash('warning', 'Le produit a été supprimé du panier');
 
         return $this->redirectToRoute("cart_index");
-    }
-
-
-    /**
-     * @Route("/user/{}", name="user_detail")
-     */
-    public function userDetail()
-    {
-        return $this->render('order/index.html.twig');
     }
 
 

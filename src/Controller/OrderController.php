@@ -59,7 +59,7 @@ class OrderController extends AbstractController
     /**
      * @Route("/shipChooseForm/", name="shipAdd_choose")
      */
-    public function chooseShipAdd(Request $request, ShipAddressRepository $sar)
+    public function chooseShipAdd(Request $request)
     {
         $order = new Order();
         $user = $this->getUser();
@@ -77,41 +77,6 @@ class OrderController extends AbstractController
             'formUser' => $form->createView(),
             'user' => $user
         ]);
-    }
-
-    /**
-     * @Route("/ordered", name="ordered")
-     */
-    public function ordered(SessionInterface $session, ProductRepository $productRepository, EntityManagerInterface $manager, Request $request)
-    {
-        $cart = $session->get('cart', []);
-        $order = new Order();
-        $order->setUser($this->getUser());
-        $shipAddress= new ShipAddress();
-
-        $order->setShipAddress($shipAddress);
-
-        
-        foreach($cart as $id => $quantity){
-            $productOrder = new ProductOrder();
-            $productOrder->setOrder($order);
-            $product = $productRepository->find($id);
-            $cartWithData[] = [
-                'product' => $product,
-                'quantity' => $quantity
-            ];
-            $productOrder->setProduct($product);
-            $productOrder->setQuantity($quantity);
-            $order->addProductOrder($productOrder);
-            $manager->persist($order);
-        }
-
-        $manager->flush();
-        $session->clear();
-
-        $this->addFlash('success', 'Votre commande a bien été effectuée');
-        return $this->redirectToRoute('cart_index');
-
     }
 
 }
