@@ -1,7 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profil{% endblock %}
+{% block title %}Mon Profil{% endblock %}
 
 {% block body %}
-
+    {% block nav %}{{ parent() }}{% endblock %}
+    <h2>Mes informations</h2>
+    <p>Email : {{ app.user.username }}</p>
+    <a href="{{ path('profil_edit', {'id': app.user.id }) }}" class="btn btn-primary">Modifier mes informations</a>
+    
+    <h2>Mes adresses</h2>
+    <ul>
+        {% for address in addresses %}
+            <li>
+                {{ address }} 
+                <a href="{{ path('address_edit', {'id': address.id }) }}" class="btn btn-primary">Modifier</a>
+                <a href="{{ path('address_delete', {'id': address.id }) }}" class="btn btn-danger">Supprimer</a>
+            </li>
+        {% endfor %}    
+    </ul>
+    <h2>Mes commandes</h2>
+        
+    {# {% for order in orders %}
+        
+    {% endfor %} #}
+    {% block footer %}{{ parent() }}{% endblock %}
 {% endblock %}

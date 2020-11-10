@@ -35,12 +35,11 @@ class CartController extends AbstractController
         // On créer une commande
         foreach($cart->getContent() as $cartLine){
             // Pour chaque produit dans le panier
-            // dd($cartLine);
             $cartWithData[] = [
                 'product' => $cartLine['product'],
                 'quantity' => $cartLine['quantity']
             ];
-            // On rempli un tableau key->value avec l'id du produit et la quantité
+            // On rempli un tableau key->value avec le produit et la quantité
             $productOrder = new ProductOrder();
             // On créer un nouvel ligne de commande
             $productOrder->setProduct($cartLine['product']);
@@ -63,18 +62,6 @@ class CartController extends AbstractController
         $newOrder->setUser($this->getUser());
         // On récupère l'utilisateur
 
-        $shipAddress = new ShipAddress();
-        $formAddShip = $this->createForm(ShipAddressType::class, $shipAddress);
-        $formAddShip->handleRequest($request);
-        if($formAddShip->isSubmitted() && $formAddShip->isValid()){
-            $shipAddress = $formAddShip->getData();
-            $shipAddress->setUser($this->getUser());
-            $manager->persist($shipAddress);
-            $manager->flush();
-
-            return $this->redirectToRoute('cart_index');
-        }
-
         $formSA = $this->createForm(OrderType::class, $newOrder);
         $formSA->handleRequest($request);
 
@@ -84,7 +71,6 @@ class CartController extends AbstractController
             'items' => $cartWithData,
             'total' => $total,
             'formSA' => $formSA->createView(),
-            'formAddShip' => $formAddShip->createView(),
         ]);
     }
 
@@ -117,6 +103,28 @@ class CartController extends AbstractController
         $this->addFlash('warning', 'Le produit a été supprimé du panier');
 
         return $this->redirectToRoute("cart_index");
+    }
+
+    /**
+     * @Route("/ShipAddress/add", name="shipAdd_add")
+     */
+    public function addShipAddress(Request $request, EntityManagerInterface $manager ){
+        $shipAddress = new ShipAddress();
+        $form = $this->createForm(ShipAddressType::class, $shipAddress);
+        $form->handleRequest($request);
+        
+        if($form->isSubmitted() && $form->isValid()){
+            $shipAddress = $form->getData();
+            $shipAddress->setUser($this->getUser());
+            $manager->persist($shipAddress);
+            $manager->flush();
+
+            return $this->redirectToRoute('cart_index');
+        }
+
+        return $this->render('cart/addShipAddress.html.twig', [
+            'formAddShip' => $form->createView(),
+        ]);
     }
 
 

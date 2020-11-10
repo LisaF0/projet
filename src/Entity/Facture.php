@@ -57,6 +57,13 @@ class Facture
      */
     private $linkPDF;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->reference = 1;
+        $this->linkPDF = "";
+    }
+
     public function getId(): ?int
     {
         return $this->id;

@@ -43,13 +43,10 @@
         </tfoot>
         </table>
         <p>
-            <a href="">Ajouter une adresse</a>
-            {{ form(formAddShip) }}
+            <a href="{{ path('shipAdd_add') }}" class="btn btn-primary">Ajouter une adresse</a>
         </p>
         <p>
-            Adresse de livraison : <a href="{{ path('shipAdd_choose') }}">Choisir une addresse</a>
             {{ form(formSA) }}
-        
         </p>
         <p>Adresse de facturation :</p>
         <p>Moyen de paiement :</p>

@@ -30,12 +30,9 @@ class OrderType extends AbstractType
 
             ->add('ShipAddress', EntityType::class, [
                 'class' => ShipAddress::class,
-                'choices' => $this->ShipAddressRepository->findByUser($this->security->getUser())
+                'choices' => $this->ShipAddressRepository->findByUser($this->security->getUser()),
+                'label' => 'Choisir une adresse de livraison : '
             ])
-            // ->add('Facture', EntityType::class, [
-            //     'class' => Facture::class,
-
-            // ])
 
         ;
     }

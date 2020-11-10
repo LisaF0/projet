@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+    {% block nav %}{{ parent() }}{% endblock %}
+    <h1>Modifier mon adresse</h1>
+
+   {{ form(formAddress) }}
+
+    {% block footer %}{{ parent() }}{% endblock %}
+{% endblock %}
