@@ -3,7 +3,8 @@
 namespace App\Form;
 
 use App\Entity\User;
-use App\Entity\Order;
+use App\Entity\Ordering;
+use App\Entity\Facture;
 use App\Entity\ShipAddress;
 use App\Repository\UserRepository;
 use Symfony\Component\Form\AbstractType;
@@ -14,24 +15,34 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class OrderType extends AbstractType
 {
-    private $ShipAddressRepository;
     private $security;
-    public function __construct(ShipAddressRepository $ShipAddressRepository, Security $security)
+
+    public function __construct(ShipAddressRepository $repo, Security $security)
     {
-        $this->ShipAddressRepository = $ShipAddressRepository;
         $this->security = $security;
+        $this->repo = $repo;
     }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        
         $builder
 
-            ->add('ShipAddress', EntityType::class, [
+            ->add('shipAddress', EntityType::class, [
                 'class' => ShipAddress::class,
-                'choices' => $this->ShipAddressRepository->findByUser($this->security->getUser()),
+                
+                'choices' => $this->repo->findByUser($this->security->getUser()),
+                
                 'label' => 'Choisir une adresse de livraison : '
+            ])
+            // ->add('Facture', FactureType::class, [
+            //     'label' => 'Choisir une adresse de facturation :'
+            // ])
+            ->add('Submit', SubmitType::class, [
+                'label' => 'Paiement'
             ])
 
         ;
@@ -40,7 +51,7 @@ class OrderType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Order::class,
+            'data_class' => Ordering::class,
         ]);
     }
 }

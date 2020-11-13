@@ -22,10 +22,17 @@ class ProfilController extends AbstractController
     {
         $addresses = $user->getShipAddresses();
         $orders = $user->getOrders();
-        // dd($addresses);
+        dump($orders);
+        // foreach($orders as $order){
+        //     $productsOrder = $order->getProductsOrder();
+        //     dump($productsOrder);
+        // }
+        
+         
         return $this->render('profil/index.html.twig', [
             'addresses'  => $addresses,
-            'orders' => $orders
+            'orders' => $orders,
+            // 'productsOrder' => $productsOrder
         ]);
     }
 

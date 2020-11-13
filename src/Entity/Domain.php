@@ -34,7 +34,6 @@ class Domain
         $this->products = new ArrayCollection();
     }
 
-
     public function getId(): ?int
     {
         return $this->id;
@@ -53,7 +52,7 @@ class Domain
     }
 
     /**
-     * @return Collection|Products[]
+     * @return Collection|Product[]
      */
     public function getProducts(): Collection
     {

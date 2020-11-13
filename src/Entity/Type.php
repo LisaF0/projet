@@ -34,8 +34,6 @@ class Type
         $this->products = new ArrayCollection();
     }
 
-
-
     public function getId(): ?int
     {
         return $this->id;
@@ -54,7 +52,7 @@ class Type
     }
 
     /**
-     * @return Collection|Products[]
+     * @return Collection|Product[]
      */
     public function getProducts(): Collection
     {

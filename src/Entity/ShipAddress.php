@@ -45,18 +45,18 @@ class ShipAddress
     private $address;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="shipAddress")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="shipAddresses")
      */
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="ShipAddress")
+     * @ORM\OneToMany(targetEntity=Ordering::class, mappedBy="shipAddress")
      */
-    private $orders;
+    private $orderings;
 
     public function __construct()
     {
-        $this->orders = new ArrayCollection();
+        $this->orderings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -137,29 +137,29 @@ class ShipAddress
     }
 
     /**
-     * @return Collection|Orders[]
+     * @return Collection|Ordering[]
      */
-    public function getOrders(): Collection
+    public function getOrderings(): Collection
     {
-        return $this->orders;
+        return $this->orderings;
     }
 
-    public function addOrder(Order $order): self
+    public function addOrdering(Ordering $ordering): self
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders[] = $order;
-            $order->setShipAddress($this);
+        if (!$this->orderings->contains($ordering)) {
+            $this->orderings[] = $ordering;
+            $ordering->setShipAddress($this);
         }
 
         return $this;
     }
 
-    public function removeOrder(Order $order): self
+    public function removeOrdering(Ordering $ordering): self
     {
-        if ($this->orders->removeElement($order)) {
+        if ($this->orderings->removeElement($ordering)) {
             // set the owning side to null (unless already changed)
-            if ($order->getShipAddress() === $this) {
-                $order->setShipAddress(null);
+            if ($ordering->getShipAddress() === $this) {
+                $ordering->setShipAddress(null);
             }
         }
 

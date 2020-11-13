@@ -35,7 +35,7 @@ class Photo
     private $path;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="photo")
+     * @ORM\ManyToOne(targetEntity=Product::class, inversedBy="photos")
      */
     private $product;
 

@@ -20,7 +20,7 @@ class Facture
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $reference;
+    private $factureReference;
 
     /**
      * @ORM\Column(type="datetime")
@@ -57,11 +57,17 @@ class Facture
      */
     private $linkPDF;
 
+     /**
+     * @ORM\OneToOne(targetEntity=Ordering::class, cascade={"all"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $ordering;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->reference = 1;
-        $this->linkPDF = "";
+        $this->factureReference = 1;
+        $this->linkPDF = "Facture".$this->factureReference;
     }
 
     public function getId(): ?int
@@ -69,14 +75,14 @@ class Facture
         return $this->id;
     }
 
-    public function getReference(): ?string
+    public function getFactureReference(): ?string
     {
-        return $this->reference;
+        return $this->factureReference;
     }
 
-    public function setReference(string $reference): self
+    public function setFactureReference(string $factureReference): self
     {
-        $this->reference = $reference;
+        $this->factureReference = $factureReference;
 
         return $this;
     }
@@ -161,6 +167,23 @@ class Facture
     public function setLinkPDF(string $linkPDF): self
     {
         $this->linkPDF = $linkPDF;
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->firstname.' '.$this->lastname.' - '.$this->city.', '.$this->address.', '.$this->zipcode;
+    }
+
+    public function getOrdering(): ?Ordering
+    {
+        return $this->ordering;
+    }
+
+    public function setOrdering(?Ordering $ordering): self
+    {
+        $this->ordering = $ordering;
 
         return $this;
     }

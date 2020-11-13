@@ -21,6 +21,9 @@
     <h2>Mes commandes</h2>
         
     {# {% for order in orders %}
+        {% for productOrder in order.productsOrder %}
+            {{ productOrder.product.name }}
+        {% endfor %}
         
     {% endfor %} #}
     {% block footer %}{{ parent() }}{% endblock %}

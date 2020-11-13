@@ -52,7 +52,7 @@ class Appellation
     }
 
     /**
-     * @return Collection|Products[]
+     * @return Collection|Product[]
      */
     public function getProducts(): Collection
     {

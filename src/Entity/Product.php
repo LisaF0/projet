@@ -112,7 +112,7 @@ class Product
         return $this->description;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
@@ -156,7 +156,7 @@ class Product
     }
 
     /**
-     * @return Collection|Photos[]
+     * @return Collection|Photo[]
      */
     public function getPhotos(): Collection
     {

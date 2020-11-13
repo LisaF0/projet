@@ -44,14 +44,14 @@ class User implements UserInterface
     private $shipAddresses;
 
     /**
-     * @ORM\OneToMany(targetEntity=Order::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Ordering::class, mappedBy="user", cascade={"persist"})
      */
-    private $orders;
+    private $orderings;
 
     public function __construct()
     {
         $this->shipAddresses = new ArrayCollection();
-        $this->orders = new ArrayCollection();
+        $this->orderings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -81,16 +81,9 @@ class User implements UserInterface
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
+    public function getRoles(): ?array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return $this->roles;
     }
 
     public function setRoles(array $roles): self
@@ -100,12 +93,9 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
-        return (string) $this->password;
+        return $this->password;
     }
 
     public function setPassword(string $password): self
@@ -133,7 +123,7 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|ShipAddresses[]
+     * @return Collection|ShipAddress[]
      */
     public function getShipAddresses(): Collection
     {
@@ -163,29 +153,29 @@ class User implements UserInterface
     }
 
     /**
-     * @return Collection|Orders[]
+     * @return Collection|Ordering[]
      */
-    public function getOrders(): Collection
+    public function getOrderings(): Collection
     {
-        return $this->orders;
+        return $this->orderings;
     }
 
-    public function addOrder(Order $order): self
+    public function addOrdering(Ordering $ordering): self
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders[] = $order;
-            $order->setUser($this);
+        if (!$this->orderings->contains($ordering)) {
+            $this->orderings[] = $ordering;
+            $ordering->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeOrder(Order $order): self
+    public function removeOrdering(Ordering $ordering): self
     {
-        if ($this->orders->removeElement($order)) {
+        if ($this->orderings->removeElement($ordering)) {
             // set the owning side to null (unless already changed)
-            if ($order->getUser() === $this) {
-                $order->setUser(null);
+            if ($ordering->getUser() === $this) {
+                $ordering->setUser(null);
             }
         }
 

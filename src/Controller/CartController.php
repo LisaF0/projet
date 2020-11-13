@@ -5,11 +5,15 @@ namespace App\Controller;
 use App\Entity\Cart;
 use App\Entity\Order;
 use App\Form\UserType;
+use App\Entity\Facture;
 use App\Entity\Product;
 use App\Form\OrderType;
+use App\Entity\Ordering;
+use App\Form\FactureType;
 use App\Entity\ShipAddress;
 use App\Entity\ProductOrder;
 use App\Form\ShipAddressType;
+use App\Entity\ProductOrdering;
 use Doctrine\ORM\EntityManager;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,50 +32,52 @@ class CartController extends AbstractController
     public function index(SessionInterface $session, ProductRepository $productRepository, Request $request, EntityManagerInterface $manager)
     {
         $cart = $session->get('cart', new Cart());
-        //On récupère le panier en session
-        $cartWithData = [];
+        $incart = [];
+
+        $newOrder = new Ordering();
         
-        $newOrder = new Order();
-        // On créer une commande
-        foreach($cart->getContent() as $cartLine){
-            // Pour chaque produit dans le panier
-            $cartWithData[] = [
+        
+        foreach($cart->getFullCart() as $cartLine){
+            $incart[] = [
                 'product' => $cartLine['product'],
                 'quantity' => $cartLine['quantity']
             ];
-            // On rempli un tableau key->value avec le produit et la quantité
-            $productOrder = new ProductOrder();
-            // On créer un nouvel ligne de commande
-            $productOrder->setProduct($cartLine['product']);
-            // On insert le produit
-            $productOrder->setQuantity($cartLine['quantity']);
-            // Et sa quantité
-            $newOrder->addProductOrder($productOrder);
-            // On ajoute la nouvelle ligne de commande à la commande
+            
         }
-
-        $total = 0;
-
-        foreach($cartWithData as $item) {
-            // Pour chaque item du panier
-            $totalItem = $item['product']->getUnitprice() * $item['quantity'];
-            // On récupère le prix total
-            $total += $totalItem;
-        }
-      
-        $newOrder->setUser($this->getUser());
-        // On récupère l'utilisateur
+       
+        $total = $cart->getTotal($incart);
 
         $formSA = $this->createForm(OrderType::class, $newOrder);
         $formSA->handleRequest($request);
-
-        
-        // dump($newOrder);
+        if($formSA->isSubmitted() && $formSA->isValid()){
+            
+            $newOrder->setUser($this->getUser());
+            
+            foreach($cart->getFullCart() as $cartLine){
+                
+                $newProductOrder = new ProductOrdering();
+                $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
+                $newProductOrder->setProduct($product);
+                $newProductOrder->setQuantity($cartLine['quantity']);
+                
+               
+               
+                $newOrder->addProductOrdering($newProductOrder);
+                $manager->persist($newProductOrder); 
+               
+            }
+            $manager->persist($newOrder);
+            $manager->flush();
+            
+            
+            
+        }
         return $this->render('cart/index.html.twig', [
-            'items' => $cartWithData,
+            'items' => $incart,
             'total' => $total,
             'formSA' => $formSA->createView(),
         ]);
+
     }
 
     /**
@@ -96,7 +102,6 @@ class CartController extends AbstractController
     public function remove(Product $product, SessionInterface $session)
     {
         $cart = $session->get('cart', new Cart());
-        // dd($cart);
         $cart->remove($product);
         $session->set('cart', $cart);
 
