@@ -53,13 +53,13 @@ class Ordering
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=ProductOrdering::class, mappedBy="ordering")
+     * @ORM\OneToMany(targetEntity=ProductOrdering::class, mappedBy="ordering", cascade={"persist"})
      */
     private $productOrderings;
 
     /**
      * @ORM\OneToOne(targetEntity=Facture::class, cascade={"all"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $facture;
 

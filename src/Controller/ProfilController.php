@@ -21,18 +21,11 @@ class ProfilController extends AbstractController
     public function showProfil(User $user): Response
     {
         $addresses = $user->getShipAddresses();
-        $orders = $user->getOrders();
-        dump($orders);
-        // foreach($orders as $order){
-        //     $productsOrder = $order->getProductsOrder();
-        //     dump($productsOrder);
-        // }
-        
-         
+        $orders = $user->getOrderings();
+
         return $this->render('profil/index.html.twig', [
             'addresses'  => $addresses,
             'orders' => $orders,
-            // 'productsOrder' => $productsOrder
         ]);
     }
 

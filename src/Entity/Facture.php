@@ -59,7 +59,7 @@ class Facture
 
      /**
      * @ORM\OneToOne(targetEntity=Ordering::class, cascade={"all"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $ordering;
 
@@ -171,11 +171,6 @@ class Facture
         return $this;
     }
 
-    public function __toString()
-    {
-        return $this->firstname.' '.$this->lastname.' - '.$this->city.', '.$this->address.', '.$this->zipcode;
-    }
-
     public function getOrdering(): ?Ordering
     {
         return $this->ordering;
@@ -188,4 +183,8 @@ class Facture
         return $this;
     }
 
+    public function __toString()
+    {
+        return $this->firstname.' '.$this->lastname.' - '.$this->city.', '.$this->address.', '.$this->zipcode;
+    }
 }

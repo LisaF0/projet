@@ -38,9 +38,9 @@ class OrderType extends AbstractType
                 
                 'label' => 'Choisir une adresse de livraison : '
             ])
-            // ->add('Facture', FactureType::class, [
-            //     'label' => 'Choisir une adresse de facturation :'
-            // ])
+            ->add('Facture', FactureType::class, [
+                'label' => 'Choisir une adresse de facturation :'
+            ])
             ->add('Submit', SubmitType::class, [
                 'label' => 'Paiement'
             ])

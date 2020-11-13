@@ -33,16 +33,14 @@ class CartController extends AbstractController
     {
         $cart = $session->get('cart', new Cart());
         $incart = [];
-
         $newOrder = new Ordering();
-        
+        // $newFacture = new Facture();
         
         foreach($cart->getFullCart() as $cartLine){
             $incart[] = [
                 'product' => $cartLine['product'],
                 'quantity' => $cartLine['quantity']
             ];
-            
         }
        
         $total = $cart->getTotal($incart);
@@ -60,16 +58,14 @@ class CartController extends AbstractController
                 $newProductOrder->setProduct($product);
                 $newProductOrder->setQuantity($cartLine['quantity']);
                 
-               
-               
                 $newOrder->addProductOrdering($newProductOrder);
-                $manager->persist($newProductOrder); 
+                $manager->persist($newOrder);
+                $manager->flush();
+
+                // $newOrder->getFacture()->setOrdering($newOrder);
+                // Obligatoire pour rajouter l'order_id dans l'entité facture
                
             }
-            $manager->persist($newOrder);
-            $manager->flush();
-            
-            
             
         }
         return $this->render('cart/index.html.twig', [
