@@ -29,7 +29,7 @@ class CartController extends AbstractController
     /**
      * @Route("/cart", name="cart_index")
      */
-    public function index(SessionInterface $session, ProductRepository $productRepository, Request $request, EntityManagerInterface $manager)
+    public function index(SessionInterface $session, Request $request, EntityManagerInterface $manager)
     {
         $cart = $session->get('cart', new Cart());
         $incart = [];

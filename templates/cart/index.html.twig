@@ -51,7 +51,7 @@
 
         <p>Moyen de paiement :</p>
         {% if app.user %}
-            <p><a href="#" class="btn btn-primary">Commander</a></p>
+            <p><a href="{{ path('checkout', [total] ) }}" id="checkout-button" class="btn btn-primary">Commander</a></p>
         {% else %}
             <p><a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a></p>
         {% endif %}
