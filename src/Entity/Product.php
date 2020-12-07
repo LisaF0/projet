@@ -50,11 +50,6 @@ class Product
     private $available;
 
     /**
-     * @ORM\OneToMany(targetEntity=Photo::class, mappedBy="product")
-     */
-    private $photos;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Appellation::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -72,11 +67,11 @@ class Product
      */
     private $domain;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $photo;
 
-    public function __construct()
-    {
-        $this->photos = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -155,36 +150,6 @@ class Product
         return $this;
     }
 
-    /**
-     * @return Collection|Photo[]
-     */
-    public function getPhotos(): Collection
-    {
-        return $this->photos;
-    }
-
-    public function addPhoto(Photo $photo): self
-    {
-        if (!$this->photos->contains($photo)) {
-            $this->photos[] = $photo;
-            $photo->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removePhoto(Photo $photo): self
-    {
-        if ($this->photos->removeElement($photo)) {
-            // set the owning side to null (unless already changed)
-            if ($photo->getProduct() === $this) {
-                $photo->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getAppellation(): ?Appellation
     {
         return $this->appellation;
@@ -217,6 +182,18 @@ class Product
     public function setDomain(?Domain $domain): self
     {
         $this->domain = $domain;
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): self
+    {
+        $this->photo = $photo;
 
         return $this;
     }

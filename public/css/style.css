@@ -22,3 +22,7 @@ section{
 .navbar a{
     margin : 0.2em;
 }
+
+.winePhoto{
+    width: 150px;
+}

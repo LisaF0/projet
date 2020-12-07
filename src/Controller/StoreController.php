@@ -18,6 +18,8 @@ class StoreController extends AbstractController
         ->getRepository(Product::class)
         ->findAll();
 
+        
+
         return $this->render('store/index.html.twig', [
             'products' => $products,
         ]);
