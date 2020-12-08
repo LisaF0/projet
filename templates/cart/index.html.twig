@@ -1,9 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello CartController!{% endblock %}
+{% block stylesheets %}
+{{ parent()  }}
 
+<script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+<script src="{{ asset('js/script.js') }}" defer></script>
+
+{% endblock %}
 {% block body %}
     {% block nav %}{{ parent() }}{% endblock %}
+    
     {% if items | length > 0 %}
         <table class="table">
         <thead>
@@ -45,13 +52,13 @@
         <p>
             <a href="{{ path('shipAdd_add') }}" class="btn btn-primary">Ajouter une adresse</a>
         </p>
-        <p>
+        {# <p>
             {{ form(formSA) }}
-        </p>
+        </p> #}
 
-        <p>Moyen de paiement :</p>
+        {# <p>Moyen de paiement :</p> #}
         {% if app.user %}
-            <p><a href="{{ path('checkout', [total] ) }}" id="checkout-button" class="btn btn-primary">Commander</a></p>
+            <button id="checkout-button">Checkout</button>
         {% else %}
             <p><a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a></p>
         {% endif %}
@@ -60,4 +67,38 @@
         <p>Votre panier est vide.</p>
     {% endif %}
     {% block footer %}{{ parent() }}{% endblock %}
+    
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+      // Create an instance of the Stripe object with your publishable API key
+      var stripe = Stripe('pk_test_51HvgjELyEjuAwgbZePdTWvQMgmdhI1uAxfEmwx6zqvuSrYSVru4XukNzFhOEaSNPz6torjLLNySw1kz0JgkUNhBv00vg0FnJ8K');
+      var checkoutButton = document.getElementById('checkout-button');
+
+      checkoutButton.addEventListener('click', function() {
+        // Create a new Checkout Session using the server-side endpoint you
+        // created in step 3.
+        fetch('/create-checkout-session', {
+          method: 'POST',
+        })
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(session) {
+          return stripe.redirectToCheckout({ sessionId: session.id });
+        })
+        .then(function(result) {
+          // If `redirectToCheckout` fails due to a browser or network
+          // error, you should display the localized error message to your
+          // customer using `error.message`.
+          if (result.error) {
+            alert(result.error.message);
+          }
+        })
+        .catch(function(error) {
+          console.error('Error:', error);
+        });
+      });
+    </script>
+
 {% endblock %}
