@@ -49,16 +49,16 @@
             </tr>
         </tfoot>
         </table>
-        <p>
+        {# <p>
             <a href="{{ path('shipAdd_add') }}" class="btn btn-primary">Ajouter une adresse</a>
-        </p>
+        </p> #}
         {# <p>
             {{ form(formSA) }}
         </p> #}
 
         {# <p>Moyen de paiement :</p> #}
         {% if app.user %}
-            <button id="checkout-button">Checkout</button>
+            <button class="btn btn-primary" id="checkout-button">Checkout</button>
         {% else %}
             <p><a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a></p>
         {% endif %}
@@ -74,6 +74,7 @@
       // Create an instance of the Stripe object with your publishable API key
       var stripe = Stripe('pk_test_51HvgjELyEjuAwgbZePdTWvQMgmdhI1uAxfEmwx6zqvuSrYSVru4XukNzFhOEaSNPz6torjLLNySw1kz0JgkUNhBv00vg0FnJ8K');
       var checkoutButton = document.getElementById('checkout-button');
+
 
       checkoutButton.addEventListener('click', function() {
         // Create a new Checkout Session using the server-side endpoint you

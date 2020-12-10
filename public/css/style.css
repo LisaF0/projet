@@ -1,8 +1,8 @@
-article{
-    width: 25vw;
-    border: 1px solid black;
-    padding: 1em;
-    margin: 1em;
+*{
+    box-sizing: border-box;
+}
+img{
+    margin:10px;
 }
 
 section h1{
@@ -23,6 +23,54 @@ section{
     margin : 0.2em;
 }
 
+article{
+    min-width: 350px;
+    width: 80vw;
+    border: 1px solid #b2bfca;
+    padding: 1em;
+    margin: 1em;
+    display: flex;
+    align-items: center;
+}
 .winePhoto{
-    width: 150px;
+    width: auto;
+    height: 300px;
+}
+.productName{
+    color:black;
+    font-size: 22px;
+}
+input{
+    width: 35px;
+    margin-right:-5px;
+    padding: 3.75px;
+    border: none;
+    width: 25%;
+}
+.qteAdd{
+    border: 1px solid #6c757d;
+    border-radius: .25rem;
+    margin:0;
+    width: 200px;
+    height: 40px;
+    margin-bottom: 16px;
+}
+.cartAdd{
+    width: 75%;
+    margin:0;
+}
+
+@media (min-width:768px)
+{
+    article{
+        width:45vw
+    }
+
+}
+@media (min-width:1300px)
+{
+    article{
+        width:25vw
+    }
+
 }

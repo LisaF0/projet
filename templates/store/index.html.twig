@@ -8,22 +8,26 @@
     {% for product in products %}
         <article>
             <img src="{{ asset('img/' ~ product.photo )}}" alt="{{ 'Bouteille de ' ~ product.name }}" class="winePhoto">
-            <a href="{{ path('product_detail', {'id':product.id}) }}"><h1>{{ product.name }}</h1></a>
-            <p>{{ product.unitprice ~ '€'}}</p>
-            <label for="quantity">Quantité : </label>
-            <input type="number" id="quantity" name="quantity" min="1" max="{{ product.unitstock }}" value="1">
-            {% if product.unitstock > 0 %}
-                 <p><i class="fas fa-check"></i> Disponible</p>
-            {% else %}
-                <p><i class="fas fa-times"></i> Indisponible</p>
-            {% endif %}
-            
-            <p>
-                <a href="{{ path('cart_add', {'id': product.id} ) }}" type="button" class="btn btn-primary"><i class="fas fa-cart-plus"></i> Ajouter au panier</a>
-            </p>
+            <div>
+                <a href="{{ path('product_detail', {'id':product.id}) }}"><h2 class="productName">{{ product.name }}</h2></a>
+                <p>{{product.description }}</p>
+                <p>{{ product.unitprice ~ '€'}}</p>
+                <div class="qteAdd">
+                    <input type="number" id="quantity" name="quantity" min="1" max="{{ product.unitstock }}" value="1">
+                    <a href="{{ path('cart_add', {'id': product.id} ) }}" type="button" class="btn btn-secondary cartAdd"><i class="fas fa-cart-plus"></i> Ajouter au panier</a>
+                </div>
+                {% if product.unitstock > 0 %}
+                    <p><i class="fas fa-check"></i> Disponible</p>
+                {% else %}
+                    <p><i class="fas fa-times"></i> Indisponible</p>
+                {% endif %}
+            </div>
         </article>
     {% endfor %}
     </section>
+
+
     
     {% block footer %}{{ parent() }}{% endblock %}
 {% endblock %}
+

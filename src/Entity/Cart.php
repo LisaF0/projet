@@ -21,8 +21,7 @@ class Cart
         }
         else{
             $this->incart[$product->getId()]["quantity"]++;
-        }
-        
+        }   
     }  
 
     public function remove(Product $product){

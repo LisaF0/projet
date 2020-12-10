@@ -17,7 +17,7 @@ class CheckoutController extends AbstractController
     /**
      * @Route("/index", name="index")
      */
-    public function index(SessionInterface $session): Response
+    public function index(SessionInterface $session)
     {
         $cart = $session->get('cart', new Cart());
         $incart = [];
@@ -29,31 +29,17 @@ class CheckoutController extends AbstractController
         }
         $total = $cart->getTotal($incart);
 
-        $stripe = new \Stripe\StripeClient(
-            'sk_test_51HvgjELyEjuAwgbZtFkkq4UfxmsjafIAB10xIVuEjqHkQqVuHmrtBD4XvNGHPLnsOc7cKV8eL2lFxVNnVNSgyfpv00TCqiAFXL'
-          );
+        $product = \Stripe\Product::create([
+          'name' => $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getName()),
+        ]);
 
+        $price = \Stripe\Price::create([
+          'product' => '{{PRODUCT_ID}}',
+          'unit_amount' => $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getPrice()),
+          'quantity' => $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->find($cartLine['quantity'])),
+          'currency' => 'eur',
+        ]);
 
-          $stripe->checkout->sessions->create([
-            'success_url' => $this->generateUrl('success', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'cancel_url' => $this->generateUrl('error', [], UrlGeneratorInterface::ABSOLUTE_URL),
-            'payment_method_types' => ['card'],
-            'line_items' => [
-              [
-                'price_data' => [
-                    'currency' => 'eur',
-                    'product_data' => [
-                        'name' => "Vin"
-                    ] ,
-                    'unit_amount' => $total*100,
-                ],
-                
-                'quantity' => 1,
-              ],
-            ],
-            'mode' => 'payment',
-          ]);
-        return new JsonResponse([ 'id' => $session->getId() ]);
     }
 
     /**
@@ -63,12 +49,11 @@ class CheckoutController extends AbstractController
     {
         \Stripe\Stripe::setApiKey('sk_test_51HvgjELyEjuAwgbZtFkkq4UfxmsjafIAB10xIVuEjqHkQqVuHmrtBD4XvNGHPLnsOc7cKV8eL2lFxVNnVNSgyfpv00TCqiAFXL');
        
-
         $session = \Stripe\Checkout\Session::create([
             'payment_method_types' => ['card'],
             'line_items' => [[
               'price_data' => [
-                'currency' => 'usd',
+                'currency' => 'eur',
                 'product_data' => [
                   'name' => 'T-shirt',
                 ],

@@ -10,6 +10,7 @@
             integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
             <link rel="stylesheet" href="{{ asset('css/style.css') }}">
             <script src="https://js.stripe.com/v3/"></script>
+            <script src="{{ asset('js/script.js') }}"></script>
         {% endblock %}
     </head>
     <body>
@@ -21,14 +22,14 @@
                     {% if app.user %}
                         <a href="{{ path('profil_show', {'id': app.user.id}) }}" class="btn btn-secondary"> {{ app.user.username ~ ' ' }}<i class="fas fa-user"></i></a>
                     {% endif %}
-                    <a href="{{ path('cart_index') }}" class="btn btn-secondary">Panier <i class="fas fa-shopping-cart"></i></a>
+                    <a href="{{ path('cart_index') }}" class="btn btn-secondary" id="cart-button">Panier <i class="fas fa-shopping-cart"><span class="badge badge-pill badge-secondary">1</span></i></a>
                     {% if app.user %}
                         <a href="{{ path('app_logout') }}" class="btn btn-secondary">Se déconnecter <i class="fas fa-sign-out-alt"></i></a>
                     {% else %}
                         <a href="{{ path('app_login') }}" class="btn btn-secondary">Se connecter <i class="fas fa-sign-in-alt"></i></a>
                     {% endif %}
-                    
                 </nav>
+
                 {# this check prevents starting a session when there are no flash messages #}
                 {% if app.request.hasPreviousSession %}
                     {% for label, messages in app.flashes %}
@@ -43,6 +44,7 @@
 
             {% block footer %}{% endblock %}
         {% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block javascripts %}
+        {% endblock %}
     </body>
 </html>
