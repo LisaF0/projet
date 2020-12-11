@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Stripe\Stripe;
 use App\Entity\Cart;
 use App\Entity\Order;
 use App\Form\UserType;
@@ -22,6 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CartController extends AbstractController
@@ -60,18 +62,26 @@ class CartController extends AbstractController
                 
                 $newOrder->addProductOrdering($newProductOrder);
                 $manager->persist($newOrder);
-                $manager->flush();
 
+            
+                // $manager->flush();
                 // $newOrder->getFacture()->setOrdering($newOrder);
                 // Obligatoire pour rajouter l'order_id dans l'entité facture
-               
+                return $this->render('checkout/index.html.twig', [
+                    'items' => $incart,
+                    'total' => $total,
+                    'order' => $newOrder,
+                    'reference' => $newOrder->getOrderingReference(),
+                ]);
             }
-            
         }
+
         return $this->render('cart/index.html.twig', [
             'items' => $incart,
             'total' => $total,
             'formSA' => $formSA->createView(),
+            
+
         ]);
 
     }
@@ -127,6 +137,9 @@ class CartController extends AbstractController
             'formAddShip' => $form->createView(),
         ]);
     }
+
+
+
 
 
 }

@@ -42,7 +42,7 @@ class OrderType extends AbstractType
                 'label' => 'Choisir une adresse de facturation :'
             ])
             ->add('Submit', SubmitType::class, [
-                'label' => 'Paiement'
+                'label' => 'Récapitulatif de la commande'
             ])
 
         ;

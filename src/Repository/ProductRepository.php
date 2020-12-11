@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Filter;
 use App\Entity\Product;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Product|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,6 +19,36 @@ class ProductRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Product::class);
     }
+
+    public function findByFilter(Filter $filter){
+        $query =  $this->createQueryBuilder('p')
+            ->select('a', 'p', 'd', 't')
+            ->join('p.appellation', 'a')
+            ->join('p.domain', 'd')
+            ->join('p.type', 't');
+
+            if(!empty($filter->appellations)){
+                $query = $query
+                    ->andWhere('a.id IN (:appellations)')
+                    ->setParameter('appellations', $filter->appellations);
+            }
+            
+            if(!empty($filter->domains)){
+                $query = $query
+                    ->andWhere('d.id IN (:domains)')
+                    ->setParameter('domains', $filter->domains);
+            }
+
+            if(!empty($filter->types)){
+                $query = $query
+                    ->andWhere('t.id IN (:types)')
+                    ->setParameter('types', $filter->types);
+            }
+            return $query
+            ->getQuery()
+            ->getResult();
+    }
+
 
     // /**
     //  * @return Product[] Returns an array of Product objects
