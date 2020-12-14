@@ -19,6 +19,14 @@ class OrderingRepository extends ServiceEntityRepository
         parent::__construct($registry, Ordering::class);
     }
 
+    public function findOneByReference($reference){
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.orderingReference = :reference')
+            ->setParameter('reference', $reference)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
     // /**
     //  * @return Ordering[] Returns an array of Ordering objects
     //  */

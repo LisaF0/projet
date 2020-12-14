@@ -66,7 +66,7 @@ class Facture
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->factureReference = 1;
+        $this->factureReference = $this->createdAt->format('dmY').'-'.uniqid();
         $this->linkPDF = "Facture".$this->factureReference;
     }
 

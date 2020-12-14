@@ -2,9 +2,12 @@
 
 {% block title %}Checkout{% endblock %}
 {% block stylesheets %}
-    <script src="https://js.stripe.com/v3/"></script>
+{{ parent() }}
 {% endblock %}
 {% block body %}
-<h1>Success</h1>
+{% block nav %}{{ parent() }}{% endblock %}
+<h1>Votre commande a bien été effectuée</h1>
+<h3>Récapitulatif</h3>
+<button class="btn btn-primary">Télécharger la facture</button>
 {% endblock %}
 

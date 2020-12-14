@@ -46,23 +46,27 @@
                 </tr>
             </tfoot>
         </table>
-        <div>
-            <h3>Adresse de livraison</h3>
-            <p>{{ order.shipAddress.lastname }}</p>
-            <p>{{ order.shipAddress.firstname }}</p>
-            <p>{{ order.shipAddress.city }}</p>
-            <p>{{ order.shipAddress.zipcode }}</p>
-            <p>{{ order.shipAddress.address }}</p>
+        <div class="container-address">
+            <div class="address">
+                <h3>Adresse de livraison</h3>
+                <p>Nom: {{ order.shipAddress.lastname }}</p>
+                <p>Prénom: {{ order.shipAddress.firstname }}</p>
+                <p>Ville: {{ order.shipAddress.city }}</p>
+                <p>Code Postal: {{ order.shipAddress.zipcode }}</p>
+                <p>Adresse: {{ order.shipAddress.address }}</p>
+            </div>
+            <div class="address">
+                <h3>Adresse de facturation</h3>
+                <p>Nom: {{ order.facture.lastname }}</p>
+                <p>Prénom: {{ order.facture.firstname }}</p>
+                <p>Ville: {{ order.facture.city }}</p>
+                <p>Code Postal: {{ order.facture.zipcode }}</p>
+                <p>Adresse: {{ order.facture.address }}</p>
+            </div>          
         </div>
-                <div>
-            <h3>Adresse de facturation</h3>
-            <p>{{ order.facture.lastname }}</p>
-            <p>{{ order.facture.firstname }}</p>
-            <p>{{ order.facture.city }}</p>
-            <p>{{ order.facture.zipcode }}</p>
-            <p>{{ order.facture.address }}</p>
-
-        </div>          
+        {# <pre>
+            {{ dump(reference) }}
+        </pre> #}
         {% if app.user %}
             <button class="btn btn-primary" id="checkout-button">Checkout</button>
         {% else %}
@@ -83,7 +87,7 @@
       checkoutButton.addEventListener('click', function() {
         // Create a new Checkout Session using the server-side endpoint you
         // created in step 3.
-        fetch("/create-checkout-session", {
+        fetch("/create-checkout-session/{{ reference }}", {
           method: 'POST',
         })
         .then(function(response) {

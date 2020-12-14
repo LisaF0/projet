@@ -2,9 +2,10 @@
 
 {% block title %}Checkout{% endblock %}
 {% block stylesheets %}
-    <script src="https://js.stripe.com/v3/"></script>
+{{ parent() }}
 {% endblock %}
 {% block body %}
-<h1>Error</h1>
+{% block nav %}{{ parent() }}{% endblock %}
+<h1>Une erreur est survenue lors de votre commande</h1>
 {% endblock %}
 

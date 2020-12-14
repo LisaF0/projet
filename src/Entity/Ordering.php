@@ -32,7 +32,8 @@ class Ordering
 
     const STATUS_ORDER = [
         0 => "en attente",
-        1 => "validée"
+        1 => "Payée",
+        2 => "Paiement refusé"
     ];
 
     /**
@@ -59,14 +60,14 @@ class Ordering
 
     /**
      * @ORM\OneToOne(targetEntity=Facture::class, cascade={"all"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $facture;
 
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->orderingReference = '1';
+        $this->orderingReference = $this->createdAt->format('dmY').'-'.uniqid();
         $this->orderingStatus = self::STATUS_ORDER[0];
         $this->productOrderings = new ArrayCollection();
     }

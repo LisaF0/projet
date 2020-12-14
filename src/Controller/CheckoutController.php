@@ -6,6 +6,7 @@ use Stripe\Stripe;
 
 use App\Entity\Cart;
 use App\Entity\Ordering;
+use App\Repository\OrderingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,24 +17,28 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class CheckoutController extends AbstractController
 {
     /**
-     * @Route("/create-checkout-session", name="create-checkout-session")
+     * @Route("/create-checkout-session/{reference}", name="create-checkout-session")
      */
-    public function index(EntityManagerInterface $em, SessionInterface $session)
+    public function index($reference, OrderingRepository $or)
     {
-      $cart = $session->get('cart', new Cart());
+      // $cart = $session->get('cart', new Cart());
+      // $order = $manager->getRepository(Ordering::class)->findOneByReference($reference);
+      $order = $or->findOneByReference($reference);
       $productsForStripe = [];
-      dump($cart);
+      
 
-      foreach($cart->getFullCart() as $cartLine){
+      // foreach($cart->getFullCart() as $cartLine){
+        foreach($order->getProductOrderings()->getValues() as $cartLine){
+          // dd($cartLine);
         $productsForStripe[] = [
           'price_data' => [
               'currency' => 'eur',
               'product_data' => [
-                'name' => $cartLine['product']->getName(),
+                'name' => $cartLine->getProduct()->getName(),
               ],
-              'unit_amount' => $cartLine['product']->getUnitPrice()*100,
+              'unit_amount' => $cartLine->getProduct()->getUnitPrice()*100,
             ],
-            'quantity' => $cartLine['quantity'],
+            'quantity' => $cartLine->getQuantity(),
         ];
       }
       Stripe::setApiKey('sk_test_51HvgjELyEjuAwgbZtFkkq4UfxmsjafIAB10xIVuEjqHkQqVuHmrtBD4XvNGHPLnsOc7cKV8eL2lFxVNnVNSgyfpv00TCqiAFXL');
@@ -55,6 +60,7 @@ class CheckoutController extends AbstractController
      */
     public function success()
     {
+
         return $this->render('checkout/success.html.twig', []);
     }
 

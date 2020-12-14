@@ -31,12 +31,10 @@ class CartController extends AbstractController
     /**
      * @Route("/cart", name="cart_index")
      */
-    public function index(SessionInterface $session, Request $request, EntityManagerInterface $manager)
+    public function index(SessionInterface $session)
     {
         $cart = $session->get('cart', new Cart());
         $incart = [];
-        $newOrder = new Ordering();
-        // $newFacture = new Facture();
         
         foreach($cart->getFullCart() as $cartLine){
             $incart[] = [
@@ -44,47 +42,66 @@ class CartController extends AbstractController
                 'quantity' => $cartLine['quantity']
             ];
         }
-       
         $total = $cart->getTotal($incart);
-
-        $formSA = $this->createForm(OrderType::class, $newOrder);
-        $formSA->handleRequest($request);
-        if($formSA->isSubmitted() && $formSA->isValid()){
-            
-            $newOrder->setUser($this->getUser());
-            
-            foreach($cart->getFullCart() as $cartLine){
-                
-                $newProductOrder = new ProductOrdering();
-                $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
-                $newProductOrder->setProduct($product);
-                $newProductOrder->setQuantity($cartLine['quantity']);
-                
-                $newOrder->addProductOrdering($newProductOrder);
-                $manager->persist($newOrder);
-
-            
-                // $manager->flush();
-                // $newOrder->getFacture()->setOrdering($newOrder);
-                // Obligatoire pour rajouter l'order_id dans l'entité facture
-                return $this->render('checkout/index.html.twig', [
-                    'items' => $incart,
-                    'total' => $total,
-                    'order' => $newOrder,
-                    'reference' => $newOrder->getOrderingReference(),
-                ]);
-            }
-        }
 
         return $this->render('cart/index.html.twig', [
             'items' => $incart,
             'total' => $total,
-            'formSA' => $formSA->createView(),
-            
-
         ]);
-
     }
+
+    // public function indexx(SessionInterface $session, Request $request, EntityManagerInterface $manager)
+    // {
+    //     $cart = $session->get('cart', new Cart());
+    //     $incart = [];
+    //     $newOrder = new Ordering();
+    //     // $newFacture = new Facture();
+        
+    //     foreach($cart->getFullCart() as $cartLine){
+    //         $incart[] = [
+    //             'product' => $cartLine['product'],
+    //             'quantity' => $cartLine['quantity']
+    //         ];
+    //     }
+       
+    //     $total = $cart->getTotal($incart);
+
+    //     $formSA = $this->createForm(OrderType::class, $newOrder);
+    //     $formSA->handleRequest($request);
+    //     if($formSA->isSubmitted() && $formSA->isValid()){
+            
+    //         $newOrder->setUser($this->getUser());
+            
+    //         foreach($cart->getFullCart() as $cartLine){
+                
+    //             $newProductOrder = new ProductOrdering();
+    //             $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
+    //             $newProductOrder->setProduct($product);
+    //             $newProductOrder->setQuantity($cartLine['quantity']);
+                
+    //             $newOrder->addProductOrdering($newProductOrder);
+    //             $manager->persist($newOrder);
+
+            
+    //             // $manager->flush();
+    //             // $newOrder->getFacture()->setOrdering($newOrder);
+    //             // Obligatoire pour rajouter l'order_id dans l'entité facture
+    //             return $this->render('checkout/index.html.twig', [
+    //                 'items' => $incart,
+    //                 'total' => $total,
+    //                 'order' => $newOrder,
+    //                 'reference' => $newOrder->getOrderingReference(),
+    //             ]);
+    //         }
+    //     }
+
+    //     return $this->render('cart/index.html.twig', [
+    //         'items' => $incart,
+    //         'total' => $total,
+    //         'formSA' => $formSA->createView(),
+    //     ]);
+
+    // }
 
     /**
     * @Route("/cart/add/{id}", name="cart_add")
@@ -130,7 +147,7 @@ class CartController extends AbstractController
             $manager->persist($shipAddress);
             $manager->flush();
 
-            return $this->redirectToRoute('cart_index');
+            return $this->redirectToRoute('choose_address');
         }
 
         return $this->render('cart/addShipAddress.html.twig', [
@@ -138,6 +155,59 @@ class CartController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/chooseAdd", name="choose_address")
+     */
+    public function buy(SessionInterface $session, Request $request, EntityManagerInterface $manager)
+    {
+        $newOrder = new Ordering();
+        $newFacture = new Facture();
+        $newOrder->setFacture($newFacture);
+        $cart = $session->get('cart', new Cart());
+
+
+        foreach($cart->getFullCart() as $cartLine){
+            $incart[] = [
+                'product' => $cartLine['product'],
+                'quantity' => $cartLine['quantity']
+            ];
+        }
+       
+        $total = $cart->getTotal($incart);
+        $formSA = $this->createForm(OrderType::class, $newOrder);
+        $formSA->handleRequest($request);
+        if($formSA->isSubmitted() && $formSA->isValid()){
+            $newOrder->setUser($this->getUser());
+            
+
+            foreach($cart->getFullCart() as $cartLine){
+                
+                $newProductOrder = new ProductOrdering();
+                $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
+                $newProductOrder->setProduct($product);
+                $newProductOrder->setQuantity($cartLine['quantity']);
+                
+                $newOrder->addProductOrdering($newProductOrder);
+                $manager->persist($newOrder);
+            }
+            $newOrder->getFacture()->setOrdering($newOrder);
+            // Obligatoire pour rajouter l'order_id dans l'entité facture
+                $manager->flush();
+                
+                
+                return $this->render('checkout/index.html.twig', [
+                    'items' => $incart,
+                    'total' => $total,
+                    'order' => $newOrder,
+                    'reference' => $newOrder->getOrderingReference(),
+                ]);
+            
+        }
+
+        return $this->render('cart/addresses.html.twig', [
+            'formSA' => $formSA->createView(),
+        ]);
+    }
 
 
 

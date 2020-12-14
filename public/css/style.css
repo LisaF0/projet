@@ -64,6 +64,18 @@ input{
     width: 75%;
     margin:0;
 }
+div.address{
+    border: 1px solid black;
+    padding: 15px;
+    width : 350px;
+    margin: 30px;
+}
+#checkout-button{
+
+    margin-right: 50%;
+    margin-left: 50%;
+    
+}
 
 @media (min-width:768px)
 {
@@ -76,6 +88,11 @@ input{
 {
     article{
         width:25vw
+    }
+    div.container-address{
+        display: flex;
+        justify-content: center;
+        
     }
 
 
