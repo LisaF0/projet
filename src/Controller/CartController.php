@@ -50,59 +50,6 @@ class CartController extends AbstractController
         ]);
     }
 
-    // public function indexx(SessionInterface $session, Request $request, EntityManagerInterface $manager)
-    // {
-    //     $cart = $session->get('cart', new Cart());
-    //     $incart = [];
-    //     $newOrder = new Ordering();
-    //     // $newFacture = new Facture();
-        
-    //     foreach($cart->getFullCart() as $cartLine){
-    //         $incart[] = [
-    //             'product' => $cartLine['product'],
-    //             'quantity' => $cartLine['quantity']
-    //         ];
-    //     }
-       
-    //     $total = $cart->getTotal($incart);
-
-    //     $formSA = $this->createForm(OrderType::class, $newOrder);
-    //     $formSA->handleRequest($request);
-    //     if($formSA->isSubmitted() && $formSA->isValid()){
-            
-    //         $newOrder->setUser($this->getUser());
-            
-    //         foreach($cart->getFullCart() as $cartLine){
-                
-    //             $newProductOrder = new ProductOrdering();
-    //             $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
-    //             $newProductOrder->setProduct($product);
-    //             $newProductOrder->setQuantity($cartLine['quantity']);
-                
-    //             $newOrder->addProductOrdering($newProductOrder);
-    //             $manager->persist($newOrder);
-
-            
-    //             // $manager->flush();
-    //             // $newOrder->getFacture()->setOrdering($newOrder);
-    //             // Obligatoire pour rajouter l'order_id dans l'entité facture
-    //             return $this->render('checkout/index.html.twig', [
-    //                 'items' => $incart,
-    //                 'total' => $total,
-    //                 'order' => $newOrder,
-    //                 'reference' => $newOrder->getOrderingReference(),
-    //             ]);
-    //         }
-    //     }
-
-    //     return $this->render('cart/index.html.twig', [
-    //         'items' => $incart,
-    //         'total' => $total,
-    //         'formSA' => $formSA->createView(),
-    //     ]);
-
-    // }
-
     /**
     * @Route("/cart/add/{id}", name="cart_add")
     */
@@ -178,6 +125,8 @@ class CartController extends AbstractController
         $formSA->handleRequest($request);
         if($formSA->isSubmitted() && $formSA->isValid()){
             $newOrder->setUser($this->getUser());
+            $newOrder->getFacture()->setOrdering($newOrder);
+            $manager->persist($newOrder);
             
 
             foreach($cart->getFullCart() as $cartLine){
@@ -188,12 +137,13 @@ class CartController extends AbstractController
                 $newProductOrder->setQuantity($cartLine['quantity']);
                 
                 $newOrder->addProductOrdering($newProductOrder);
-                $manager->persist($newOrder);
+                $manager->persist($newProductOrder);
             }
-            $newOrder->getFacture()->setOrdering($newOrder);
+           
+            
             // Obligatoire pour rajouter l'order_id dans l'entité facture
                 $manager->flush();
-                
+                // dd($newOrder); 
                 
                 return $this->render('checkout/index.html.twig', [
                     'items' => $incart,

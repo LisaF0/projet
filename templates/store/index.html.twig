@@ -23,10 +23,14 @@
                                 <a href="{{ path('product_detail', {'id':product.id}) }}"><h2 class="productName">{{ product.name }}</h2></a>
                                 <p>{{product.description }}</p>
                                 <p>{{ product.unitprice ~ '€'}}</p>
+                                
+                                <form action="">
                                 <div class="qteAdd">
                                     <input type="number" id="quantity" name="quantity" min="1" max="{{ product.unitstock }}" value="1">
-                                    <a href="{{ path('cart_add', {'id': product.id} ) }}" type="button" class="btn btn-secondary cartAdd"><i class="fas fa-cart-plus"></i> Ajouter au panier</a>
-                                </div>
+                                    
+                                
+                                    <a href="{{ path('cart_add', {'id': product.id} ) }}" type="submit" class="btn btn-secondary cartAdd"><i class="fas fa-cart-plus"></i> Ajouter au panier</a>
+                                </div></form>
                                 {% if product.unitstock > 0 %}
                                     <p><i class="fas fa-check"></i> Disponible</p>
                                 {% else %}
@@ -42,5 +46,22 @@
 
     
     {% block footer %}{{ parent() }}{% endblock %}
+{% endblock %}
+{% block javascripts %}
+<script>
+// $('form').submit(function(e){
+//     e.preventDefault();
+//     $.ajax({
+//         type: 'POST',
+//         url: $(this).attr('action'),
+//         data: $(this).serialize(),
+//         success: function(data) {
+//             console.log(data)
+//         }
+
+
+//     })
+// })
+</script>
 {% endblock %}
 

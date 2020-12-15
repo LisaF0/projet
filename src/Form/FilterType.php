@@ -40,7 +40,8 @@ class FilterType extends AbstractType
             ])
 
             ->add('submit', SubmitType::class, [
-                'label' => 'Filtrer'
+                'label' => 'Filtrer',
+                'attr' => ['id' => 'formFilterSubmit']
             ])
             ;
     }

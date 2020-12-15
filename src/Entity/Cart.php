@@ -40,6 +40,10 @@ class Cart
         return $total;
     }
 
-    // public function clear(){}
+    public function clear($incart){
+        unset($this->incart);
+
+    return $incart; 
+    }
 
 }

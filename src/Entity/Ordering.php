@@ -64,6 +64,11 @@ class Ordering
      */
     private $facture;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $stripeSessionId;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -185,6 +190,33 @@ class Ordering
         return $this;
     }
 
+    public function getStripeSessionId(): ?string
+    {
+        return $this->stripeSessionId;
+    }
 
+    public function setStripeSessionId(?string $stripeSessionId): self
+    {
+        $this->stripeSessionId = $stripeSessionId;
+
+        return $this;
+    }
+
+    public function getTotal(){
+        $total = 0;
+        foreach($this->productOrderings as $product){
+            $productTotal =  $product->getProduct()->getUnitPrice() * $product->getQuantity();
+            $total += $productTotal;
+        }
+        return $total;
+    }
+
+    public function getQuantityTotal(){
+        $totalQuantity = 0;
+        foreach($this->productOrderings as $product){
+            $totalQuantity += $product->getQuantity();
+        }
+        return $totalQuantity;
+    }
 
 }

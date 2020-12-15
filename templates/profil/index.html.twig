@@ -21,9 +21,33 @@
     <h2>Mes commandes</h2>
         
     {% for order in orders %}
-        {% for productOrder in order.productOrderings %}
-            {{ productOrder.product.name }}
-        {% endfor %}
+    <p>Date de la commande : {{ order.createdAt|date('d/m/Y') }}</p>
+    <p>Référence de la commande : {{ order.orderingReference }}</p>
+    <table class='table'>
+        <thead>
+            <tr>
+                <td>Produit</td>
+                <td>Quantité</td>
+                <td>Prix unitaire</td>
+                <td>Total</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for productOrder in order.productOrderings %}
+            <tr>
+                <td>{{ productOrder.product.name }}</td>
+                <td>{{ productOrder.quantity }}</td>
+                <td>{{ productOrder.product.unitPrice }}</td>
+                <td>{{ productOrder.quantity * productOrder.product.unitPrice }}</td>
+            </tr>
+   
+            {% endfor %}
+        </tbody>
+    </table>
+        <div>
+            <p>Total : {{ order.getTotal }}</p>
+            <p>Nombre de produit total : {{ order.getQuantityTotal }}</p>
+        </div>
     {% endfor %}
     {% block footer %}{{ parent() }}{% endblock %}
 {% endblock %}

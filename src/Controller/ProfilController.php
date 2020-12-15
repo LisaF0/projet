@@ -22,6 +22,8 @@ class ProfilController extends AbstractController
     {
         $addresses = $user->getShipAddresses();
         $orders = $user->getOrderings();
+        
+        
 
         return $this->render('profil/index.html.twig', [
             'addresses'  => $addresses,

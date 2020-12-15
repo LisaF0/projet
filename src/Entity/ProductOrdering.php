@@ -23,7 +23,7 @@ class ProductOrdering
     private $quantity;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Ordering::class, inversedBy="productOrderings")
+     * @ORM\ManyToOne(targetEntity=Ordering::class, inversedBy="productOrderings", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $ordering;

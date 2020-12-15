@@ -7,7 +7,55 @@
 {% block body %}
 {% block nav %}{{ parent() }}{% endblock %}
 <h1>Votre commande a bien été effectuée</h1>
-<h3>Récapitulatif</h3>
+<h3>Récapitulatif de la commande n° {{order.orderingReference}}</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Produit</th>
+                    <th>Prix</th>
+                    <th>Quantité</th>
+                    <th>Total</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.productOrderings %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.product.unitprice ~ '€' }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.product.unitprice * item.quantity ~ '€' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2" class="text-right">Total : </td>
+                    <td>{{ quantityTotal }}</td>
+                    <td>{{ total ~ '€'}}</td>
+                    
+                </tr>
+            </tfoot>
+        </table>
+
+                <div class="container-address">
+            <div class="address">
+                <h3>Adresse de livraison</h3>
+                <p>Nom: {{ order.shipAddress.lastname }}</p>
+                <p>Prénom: {{ order.shipAddress.firstname }}</p>
+                <p>Ville: {{ order.shipAddress.city }}</p>
+                <p>Code Postal: {{ order.shipAddress.zipcode }}</p>
+                <p>Adresse: {{ order.shipAddress.address }}</p>
+            </div>
+            <div class="address">
+                <h3>Adresse de facturation</h3>
+                <p>Nom: {{ order.facture.lastname }}</p>
+                <p>Prénom: {{ order.facture.firstname }}</p>
+                <p>Ville: {{ order.facture.city }}</p>
+                <p>Code Postal: {{ order.facture.zipcode }}</p>
+                <p>Adresse: {{ order.facture.address }}</p>
+            </div>          
+        </div>
 <button class="btn btn-primary">Télécharger la facture</button>
 {% endblock %}
 
