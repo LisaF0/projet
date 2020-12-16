@@ -2,12 +2,12 @@
 
 {% block title %}Checkout{% endblock %}
 {% block stylesheets %}
-{{ parent() }}
+    {{ parent() }}
 {% endblock %}
 {% block body %}
-{% block nav %}{{ parent() }}{% endblock %}
-<h1>Votre commande a bien été effectuée</h1>
-<h3>Récapitulatif de la commande n° {{order.orderingReference}}</h3>
+    {% block nav %}{{ parent() }}{% endblock %}
+        <h1>Votre commande a bien été effectuée</h1>
+        <h3>Récapitulatif de la commande n° {{order.orderingReference}}</h3>
         <table class="table">
             <thead>
                 <tr>
@@ -38,7 +38,7 @@
             </tfoot>
         </table>
 
-                <div class="container-address">
+        <div class="container-address">
             <div class="address">
                 <h3>Adresse de livraison</h3>
                 <p>Nom: {{ order.shipAddress.lastname }}</p>
@@ -56,6 +56,6 @@
                 <p>Adresse: {{ order.facture.address }}</p>
             </div>          
         </div>
-<button class="btn btn-primary">Télécharger la facture</button>
+        <button class="btn btn-primary">Télécharger la facture</button>
 {% endblock %}
 

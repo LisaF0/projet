@@ -9,7 +9,6 @@ use App\Repository\UserRepository;
 use App\Repository\OrderingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
-
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,15 +20,11 @@ class CheckoutController extends AbstractController
      */
     public function index($reference, OrderingRepository $or, EntityManagerInterface $manager)
     {
-      // $cart = $session->get('cart', new Cart());
-      
       $YOUR_DOMAIN = 'http://127.0.0.1:8000';
       $productsForStripe = [];
       $order = $or->findOneByOrderingReference($reference);
       
-      // foreach($cart->getFullCart() as $cartLine){
-        foreach($order->getProductOrderings()->getValues() as $cartLine){
-          // dd($cartLine);
+      foreach($order->getProductOrderings()->getValues() as $cartLine){
         $productsForStripe[] = [
           'price_data' => [
               'currency' => 'eur',
@@ -51,8 +46,8 @@ class CheckoutController extends AbstractController
           'mode' => 'payment',
           'success_url' => $YOUR_DOMAIN.'/success/{CHECKOUT_SESSION_ID}',
           'cancel_url' => $YOUR_DOMAIN.'/error/{CHECKOUT_SESSION_ID}',
-          ]);
-              
+      ]);
+
       $order->setStripeSessionId($checkout_session->id);
       $manager->flush();
       return new JsonResponse(['id' => $checkout_session->id]);
@@ -76,28 +71,23 @@ class CheckoutController extends AbstractController
         $total = 0;
         $quantityTotal = 0;
         foreach($order->getProductOrderings() as $cartLine){
-          
           $totalCartline = $cartLine->getProduct()->getUnitPrice() * $cartLine->getQuantity();
           $total += $totalCartline;
           $totalCartlineQuantity = $cartLine->getQuantity();
           $quantityTotal += $totalCartlineQuantity;
         }
         $cart = $session->get('cart', new Cart());
-        
         $cart->clear($cart->getFullCart());
-// dd($cart);
         return $this->render('checkout/success.html.twig', [
           'order' => $order,
           'total' => $total,
           'quantityTotal' => $quantityTotal,
         ]);
       }
-
         return $this->render('checkout/success.html.twig', [
           'order' => $order,
           
         ]);
-
     }
 
     /**

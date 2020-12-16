@@ -3,10 +3,14 @@
 {% block title %}Mon Profil{% endblock %}
 
 {% block body %}
-    {% block nav %}{{ parent() }}{% endblock %}
+    {% block nav %}
+        {{ parent() }}
+    {% endblock %}
     <h1>Modifier mon email</h1>
 
-   {{ form(formUser) }}
+    {{ form(formUser) }}
 
-    {% block footer %}{{ parent() }}{% endblock %}
+    {% block footer %}
+        {{ parent() }}
+    {% endblock %}
 {% endblock %}

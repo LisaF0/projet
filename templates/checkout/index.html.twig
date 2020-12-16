@@ -2,112 +2,105 @@
 
 {% block title %}Checkout{% endblock %}
 {% block stylesheets %}
-{{ parent() }}
+    {{ parent() }}
 {% endblock %}
 {% block body %}
-    {% block nav %}{{ parent() }}{% endblock %}
-    {% if items | length > 0 %}
+    {% block nav %}
+        {{ parent() }}
+    {% endblock %}
+    
     <h2>Récapitulatif de la commande</h2>
-        <h3>Panier</h3>
-        <table class="table">
-            <thead>
+    <h3>Panier</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Prix</th>
+                <th>Quantité</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
                 <tr>
-                    <th>Produit</th>
-                    <th>Prix</th>
-                    <th>Quantité</th>
-                    <th>Total</th>
-                    <th></th>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.product.unitprice ~ '€' }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.product.unitprice * item.quantity ~ '€' }}</td>
+                    <td>
+                        <a href="{{ path('cart_remove', {'id': item.product.id }) }}" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash"></i>
+                        </a>  
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for item in items %}
-                    <tr>
-                        <td>{{ item.product.name }}</td>
-                        <td>{{ item.product.unitprice ~ '€' }}</td>
-                        <td>{{ item.quantity }}</td>
-                        <td>{{ item.product.unitprice * item.quantity ~ '€' }}</td>
-                        <td>
-                            <a href="{{ path('cart_remove', {'id': item.product.id }) }}" class="btn btn-danger btn-sm">
-                                <i class="fas fa-trash"></i>
-                            </a>  
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3" class="text-right">Total : </td>
-                    <td>{{ total ~ '€'}}</td>
-                    {% if app.user %}
-                        <td> </td>
-                    {% else %}
-                        <td> </td>
-                    {% endif %}
-                </tr>
-            </tfoot>
-        </table>
-        <div class="container-address">
-            <div class="address">
-                <h3>Adresse de livraison</h3>
-                <p>Nom: {{ order.shipAddress.lastname }}</p>
-                <p>Prénom: {{ order.shipAddress.firstname }}</p>
-                <p>Ville: {{ order.shipAddress.city }}</p>
-                <p>Code Postal: {{ order.shipAddress.zipcode }}</p>
-                <p>Adresse: {{ order.shipAddress.address }}</p>
-            </div>
-            <div class="address">
-                <h3>Adresse de facturation</h3>
-                <p>Nom: {{ order.facture.lastname }}</p>
-                <p>Prénom: {{ order.facture.firstname }}</p>
-                <p>Ville: {{ order.facture.city }}</p>
-                <p>Code Postal: {{ order.facture.zipcode }}</p>
-                <p>Adresse: {{ order.facture.address }}</p>
-            </div>          
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-right">Total : </td>
+                <td>{{ total ~ '€'}}</td>
+                {% if app.user %}
+                    <td> </td>
+                {% else %}
+                    <td> </td>
+                {% endif %}
+            </tr>
+        </tfoot>
+    </table>
+    <div class="container-address">
+        <div class="address">
+            <h3>Adresse de livraison</h3>
+            <p>Nom: {{ order.shipAddress.lastname }}</p>
+            <p>Prénom: {{ order.shipAddress.firstname }}</p>
+            <p>Ville: {{ order.shipAddress.city }}</p>
+            <p>Code Postal: {{ order.shipAddress.zipcode }}</p>
+            <p>Adresse: {{ order.shipAddress.address }}</p>
         </div>
-        {# <pre>
-            {{ dump(reference) }}
-        </pre> #}
-        {% if app.user %}
-            <button class="btn btn-primary" id="checkout-button">Checkout</button>
-        {% else %}
-            <p><a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a></p>
-        {% endif %}
-    {% else %}
-        <p>Votre panier est vide.</p>
-    {% endif %}
-    {% block footer %}{{ parent() }}{% endblock %}
+        <div class="address">
+            <h3>Adresse de facturation</h3>
+            <p>Nom: {{ order.facture.lastname }}</p>
+            <p>Prénom: {{ order.facture.firstname }}</p>
+            <p>Ville: {{ order.facture.city }}</p>
+            <p>Code Postal: {{ order.facture.zipcode }}</p>
+            <p>Adresse: {{ order.facture.address }}</p>
+        </div>          
+    </div>
+        
+    {% block footer %}
+        {{ parent() }}
+    {% endblock %}
 {% endblock %}
 {% block javascripts %}
-<script type="text/javascript">
-      // Create an instance of the Stripe object with your publishable API key
-      var stripe = Stripe('pk_test_51HvgjELyEjuAwgbZePdTWvQMgmdhI1uAxfEmwx6zqvuSrYSVru4XukNzFhOEaSNPz6torjLLNySw1kz0JgkUNhBv00vg0FnJ8K');
-      var checkoutButton = document.getElementById('checkout-button');
+    <script type="text/javascript">
+        // Create an instance of the Stripe object with your publishable API key
+        var stripe = Stripe('pk_test_51HvgjELyEjuAwgbZePdTWvQMgmdhI1uAxfEmwx6zqvuSrYSVru4XukNzFhOEaSNPz6torjLLNySw1kz0JgkUNhBv00vg0FnJ8K');
+        var checkoutButton = document.getElementById('checkout-button');
 
 
-      checkoutButton.addEventListener('click', function() {
-        // Create a new Checkout Session using the server-side endpoint you
-        // created in step 3.
-        fetch("/create-checkout-session/{{ reference }}", {
-          method: 'POST',
-        })
-        .then(function(response) {
-          return response.json();
-        })
-        .then(function(session) {
-          return stripe.redirectToCheckout({ sessionId: session.id });
-        })
-        .then(function(result) {
-          // If `redirectToCheckout` fails due to a browser or network
-          // error, you should display the localized error message to your
-          // customer using `error.message`.
-          if (result.error) {
-            alert(result.error.message);
-          }
-        })
-        .catch(function(error) {
-          console.error('Error:', error);
+        checkoutButton.addEventListener('click', function() {
+            // Create a new Checkout Session using the server-side endpoint you
+            // created in step 3.
+            fetch("/create-checkout-session/{{ reference }}", {
+            method: 'POST',
+            })
+            .then(function(response) {
+            return response.json();
+            })
+            .then(function(session) {
+            return stripe.redirectToCheckout({ sessionId: session.id });
+            })
+            .then(function(result) {
+            // If `redirectToCheckout` fails due to a browser or network
+            // error, you should display the localized error message to your
+            // customer using `error.message`.
+            if (result.error) {
+                alert(result.error.message);
+            }
+            })
+            .catch(function(error) {
+            console.error('Error:', error);
+            });
         });
-      });
     </script>
-
 {% endblock %}

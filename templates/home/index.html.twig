@@ -3,6 +3,10 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-    {% block nav %}{{ parent() }}{% endblock %}
-    {% block footer %}{{ parent() }}{% endblock %}
+    {% block nav %}
+        {{ parent() }}
+    {% endblock %}
+    {% block footer %
+        {{ parent() }}
+    {% endblock %}
 {% endblock %}

@@ -2,28 +2,18 @@
 
 namespace App\Controller;
 
-use Stripe\Stripe;
 use App\Entity\Cart;
-use App\Entity\Order;
-use App\Form\UserType;
 use App\Entity\Facture;
 use App\Entity\Product;
 use App\Form\OrderType;
 use App\Entity\Ordering;
-use App\Form\FactureType;
 use App\Entity\ShipAddress;
-use App\Entity\ProductOrder;
 use App\Form\ShipAddressType;
 use App\Entity\ProductOrdering;
-use Doctrine\ORM\EntityManager;
-use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CartController extends AbstractController
@@ -34,7 +24,7 @@ class CartController extends AbstractController
     public function index(SessionInterface $session)
     {
         $cart = $session->get('cart', new Cart());
-        $incart = [];
+        // $incart = [];
         
         foreach($cart->getFullCart() as $cartLine){
             $incart[] = [
@@ -55,7 +45,6 @@ class CartController extends AbstractController
     */
     public function add(Product $product, SessionInterface $session)
     {
-
         $cart = $session->get('cart', new Cart());
         $cart->add($product);
         $session->set('cart', $cart);
@@ -63,7 +52,6 @@ class CartController extends AbstractController
         $this->addFlash('success', 'Le produit a été ajouté au panier');
         
         return $this->redirectToRoute("products_index");
-        
     }
 
     /**
@@ -112,7 +100,6 @@ class CartController extends AbstractController
         $newOrder->setFacture($newFacture);
         $cart = $session->get('cart', new Cart());
 
-
         foreach($cart->getFullCart() as $cartLine){
             $incart[] = [
                 'product' => $cartLine['product'],
@@ -128,7 +115,6 @@ class CartController extends AbstractController
             $newOrder->getFacture()->setOrdering($newOrder);
             $manager->persist($newOrder);
             
-
             foreach($cart->getFullCart() as $cartLine){
                 
                 $newProductOrder = new ProductOrdering();
@@ -139,27 +125,18 @@ class CartController extends AbstractController
                 $newOrder->addProductOrdering($newProductOrder);
                 $manager->persist($newProductOrder);
             }
-           
+            $manager->flush();
             
-            // Obligatoire pour rajouter l'order_id dans l'entité facture
-                $manager->flush();
-                // dd($newOrder); 
-                
-                return $this->render('checkout/index.html.twig', [
-                    'items' => $incart,
-                    'total' => $total,
-                    'order' => $newOrder,
-                    'reference' => $newOrder->getOrderingReference(),
-                ]);
             
+            return $this->render('checkout/index.html.twig', [
+                'items' => $incart,
+                'total' => $total,
+                'order' => $newOrder,
+                'reference' => $newOrder->getOrderingReference(),
+            ]);
         }
-
         return $this->render('cart/addresses.html.twig', [
             'formSA' => $formSA->createView(),
         ]);
     }
-
-
-
-
 }

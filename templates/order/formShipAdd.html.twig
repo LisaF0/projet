@@ -3,7 +3,11 @@
 {% block title %}Hello OrderController!{% endblock %}
 
 {% block body %}
-    {% block nav %}{{ parent() }}{% endblock %}
+    {% block nav %}
+        {{ parent() }}
+    {% endblock %}
     {{ form(formShipAdd) }}
-    {% block footer %}{{ parent() }}{% endblock %}
+    {% block footer %}
+        {{ parent() }}
+    {% endblock %}
 {% endblock %}

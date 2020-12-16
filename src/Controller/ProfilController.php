@@ -22,9 +22,6 @@ class ProfilController extends AbstractController
     {
         $addresses = $user->getShipAddresses();
         $orders = $user->getOrderings();
-        
-        
-
         return $this->render('profil/index.html.twig', [
             'addresses'  => $addresses,
             'orders' => $orders,
@@ -39,14 +36,12 @@ class ProfilController extends AbstractController
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
-
             $user->setPassword(
                 $passwordEncoder->encodePassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
             );
-
             $manager->persist($user);
             $manager->flush();
             $this->addFlash('success', 'Vos informations ont bien été modifiées');
@@ -78,7 +73,6 @@ class ProfilController extends AbstractController
         return $this->render('profil/editAddress.html.twig', [
             'formAddress' => $form->createView()
         ]);
-
     }
 
     /**
@@ -92,6 +86,4 @@ class ProfilController extends AbstractController
             'id' => $this->getUser()->getId(),
         ]);
     }
-
-
 }

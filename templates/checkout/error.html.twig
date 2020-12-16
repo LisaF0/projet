@@ -2,10 +2,12 @@
 
 {% block title %}Checkout{% endblock %}
 {% block stylesheets %}
-{{ parent() }}
+    {{ parent() }}
 {% endblock %}
 {% block body %}
-{% block nav %}{{ parent() }}{% endblock %}
-<h1>Une erreur est survenue lors de votre commande</h1>
+    {% block nav %}
+        {{ parent() }}
+    {% endblock %}
+    <h1>Une erreur est survenue lors de votre commande</h1>
 {% endblock %}
 

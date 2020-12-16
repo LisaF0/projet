@@ -3,8 +3,12 @@
 {% block title %}{{ product.name }}}}{% endblock %}
 
 {% block body %}
-    {% block nav %}{{ parent() }}{% endblock %}
+    {% block nav %}
+        {{ parent() }}
+    {% endblock %}
 
         <p>{{ product.name }}</p>
-    {% block footer %}{{ parent() }}{% endblock %}
+    {% block footer %}
+        {{ parent() }}
+    {% endblock %}
 {% endblock %}
