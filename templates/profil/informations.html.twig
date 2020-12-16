@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes informations{% endblock %}
+
+{% block body %}
+    {% block nav %}
+        {{ parent() }}
+    {% endblock %}
+    <h2>Mes informations</h2>
+    <p>Email : {{ app.user.username }}</p>
+    <a href="{{ path('infos_edit', {'id': app.user.id }) }}" class="btn btn-primary">Modifier mes informations</a>
+
+    {% block footer %}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}

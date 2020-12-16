@@ -59,9 +59,14 @@ class Facture
 
      /**
      * @ORM\OneToOne(targetEntity=Ordering::class, cascade={"all"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $ordering;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $userId;
 
     public function __construct()
     {
@@ -186,5 +191,17 @@ class Facture
     public function __toString()
     {
         return $this->firstname.' '.$this->lastname.' - '.$this->city.', '.$this->address.', '.$this->zipcode;
+    }
+
+    public function getUserId(): ?int
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(int $userId): self
+    {
+        $this->userId = $userId;
+
+        return $this;
     }
 }

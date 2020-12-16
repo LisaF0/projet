@@ -14,9 +14,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class StoreController extends AbstractController
 {
     /**
-     * @Route("/products", name="products_index")
+     * @Route("/products/{sortBy}/{order}", name="products_index")
      */
-    public function index(Request $request, ProductRepository $pr): Response
+    public function index($sortBy = null, $order = null, Request $request, ProductRepository $pr): Response
     {
         $filter = New Filter();
         
@@ -28,24 +28,19 @@ class StoreController extends AbstractController
             $products = $pr->findByFilter($filter);
 
         } else {
-            $products = $this->getDoctrine()
-            ->getRepository(Product::class)
-            ->findAll();
+            if($sortBy == "name" || $sortBy == 'unitPrice' || $order == 'ASC' || $order == 'DESC'){
+                $sortField = ($sortBy) ? $sortBy : "name";
+                $sortOrder = ($order) ? $order : "ASC";
+                $products = $this->getDoctrine()
+                ->getRepository(Product::class)
+                ->findBy([], [$sortField => $sortOrder]);
+            }
+            
+            $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
         }
         return $this->render('store/index.html.twig', [
             'products' => $products,
             'formFilter' => $formFilter->createView()
         ]);
     }
-
-    /**
-     * @Route("/product/{id}", name="product_detail")
-     */
-    public function detailProduct(Product $product = null): Response
-    {
-       return $this->render('store/product.html.twig', [
-           'product' => $product    
-       ]);
-    }
-
 }

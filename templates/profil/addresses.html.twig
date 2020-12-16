@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes adresses{% endblock %}
+
+{% block body %}
+    {% block nav %}
+        {{ parent() }}
+    {% endblock %}
+    <h2>Mes adresses</h2>
+    {# <a href="">Ajouter une adresse</a> #}
+        {% for address in addresses %}
+            <div>
+                {{ address }} 
+            </div>
+            <a href="{{ path('address_edit', {'id': address.id }) }}" class="btn btn-primary">Modifier</a>
+            <a href="{{ path('address_delete', {'id': address.id }) }}" class="btn btn-danger">Supprimer</a>
+        {% endfor %}    
+
+    {% block footer %}
+        {{ parent() }}
+    {% endblock %}
+{% endblock %}

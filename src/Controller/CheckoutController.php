@@ -64,19 +64,25 @@ class CheckoutController extends AbstractController
       if(!$order || $user != $this->getUser()){
         return $this->redirectToRoute('home_index');
       }
-      
-      if($order->getOrderingStatus() == 0 || $order->getOrderingStatus() == 1){
+      $total = $order->getTotal();
+      $quantityTotal = $order->getQuantityTotal();
+      if($order->getOrderingStatus() == 0){
         $order->setOrderingStatus(1);
         $manager->flush();
-        $total = 0;
-        $quantityTotal = 0;
-        foreach($order->getProductOrderings() as $cartLine){
-          $totalCartline = $cartLine->getProduct()->getUnitPrice() * $cartLine->getQuantity();
-          $total += $totalCartline;
-          $totalCartlineQuantity = $cartLine->getQuantity();
-          $quantityTotal += $totalCartlineQuantity;
+        
+
+        //je retire des stock la qte de produit qui a été vendu
+        
+        foreach($order->getProductOrderings() as $productLine){
+          $product = $productLine->getProduct();
+          $quantity = $productLine->getQuantity();
+          $value = $product->getUnitStock() - $quantity;
+          $product->setUnitStock($value);
         }
+        $manager->flush();
+        
         $cart = $session->get('cart', new Cart());
+        //je vide le panier
         $cart->clear($cart->getFullCart());
         return $this->render('checkout/success.html.twig', [
           'order' => $order,
@@ -84,10 +90,12 @@ class CheckoutController extends AbstractController
           'quantityTotal' => $quantityTotal,
         ]);
       }
-        return $this->render('checkout/success.html.twig', [
-          'order' => $order,
-          
-        ]);
+      return $this->render('checkout/success.html.twig', [
+        'order' => $order,
+        'total' => $total,
+        'quantityTotal' => $quantityTotal,
+        
+      ]);
     }
 
     /**
@@ -95,6 +103,6 @@ class CheckoutController extends AbstractController
      */
     public function error()
     {
-        return $this->render('checkout/error.html.twig', []);
+      return $this->render('checkout/error.html.twig', []);
     }
 }

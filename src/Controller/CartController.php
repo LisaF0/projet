@@ -10,6 +10,7 @@ use App\Entity\Ordering;
 use App\Entity\ShipAddress;
 use App\Form\ShipAddressType;
 use App\Entity\ProductOrdering;
+use App\Repository\FactureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,21 +19,25 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CartController extends AbstractController
 {
+    private $cart;
+
+    public function __construct(SessionInterface $session){
+        $this->cart = $session->get('cart', new Cart());
+    }
     /**
      * @Route("/cart", name="cart_index")
      */
-    public function index(SessionInterface $session)
+    public function index()
     {
-        $cart = $session->get('cart', new Cart());
-        // $incart = [];
+        $incart = [];
         
-        foreach($cart->getFullCart() as $cartLine){
+        foreach($this->cart->getFullCart() as $cartLine){
             $incart[] = [
                 'product' => $cartLine['product'],
                 'quantity' => $cartLine['quantity']
             ];
         }
-        $total = $cart->getTotal($incart);
+        $total = $this->cart->getTotal($incart);
 
         return $this->render('cart/index.html.twig', [
             'items' => $incart,
@@ -43,11 +48,12 @@ class CartController extends AbstractController
     /**
     * @Route("/cart/add/{id}", name="cart_add")
     */
-    public function add(Product $product, SessionInterface $session)
+    public function add(Request $request, Product $product, SessionInterface $session)
     {
-        $cart = $session->get('cart', new Cart());
-        $cart->add($product);
-        $session->set('cart', $cart);
+        
+        $qtt = $request->request->get("quantity");
+        $this->cart->add($product, $qtt);
+        $session->set('cart', $this->cart);
 
         $this->addFlash('success', 'Le produit a été ajouté au panier');
         
@@ -59,9 +65,8 @@ class CartController extends AbstractController
      */
     public function remove(Product $product, SessionInterface $session)
     {
-        $cart = $session->get('cart', new Cart());
-        $cart->remove($product);
-        $session->set('cart', $cart);
+        $this->cart->remove($product);
+        $session->set('cart', $this->cart);
 
         $this->addFlash('warning', 'Le produit a été supprimé du panier');
 
@@ -93,21 +98,35 @@ class CartController extends AbstractController
     /**
      * @Route("/chooseAdd", name="choose_address")
      */
-    public function buy(SessionInterface $session, Request $request, EntityManagerInterface $manager)
+    public function buy(Request $request, EntityManagerInterface $manager, FactureRepository $fr)
     {
         $newOrder = new Ordering();
         $newFacture = new Facture();
+        $newFacture->setUserId($this->getUser()->getId());
         $newOrder->setFacture($newFacture);
-        $cart = $session->get('cart', new Cart());
+        // remplir les données de l'adresse de facturation à partir de la facture précédente
+        
+        $lastFacture = $fr->findLastFacture($this->getUser()->getId());
+        if($lastFacture){
+            
+            $newFacture->setUserId($lastFacture->getUserId());
+            $newFacture->setFirstname($lastFacture->getFirstname());
+            $newFacture->setLastname($lastFacture->getLastname());
+            $newFacture->setCity($lastFacture->getCity());
+            $newFacture->setZipcode($lastFacture->getZipcode());
+            $newFacture->setAddress($lastFacture->getAddress());
 
-        foreach($cart->getFullCart() as $cartLine){
+        }
+        
+
+        foreach($this->cart->getFullCart() as $cartLine){
             $incart[] = [
                 'product' => $cartLine['product'],
                 'quantity' => $cartLine['quantity']
             ];
         }
        
-        $total = $cart->getTotal($incart);
+        $total = $this->cart->getTotal($incart);
         $formSA = $this->createForm(OrderType::class, $newOrder);
         $formSA->handleRequest($request);
         if($formSA->isSubmitted() && $formSA->isValid()){
@@ -115,7 +134,7 @@ class CartController extends AbstractController
             $newOrder->getFacture()->setOrdering($newOrder);
             $manager->persist($newOrder);
             
-            foreach($cart->getFullCart() as $cartLine){
+            foreach($this->cart->getFullCart() as $cartLine){
                 
                 $newProductOrder = new ProductOrdering();
                 $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
@@ -138,5 +157,22 @@ class CartController extends AbstractController
         return $this->render('cart/addresses.html.twig', [
             'formSA' => $formSA->createView(),
         ]);
+    }
+
+    /**
+     * @Route("clearCart", name="cart_clear")
+     */
+    public function clearCart(){
+        $incart = [];
+        
+        foreach($this->cart->getFullCart() as $cartLine){
+            $incart[] = [
+                'product' => $cartLine['product'],
+                'quantity' => $cartLine['quantity']
+            ];
+        }
+        $this->cart->clear($incart);
+
+        return $this->redirectToRoute('cart_index');
     }
 }

@@ -46,6 +46,7 @@ class ShipAddress
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="shipAddresses")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $user;
 

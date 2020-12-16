@@ -19,23 +19,31 @@ class FactureRepository extends ServiceEntityRepository
         parent::__construct($registry, Facture::class);
     }
 
+    
 
-    // /**
-    //  * @return Facture[] Returns an array of Facture objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+    * @return Facture Returns Facture objects
+    */
+    public function findLastFacture($userId)
     {
+        $date = $this->createQueryBuilder('f')
+                    ->select('MAX(f.createdAt)')
+                    ->andWhere('f.userId = :userId')
+                    ->setParameter('userId', $userId)
+                    ->getQuery()
+                    ->getSingleScalarResult();
+    
+
         return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('f.userId = :userId')
+            ->setParameter('userId', $userId)
+            ->andWhere('f.createdAt = :date') 
+            ->setParameter('date', $date)
             ->getQuery()
-            ->getResult()
+            ->getOneOrNullResult()
         ;
     }
-    */
+    
 
     /*
     public function findOneBySomeField($value): ?Facture

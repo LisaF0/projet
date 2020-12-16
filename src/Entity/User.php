@@ -39,7 +39,7 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity=ShipAddress::class, mappedBy="user", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=ShipAddress::class, mappedBy="user", cascade={"all"})
      */
     private $shipAddresses;
 

@@ -6,50 +6,16 @@
     {% block nav %}
         {{ parent() }}
     {% endblock %}
-    <h2>Mes informations</h2>
-    <p>Email : {{ app.user.username }}</p>
-    <a href="{{ path('profil_edit', {'id': app.user.id }) }}" class="btn btn-primary">Modifier mes informations</a>
+    <h1>Mon profil</h1>
+    <div>
+        <a href="{{ path('profil_infos') }}" class="btn btn-secondary">Mes informations</a>
     
-    <h2>Mes adresses</h2>
-    <ul>
-        {% for address in addresses %}
-            <li>
-                {{ address }} 
-                <a href="{{ path('address_edit', {'id': address.id }) }}" class="btn btn-primary">Modifier</a>
-                <a href="{{ path('address_delete', {'id': address.id }) }}" class="btn btn-danger">Supprimer</a>
-            </li>
-        {% endfor %}    
-    </ul>
-    <h2>Mes commandes</h2>
-        
-    {% for order in orders %}
-    <p>Date de la commande : {{ order.createdAt|date('d/m/Y') }}</p>
-    <p>Référence de la commande : {{ order.orderingReference }}</p>
-    <table class='table'>
-        <thead>
-            <tr>
-                <td>Produit</td>
-                <td>Quantité</td>
-                <td>Prix unitaire</td>
-                <td>Total</td>
-            </tr>
-        </thead>
-        <tbody>
-            {% for productOrder in order.productOrderings %}
-            <tr>
-                <td>{{ productOrder.product.name }}</td>
-                <td>{{ productOrder.quantity }}</td>
-                <td>{{ productOrder.product.unitPrice }}</td>
-                <td>{{ productOrder.quantity * productOrder.product.unitPrice }}</td>
-            </tr>
-   
-            {% endfor %}
-        </tbody>
-    </table>
-        <div>
-            <p>Total : {{ order.getTotal }}</p>
-            <p>Nombre de produit total : {{ order.getQuantityTotal }}</p>
-        </div>
-    {% endfor %}
-    {% block footer %}{{ parent() }}{% endblock %}
+        <a href="{{ path('profil_addresses') }}" class="class btn btn-secondary">Mes adresses</a>
+    
+        <a href="{{ path('profil_orders') }}" class="btn btn-secondary">Mes commandes</a>
+        <a href="{{ path('account_delete', {'id': app.user.id }) }}" class="btn btn-danger">Supprimer mon compte</a>
+    </div>
+    {% block footer %}
+        {{ parent() }}
+    {% endblock %}
 {% endblock %}

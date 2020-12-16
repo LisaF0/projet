@@ -8,19 +8,26 @@ class Cart
 {
     private $incart = [];
 
+    public function getQuantity(){
+        // Pour chaque ligne du panier, on fait la somme des quantités
+        return array_reduce($this->incart, function($total, $item){
+            return $total+= $item['quantity'];
+        });
+    }
+    
     public function getFullCart(){
         return $this->incart;
     }
 
-    public function add(Product $product){
+    public function add(Product $product, $qtt){
         if(!array_key_exists($product->getId(), $this->incart)){
            $this->incart[$product->getId()] = [
                "product" => $product,
-               "quantity" => 1
+               "quantity" => $qtt
            ];
         }
         else{
-            $this->incart[$product->getId()]["quantity"]++;
+            $this->incart[$product->getId()]["quantity"]+=$qtt;
         }   
     }  
 
