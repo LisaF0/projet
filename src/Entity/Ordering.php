@@ -54,7 +54,7 @@ class Ordering
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=ProductOrdering::class, mappedBy="ordering", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=ProductOrdering::class, mappedBy="ordering", cascade={"all"})
      */
     private $productOrderings;
 

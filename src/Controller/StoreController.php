@@ -23,6 +23,7 @@ class StoreController extends AbstractController
         $formFilter = $this->createForm(FilterType::class, $filter);
         $formFilter->handleRequest($request);
 
+
         if($formFilter->isSubmitted() && $formFilter->isValid())
         {
             $products = $pr->findByFilter($filter);
@@ -42,5 +43,9 @@ class StoreController extends AbstractController
             'products' => $products,
             'formFilter' => $formFilter->createView()
         ]);
+    }
+
+    public function filterProducts(Request $request, ProductRepository $pr){
+        dd($request);
     }
 }

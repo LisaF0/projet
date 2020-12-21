@@ -27,9 +27,11 @@ class CartController extends AbstractController
     /**
      * @Route("/cart", name="cart_index")
      */
-    public function index()
+    public function index(SessionInterface $session)
     {
+        dump($session);
         $incart = [];
+        
         
         foreach($this->cart->getFullCart() as $cartLine){
             $incart[] = [
@@ -100,6 +102,10 @@ class CartController extends AbstractController
      */
     public function buy(Request $request, EntityManagerInterface $manager, FactureRepository $fr)
     {
+        $user = $this->getUser();
+        if(!$user){
+            return $this->redirectToRoute("app_login");
+        }
         $newOrder = new Ordering();
         $newFacture = new Facture();
         $newFacture->setUserId($this->getUser()->getId());
@@ -127,9 +133,9 @@ class CartController extends AbstractController
         }
        
         $total = $this->cart->getTotal($incart);
-        $formSA = $this->createForm(OrderType::class, $newOrder);
-        $formSA->handleRequest($request);
-        if($formSA->isSubmitted() && $formSA->isValid()){
+        $formOrder = $this->createForm(OrderType::class, $newOrder);
+        $formOrder->handleRequest($request);
+        if($formOrder->isSubmitted() && $formOrder->isValid()){
             $newOrder->setUser($this->getUser());
             $newOrder->getFacture()->setOrdering($newOrder);
             $manager->persist($newOrder);
@@ -155,7 +161,7 @@ class CartController extends AbstractController
             ]);
         }
         return $this->render('cart/addresses.html.twig', [
-            'formSA' => $formSA->createView(),
+            'formOrder' => $formOrder->createView(),
         ]);
     }
 

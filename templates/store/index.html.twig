@@ -64,20 +64,25 @@
 {% endblock %}
 {% block javascripts %}
     <script>
-    $('.dropdown-toggle').dropdown()
-    // $('form').submit(function(e){
-    //     e.preventDefault();
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: $(this).attr('action'),
-    //         data: $(this).serialize(),
-    //         success: function(data) {
-    //             console.log(data)
+    // $('.dropdown-toggle').dropdown()
+    // document.getElementById('filter_submit').addEventListener("click", function(e){
+    //     e.preventDefault()
+    //     let filtres = document.getElementsByClassName('form-check-input')
+    //     let type = document.getElementById('filter_types_1')
+    //     let labels = []
+    //     for(var i = 0; i < filtres.length; i++){
+    //         if(filtres[i].checked){
+    //             labels.push(filtres[i].nextElementSibling.innerText)
     //         }
-
-
-    //     })
+    //     }
+    //     let label = type.nextElementSibling
+    //     console.log(labels)
+        
     // })
+
+    
+
+    
     </script>
 {% endblock %}
 

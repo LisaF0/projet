@@ -35,13 +35,12 @@ class FilterType extends AbstractType
                 'class' => Type::class,
                 'expanded' => true,
                 'multiple' => true,
-                'choice_label' => 'name'
+                'choice_label' => 'name',
                 
             ])
 
             ->add('submit', SubmitType::class, [
                 'label' => 'Filtrer',
-                'attr' => ['id' => 'formFilterSubmit']
             ])
             ;
     }

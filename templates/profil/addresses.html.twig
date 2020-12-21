@@ -7,15 +7,19 @@
         {{ parent() }}
     {% endblock %}
     <h2>Mes adresses</h2>
-    {# <a href="">Ajouter une adresse</a> #}
+    <a href="{{ path('address_add') }}" class="btn btn-primary">Ajouter une adresse</a>
+    {% if addresses|length > 0 %}
         {% for address in addresses %}
             <div>
                 {{ address }} 
             </div>
             <a href="{{ path('address_edit', {'id': address.id }) }}" class="btn btn-primary">Modifier</a>
-            <a href="{{ path('address_delete', {'id': address.id }) }}" class="btn btn-danger">Supprimer</a>
+            {# <a href="{{ path('address_delete', {'id': address.id }) }}" class="btn btn-danger">Supprimer</a> #}
         {% endfor %}    
-
+    {% else %}
+        <p>Vous n'avez aucune adresse enregistrée.</p>
+    {% endif %}
+        
     {% block footer %}
         {{ parent() }}
     {% endblock %}

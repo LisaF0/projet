@@ -22,7 +22,7 @@ class Type
     /**
      * @ORM\Column(type="string", length=50)
      */
-    private $name;
+    public $name;
 
     /**
      * @ORM\OneToMany(targetEntity=Product::class, mappedBy="type")

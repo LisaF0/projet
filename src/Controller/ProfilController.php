@@ -6,12 +6,14 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Entity\ShipAddress;
 use App\Form\ShipAddressType;
+use App\Repository\ShipAddressRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ProfilController extends AbstractController
@@ -19,8 +21,9 @@ class ProfilController extends AbstractController
     /**
      * @Route("/profil", name="profil_show")
      */
-    public function showProfil(): Response
+    public function showProfil(SessionInterface $session): Response
     {
+
         if($this->getUser()){
             return $this->render('profil/index.html.twig');
         }
@@ -31,9 +34,10 @@ class ProfilController extends AbstractController
      * @Route("/profil/infos", name="profil_infos")
      */
     public function infosUser(){
-        if($this->getUser()){
+        $user = $this->getUser();
+        if($user){
             return $this->render('profil/informations.html.twig', [
-                'user' => $this->getUser()
+                'user' => $user
             ]);  
         }
         return $this->redirectToRoute('app_login'); 
@@ -69,11 +73,13 @@ class ProfilController extends AbstractController
     }
 
     /**
-     * @Route("/editInfos/{id}", name="infos_edit")
+     * @Route("/profil/editInfos/{id}", name="infos_edit")
      */
-    public function editEmail(User $user, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $manager, Request $request)
+    public function editEmail(User $user = null, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $manager, Request $request)
     {
-        if($this->getUser() == $user){
+        if(!$user || $this->getUser() !== $user){
+            return $this->redirectToRoute('app_login');
+        } else {
             $form = $this->createForm(UserType::class, $user);
             $form->handleRequest($request);
             if($form->isSubmitted() && $form->isValid()){
@@ -93,15 +99,17 @@ class ProfilController extends AbstractController
                 'formUser' => $form->createView()
             ]);
         }
-        return $this->redirectToRoute('app_login');
     }
 
     /**
-     * @Route("/editAddress/{id}", name="address_edit")
+     * @Route("/profil/editAddress/{id}", name="address_edit")
      */
-    public function editAddress(ShipAddress $shipAddress, Request $request, EntityManagerInterface $manager)
+    public function editAddress(ShipAddress $shipAddress = null, Request $request, EntityManagerInterface $manager)
     {
-        if($this->getUser() == $shipAddress->getUser()){
+        if(!$shipAddress || $this->getUser() !== $shipAddress->getUser()){
+            
+            return $this->redirectToRoute('app_login');
+        } else {
             $form = $this->createForm(ShipAddressType::class, $shipAddress);
             $form->handleRequest($request);
             if($form->isSubmitted() && $form->isValid()){
@@ -113,38 +121,67 @@ class ProfilController extends AbstractController
                 'formAddress' => $form->createView()
             ]);
         }
-        return $this->redirectToRoute('app_login');
     }
 
-    /**
-     * @Route("/deleteAddress/{id}", name="address_delete")
-     */
-    public function deleteAddress(ShipAddress $shipAddress, EntityManagerInterface $manager)
-    {
-        if($this->getUser() == $shipAddress->getUser()){
-            $manager->remove($shipAddress);
-            $manager->flush();
+    // /**
+    //  * @Route("/profil/deleteAddress/{id}", name="address_delete")
+    //  */
+    // public function deleteAddress(ShipAddress $shipAddress = null, EntityManagerInterface $manager)
+    // {
+    //     if(!$shipAddress || $this->getUser() !== $shipAddress->getUser()){
+    //         return $this->redirectToRoute('app_login');
+    //     } else {
+    //         $manager->remove($shipAddress);
+    //         $manager->flush();
             
-            return $this->redirectToRoute('profil_addresses');
+    //         return $this->redirectToRoute('profil_addresses');
+    //     }
+    // }
+
+    /**
+     * @Route("/profil/deleteAccount/{id}", name="account_delete")
+     */
+    public function deleteAccount(User $user = null, EntityManagerInterface $manager, SessionInterface $session)
+    {
+
+        if(!$user || $user !== $this->getUser()){
+            return $this->redirectToRoute('app_login');
+        } else {
+            $orders = $user->getOrderings();
+            foreach($orders as $order){
+                $manager->remove($order);
+            }
+
+            $manager->remove($user);
+            $manager->flush();
+            $this->container->get('security.token_storage')->setToken(null);
+            // on efface la session avant de rediriger l'user
+            $this->addFlash('success', 'Votre compte utilisateur a bien été supprimé !');
+            return $this->redirectToRoute('app_login'); 
         }
-        return $this->redirectToRoute('app_login');
     }
 
     /**
-     * @Route("/deleteAccount/{id}", name="account_delete")
+     * @Route("/profil/addAddress", name="address_add")
      */
-    public function deleteAccount($id, UserRepository $ur, EntityManagerInterface $manager)
+    public function addAddress(Request $request, EntityManagerInterface $manager)
     {
-        $user = $ur->findOneById($id);
-        // $addresses = $user->getShipAddresses();
-        // $orders = $user->getOrderings();
-        // foreach($addresses as $address){
-        //     // dd($address);
-        //     $manager->remove($address);
-        // }
+        $shipAddress = new ShipAddress();
+        $form = $this->createForm(ShipAddressType::class, $shipAddress);
+        $form->handleRequest($request);
         
-        $manager->remove($user);
-        $manager->flush();
-        return $this->redirectToRoute('home');
+        if($form->isSubmitted() && $form->isValid()){
+            $shipAddress = $form->getData();
+            $shipAddress->setUser($this->getUser());
+            $manager->persist($shipAddress);
+            $manager->flush();
+
+            return $this->redirectToRoute('profil_addresses');
+            
+        }
+
+        return $this->render('cart/addShipAddress.html.twig', [
+            'formAddShip' => $form->createView(),
+        ]);
     }
 }

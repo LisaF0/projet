@@ -59,7 +59,7 @@ class Facture
 
      /**
      * @ORM\OneToOne(targetEntity=Ordering::class, cascade={"all"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(name="ordering_id", onDelete="SET NULL")
      */
     private $ordering;
 
