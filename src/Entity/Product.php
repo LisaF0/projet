@@ -72,6 +72,11 @@ class Product
      */
     private $photo;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $year;
+
 
     public function getId(): ?int
     {
@@ -194,6 +199,18 @@ class Product
     public function setPhoto(?string $photo): self
     {
         $this->photo = $photo;
+
+        return $this;
+    }
+
+    public function getYear(): ?int
+    {
+        return $this->year;
+    }
+
+    public function setYear(int $year): self
+    {
+        $this->year = $year;
 
         return $this;
     }

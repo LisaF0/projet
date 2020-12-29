@@ -52,7 +52,7 @@ class CartController extends AbstractController
     */
     public function add(Request $request, Product $product, SessionInterface $session)
     {
-        
+        // Vérifier qu'il y'en ai en stock et que le produit existe
         $qtt = $request->request->get("quantity");
         $this->cart->add($product, $qtt);
         $session->set('cart', $this->cart);

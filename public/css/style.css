@@ -1,69 +1,21 @@
 *{
     box-sizing: border-box;
 }
-img{
-    margin:10px;
-}
-
-section h1{
-    color: black;
-}
-
 section{
     display:flex;
     flex-wrap: wrap;
     justify-content: center;
 }
-.filterSection{
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-}
-.navbar{
-    justify-content: flex-end;
-}
-
-.navbar a{
-    margin : 0.2em;
-}
-
-article{
-    min-width: 350px;
-    /* width: 80vw; */
-    border: 1px solid #b2bfca;
-    padding: 1em;
-    margin: 1em;
-    display: flex;
-    align-items: center;
-}
-.winePhoto{
-    width: auto;
-    height: 300px;
-}
-.productName{
-    color:black;
-    font-size: 22px;
-}
-input{
-    width: 35px;
-    margin-right:-5px;
-    padding: 3.75px;
-    border: none;
-    width: 25%;
-}
-.qteAdd{
-    border: 1px solid #6c757d;
-    border-radius: .25rem;
-    margin:0;
-    width: 230px;
-    height: 40px;
-    margin-bottom: 16px;
-}
-.cartAdd{
-    width: 75%;
+.alert{
     margin:0;
 }
+/* img{
+    margin: 10px;
+} */
+
+
+
+
 div.address{
     border: 1px solid black;
     padding: 15px;
@@ -76,24 +28,161 @@ div.address{
     margin-left: 50%;
     
 }
-
-@media (min-width:768px)
-{
-    article{
-        width:45vw
-    }
-
+/* ------------------------ Section Filters --------------------------- */
+#sectionFilters{
+    position: sticky;
+    top: 56px; /* taille de la navbar */
 }
-@media (min-width:1300px)
+.filterDropdown, .sortedDropdown{
+    width: 50%;
+}
+.filterButton, .sortedButton{
+    width: 100%;
+    border-radius: 0; 
+}
+.form-check-input{
+    position: inherit;
+}
+.filterContainer, .sortedContainer{
+    padding: 0 1em 1em 1em;
+}
+#filter_submit{
+    width: 100%;
+}
+.sortedContainer>a{
+    width: 100%;
+    border-bottom: 1px solid #b2bfca;
+}
+
+/* -------------------------- Store -----------------------*/
+
+#sectionProducts{
+    padding: 1em;
+}
+#productHeader{
+    width: 100vw;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: baseline;
+}
+
+article{
+    border: 1px solid #b2bfca;
+    padding: 1em;
+    margin-bottom: 1em;
+    display: flex;
+}
+.winePhoto{
+    width: auto;
+    height: 300px;
+    margin: 0 1em 0 0;
+    
+}
+.productName{
+    font-size: 22px;
+}
+.priceAndAvailableProduct{
+    display:flex;
+    justify-content: space-between;
+}
+.qteAdd{
+    width: 100%;
+    display: flex;
+}
+input{
+    width: 20%;
+}
+.cartAdd{
+    width: 80%;
+}
+.redColor{
+    color:red;
+}
+.greenColor{
+    color:green;
+}
+/* ---------------------------- Cart ----------------  */
+#cartHeader{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+}
+#cartHeader>h1{
+    font-size: 25px;
+    padding: 1em;
+}
+.cartSection{
+    justify-content: space-evenly;
+    align-items: baseline;
+}
+#cartFooter{
+    position: sticky;
+    bottom: 0;
+    background-color: rgba(93, 92, 92, 0.815);
+    width: 100%;
+    text-align: center;
+}
+.cartButton{
+    width: 100%;
+}
+.cartRemoveButton{
+    height: 30px;
+}
+.descProduct>h2{
+    font-size: 20px;
+}
+
+/* ---------------------------- Login ----------------  */
+#sectionLogin form{
+    width: 100%;
+    padding: 1.5em; 
+}
+#sectionLogin form input{
+    margin-bottom: 1em;
+}
+#sectionLogin form input::placeholder{
+    font-style: italic;
+}
+#sectionLogin form button{
+    display: block;
+    margin: auto;
+}
+
+
+
+
+
+/* ---------------------------- Register ----------------  */
+
+
+/* -----------------------------Responsive ------------------- */
+ @media (min-width:900px)
 {
-    article{
-        width:25vw
+/* --------- Store -------------*/
+    #sectionProducts{
+        flex-wrap: wrap;
     }
+    article{
+        width:40vw;
+        margin: 0 1em 1em 0;
+    }
+    /* --------- Cart -------------*/
+
+
+} 
+ @media (min-width:1450px)
+{
+    /* --------- Store -------------*/
+    article{
+        width:25vw;
+    }
+    /* --------- Cart -------------*/
+
     div.container-address{
         display: flex;
         justify-content: center;
-        
-    }
+    } 
 
 
-}
+} 

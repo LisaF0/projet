@@ -6,58 +6,62 @@
     {% block nav %}
         {{ parent() }}
     {% endblock %}
-    <div class="row">
-        <section class="col-md-2 filterSection">
-            <h3>Filtre</h3>
-            {{ form(formFilter) }}
-            <h3>Tri</h3>
-            <div class="dropdown show">
-            <a href="#" class="btn btn-secondary dropdown-toggle" role="button" id="dropdownMenuLink" 
+        <section id="sectionFilters">
+            <div class="dropdown show filterDropdown">
+                <a href="#" class="btn btn-secondary dropdown-toggle filterButton" role="button" id="dropdownMenuLink" 
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filtrer par</a>
+                <div class="dropdown-menu filterContainer" aria-labelledby="dropdownMenuLink">
+                    {{ form(formFilter) }}
+                </div>
+            </div>
+            <div class="dropdown show sortedDropdown">
+            <a href="#" class="btn btn-secondary dropdown-toggle sortedButton" role="button" id="dropdownMenuLink" 
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Trier par</a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <div class="dropdown-menu sortedContainer" aria-labelledby="dropdownMenuLink">
                     <a href="{{ path('products_index', {sortBy : 'unitPrice', order : 'ASC'}) }}" class="btn">du - cher au + cher</a>
                     <a href="{{ path('products_index', {sortBy : 'unitPrice', order : 'DESC'}) }}" class="btn">du + cher au - cher</a>
                     <a href="{{ path('products_index', {sortBy : 'name', order : 'ASC'}) }}" class="btn">ordre alphabétique</a>
                 </div>
             </div>
         </section>
-        <section class="col-md-10">
+        <section id="sectionProducts">
+            <div id="productHeader">
+                <h3>Nos Vins </h3>
+                <p>{{ products|length }} articles</p>
+            </div>
             {% if products|length > 0 %}
-            <h3>Nos Vins</h3>
-                <div class="row product-container">
-                    {% for product in products %}
-                        <div class="col-md-4" >
-                            <article>
-                                <img src="{{ asset('img/' ~ product.photo )}}" alt="{{ 'Bouteille de ' ~ product.name }}" class="winePhoto">
-                                <div>
-                                    <h2 class="productName">{{ product.name }}</h2>
-                                    <p>{{product.description }}</p>
-                                    <p>{{ product.unitprice ~ '€'}}</p>
-                                    {% if product.unitstock > 0 %}
-                                    <form method="post" action="{{ path('cart_add', {'id': product.id} ) }}">
-                                        <div class="qteAdd">
-                                            <input type="number" id="quantity" name="quantity" min="1" max="{{ product.unitstock }}" value="1">
-                                            <button type="submit" class="btn btn-secondary cartAdd"><i class="fas fa-cart-plus"></i> Ajouter au panier</button>
-                                        </div>
-                                    </form>
-                                    {% endif %}
-                                    {% if product.unitstock > 0 %}
-                                        <p><i class="fas fa-check"></i> Disponible</p>
-                                    {% else %}
-                                        <p><i class="fas fa-times"></i> Indisponible</p>
-                                    {% endif %}
+                {% for product in products %}
+                    <article>
+                        <img src="{{ asset('img/' ~ product.photo )}}" alt="{{ 'Bouteille de ' ~ product.name }}" class="winePhoto">
+                        <div>
+                            <h2 class="productName">{{ product.name ~ " " ~ product.year}}</h2>
+                            <p>Domaine {{ product.domain }}</p>
+                            <p>{{product.description }}</p>
+                            <div class="priceAndAvailableProduct">
+                                <p>{{ product.unitprice ~ '€'}}</p>
+                                {% if product.unitstock > 0 %}
+                                    <p><i class="fas fa-check greenColor"></i> Disponible</p>
+                                {% else %}
+                                    <p><i class="fas fa-times redColor"></i> Indisponible</p>
+                                {% endif %}
+                            </div>
+                            {% if product.unitstock > 0 %}
+                            <form method="post" action="{{ path('cart_add', {'id': product.id} ) }}">
+                                <div class="qteAdd">
+                                    <input type="number" id="quantity" name="quantity" min="1" max="{{ product.unitstock }}" value="1">
+                                    <button type="submit" class="btn btn-secondary cartAdd"><i class="fas fa-cart-plus"></i> Ajouter au panier</button>
                                 </div>
-                            </article>
+                            </form>
+                            {% endif %}
                         </div>
-                    {% endfor %}
-                </div>
+                    </article>
+                {% endfor %}
             {% else %}
                 <div>
                     <p>Aucun article ne correspond à votre recherche.</p>
                 </div>
             {% endif %}
         </section>
-    </div>
     {% block footer %}
         {{ parent() }}
     {% endblock %}

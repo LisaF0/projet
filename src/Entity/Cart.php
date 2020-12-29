@@ -9,10 +9,13 @@ class Cart
     private $incart = [];
 
     public function getQuantity(){
-        // Pour chaque ligne du panier, on fait la somme des quantités
-        return array_reduce($this->incart, function($total, $item){
-            return $total+= $item['quantity'];
-        });
+        if($this->incart){
+            //on vérifie qu'il y ai qqchose dans le panier
+            // Pour chaque ligne du panier, on fait la somme des quantités
+            return array_reduce($this->incart, function($total, $item){
+                return $total+= $item['quantity'];
+            });
+        }
     }
     
     public function getFullCart(){

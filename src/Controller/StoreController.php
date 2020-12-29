@@ -35,17 +35,14 @@ class StoreController extends AbstractController
                 $products = $this->getDoctrine()
                 ->getRepository(Product::class)
                 ->findBy([], [$sortField => $sortOrder]);
+            } else {
+                $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
             }
             
-            $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
         }
         return $this->render('store/index.html.twig', [
             'products' => $products,
             'formFilter' => $formFilter->createView()
         ]);
-    }
-
-    public function filterProducts(Request $request, ProductRepository $pr){
-        dd($request);
     }
 }

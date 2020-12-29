@@ -8,51 +8,87 @@
     {% block nav %}
         {{ parent() }}
     {% endblock %}
-    <h1>Mon panier</h1>
-
-    
-    {% if items | length > 0 %}
-    <a href="{{ path('cart_clear') }}"class="btn btn-danger">Vider le panier</a>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Produit</th>
-                    <th>Prix</th>
-                    <th>Quantité</th>
-                    <th>Total</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in items %}
-                    <tr>
-                        <td>{{ item.product.name }}</td>
-                        <td>{{ item.product.unitprice ~ '€' }}</td>
-                        <td>{{ item.quantity }}</td>
-                        <td>{{ item.product.unitprice * item.quantity ~ '€' }}</td>
-                        <td>
-                            <a href="{{ path('cart_remove', {'id': item.product.id }) }}" class="btn btn-danger btn-sm">
-                                <i class="fas fa-trash"></i>
-                            </a>  
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3" class="text-right">Total : </td>
-                    <td>{{ total ~ '€'}}</td>
-                    {% if app.user %}
-                        <td><a href="{{ path('choose_address') }}" class="btn btn-primary">Passer la commande</a> </td>
+    <section class="cartSection">
+        <div id="cartHeader">
+            <h1>Mon panier : {{ items|length }} articles</h1>
+            {% if items|length > 0 %}
+                <a href="{{ path('cart_clear') }}"class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vider le panier"><i class="fas fa-trash"></i></a>
+            {% endif %}
+        </div>
+        {% if items|length > 0 %}
+        {% for item in items %}
+            <article>
+                <img src="{{ asset('img/' ~ item.product.photo )}}" alt="{{ 'Bouteille de ' ~ item.product.name }}" class="winePhoto">
+                <div class="descProduct">
+                    <h2>{{ item.product.name ~ " " ~ item.product.year ~ " Domaine " ~ item.product.domain }}</h2>
+                    
+                    <p>Prix à l'unité : {{ item.product.unitprice ~ '€'}}</p>
+                    {% if item.product.unitstock > 0 %}
+                        <p><i class="fas fa-check greenColor"></i> Disponible</p>
                     {% else %}
-                        <td><a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a></td>
+                        <p><i class="fas fa-times redColor"></i> Indisponible</p>
                     {% endif %}
-                </tr>
-            </tfoot>
-        </table>
-    {% else %}
-        <p>Votre panier est vide.</p>
-    {% endif %}
+                    
+                    <p>Quantité : {{ item.quantity }}</p>
+                    <p>Sous-total : {{ item.product.unitprice * item.quantity ~ '€' }}</p>
+                </div>
+                    <a href="{{ path('cart_remove', {'id': item.product.id }) }}" class="btn btn-sm cartRemoveButton">
+                        <i class="fas fa-times"></i>
+                    </a>  
+            </article>
+        {% endfor %}
+        <div id="cartFooter">
+            <p class="cartTotal font-weight-bold m-0 p-2">{{ total ~ " €" }}</p>
+            {% if app.user %}
+                <a href="{{ path('choose_address') }}" class="btn btn-primary cartButton font-weight-bold p-3">Passer commande</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn btn-primary cartButton font-weight-bold p-3">Passer commande</a>
+            {% endif %}
+        </div>
+        
+
+        
+            {# <table class="table">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Prix</th>
+                        <th>Quantité</th>
+                        <th>Total</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.product.unitprice ~ '€' }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.product.unitprice * item.quantity ~ '€' }}</td>
+                            <td>
+                                <a href="{{ path('cart_remove', {'id': item.product.id }) }}" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-times"></i>
+                                </a>  
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-right">Total : </td>
+                        <td>{{ total ~ '€'}}</td>
+                        {% if app.user %}
+                            <td><a href="{{ path('choose_address') }}" class="btn btn-primary">Passer la commande</a> </td>
+                        {% else %}
+                            <td><a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a></td>
+                        {% endif %}
+                    </tr>
+                </tfoot>
+            </table> #}
+        {% else %}
+            <p>Votre panier est vide.</p>
+        {% endif %}
+    </section>
     {% block footer %}
         {{ parent() }}
     {% endblock %}
