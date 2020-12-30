@@ -17,10 +17,11 @@
         </div>
         {% if items|length > 0 %}
         {% for item in items %}
+
             <article>
                 <img src="{{ asset('img/' ~ item.product.photo )}}" alt="{{ 'Bouteille de ' ~ item.product.name }}" class="winePhoto">
                 <div class="descProduct">
-                    <h2>{{ item.product.name ~ " " ~ item.product.year ~ " Domaine " ~ item.product.domain }}</h2>
+                    <h2>{{ item.product.name ~ " " ~ item.product.year ~ " Domaine " ~ item.product.domain.name }}</h2>
                     
                     <p>Prix à l'unité : {{ item.product.unitprice ~ '€'}}</p>
                     {% if item.product.unitstock > 0 %}
@@ -38,7 +39,7 @@
             </article>
         {% endfor %}
         <div id="cartFooter">
-            <p class="cartTotal font-weight-bold m-0 p-2">{{ total ~ " €" }}</p>
+            <p class="cartTotal font-weight-bold m-0 p-2">Total : {{ total ~ " €" }}</p>
             {% if app.user %}
                 <a href="{{ path('choose_address') }}" class="btn btn-primary cartButton font-weight-bold p-3">Passer commande</a>
             {% else %}

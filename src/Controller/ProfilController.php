@@ -5,39 +5,38 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Entity\ShipAddress;
+use App\Form\UserEmailType;
 use App\Form\ShipAddressType;
-use App\Repository\ShipAddressRepository;
-use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class ProfilController extends AbstractController
 {
     /**
-     * @Route("/profil", name="profil_show")
-     */
-    public function showProfil(SessionInterface $session): Response
-    {
-
-        if($this->getUser()){
-            return $this->render('profil/index.html.twig');
-        }
-        return $this->redirectToRoute('app_login');  
-    }
-
-    /**
      * @Route("/profil/infos", name="profil_infos")
      */
-    public function infosUser(){
+    public function infosUser(Request $request, EntityManagerInterface $manager){
         $user = $this->getUser();
         if($user){
+            $addresses = $user->getShipAddresses();
+            $form = $this->createForm(UserEmailType::class, $user);
+            $form->handleRequest($request);
+            if($form->isSubmitted() && $form->isValid()){
+                $manager->flush();
+                $this->addFlash('success', 'Vos informations ont bien été modifiées');
+
+                return $this->redirectToRoute("profil_infos");
+            }
             return $this->render('profil/informations.html.twig', [
-                'user' => $user
+                'user' => $user,
+                'addresses' => $addresses,
+                'formUserEmail' => $form->createView()
             ]);  
         }
         return $this->redirectToRoute('app_login'); 
@@ -115,7 +114,7 @@ class ProfilController extends AbstractController
             if($form->isSubmitted() && $form->isValid()){
                 $manager->flush();
                 $this->addFlash('success', 'Cette adresse a bien été modifiée');
-                return $this->redirectToRoute('profil_addresses');
+                return $this->redirectToRoute('profil_infos');
             }
             return $this->render('profil/editAddress.html.twig', [
                 'formAddress' => $form->createView()
@@ -157,7 +156,7 @@ class ProfilController extends AbstractController
             $this->container->get('security.token_storage')->setToken(null);
             // on efface la session avant de rediriger l'user
             $this->addFlash('success', 'Votre compte utilisateur a bien été supprimé !');
-            return $this->redirectToRoute('app_login'); 
+            return $this->redirectToRoute('home_index'); 
         }
     }
 

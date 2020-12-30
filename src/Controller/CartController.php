@@ -27,9 +27,8 @@ class CartController extends AbstractController
     /**
      * @Route("/cart", name="cart_index")
      */
-    public function index(SessionInterface $session)
+    public function index()
     {
-        dump($session);
         $incart = [];
         
         

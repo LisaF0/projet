@@ -24,66 +24,75 @@
     </head>
     <body>
         {% block body %}
-            {% block nav %}
-                <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
-                    <button type="button" class="navbar-toggler justify-content-end " data-toggle="collapse" data-target="#nav">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-end" id="nav">
-                        <ul class="navbar-nav text-right">
-                            <li class="nav-item">
-                                <a href="{{ path('products_index') }}" class=" nav-link text-light font-weight-bold text-uppercase">
-                                    Produits <i class="fas fa-wine-bottle"></i>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                {% if app.user %}
-                                    <a href="{{ path('profil_show') }}" class=" nav-link text-light font-weight-bold text-uppercase"> {{ app.user.username ~ ' ' }}
-                                        <i class="fas fa-user"></i>
+            <div id="wrapper">
+                {% block nav %}
+                    <nav class="navbar navbar-expand-md bg-dark navbar-dark sticky-top">
+                        <button type="button" class="navbar-toggler justify-content-end " data-toggle="collapse" data-target="#nav">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse justify-content-end" id="nav">
+                            <ul class="navbar-nav text-right">
+                                <li class="nav-item">
+                                    <a href="{{ path('products_index') }}" class=" nav-link text-light font-weight-bold text-uppercase">
+                                        Produits <i class="fas fa-wine-bottle"></i>
                                     </a>
-                                {% endif %}
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ path('cart_index') }}" class=" nav-link text-light font-weight-bold text-uppercase" id="cart-button">
-                                    Panier <i class="fas fa-shopping-cart">
-                                    {% if app.session.get('cart') %} 
-                                    {# on vérifie que le panier n'est pas null #}
-                                        {% if app.session.get('cart').getQuantity > 0 %}
-                                            <span class="badge badge-pill badge-secondary">{{ app.session.get('cart').getQuantity }}</span> 
-                                        {% endif %}
+                                </li>
+                                <li class="nav-item dropdown">
+                                    {% if app.user %}
+                                        <a href="" class=" nav-link text-light font-weight-bold text-uppercase dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> {{ app.user.username ~ ' ' }}
+                                            <i class="fas fa-user"></i>
+                                        </a>
+                                        <div class="dropdown-menu bg-dark " aria-labelledby="navbarDropdown">
+                                            <a href="{{ path('profil_infos') }}" class="dropdown-item text-light">Mes informations</a>
+                                            <a href="{{ path('profil_orders') }}" class="dropdown-item text-light">Mes commandes</a>
+                                        </div>
                                     {% endif %}
-                                    </i> 
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                {% if app.user %}
-                                    <a href="{{ path('app_logout') }}" class=" nav-link text-light font-weight-bold text-uppercase">
-                                        Se déconnecter <i class="fas fa-sign-out-alt"></i>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ path('cart_index') }}" class=" nav-link text-light font-weight-bold text-uppercase" id="cart-button">
+                                        Panier <i class="fas fa-shopping-cart">
+                                        {% if app.session.get('cart') %} 
+                                        {# on vérifie que le panier n'est pas null #}
+                                            {% if app.session.get('cart').getQuantity > 0 %}
+                                                <span class="badge badge-pill badge-secondary">{{ app.session.get('cart').getQuantity }}</span> 
+                                            {% endif %}
+                                        {% endif %}
+                                        </i> 
                                     </a>
-                                {% else %}
-                                    <a href="{{ path('app_login') }}" class=" nav-link text-light font-weight-bold text-uppercase">
-                                        Se connecter <i class="fas fa-sign-in-alt"></i>
-                                    </a>
-                                {% endif %}
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
+                                </li>
+                                <li class="nav-item">
+                                    {% if app.user %}
+                                        <a href="{{ path('app_logout') }}" class=" nav-link text-light font-weight-bold text-uppercase">
+                                            Se déconnecter <i class="fas fa-sign-out-alt"></i>
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ path('app_login') }}" class=" nav-link text-light font-weight-bold text-uppercase">
+                                            Se connecter <i class="fas fa-sign-in-alt"></i>
+                                        </a>
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
 
-                {# this check prevents starting a session when there are no flash messages #}
-                {% if app.request.hasPreviousSession %}
-                    {% for label, messages in app.flashes %}
-                        {% for message in messages %}
-                            <div class="alert alert-{{ label }}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}        
-                    {% endfor %}
-                {% endif %}
-            {% endblock %}
+                    {# this check prevents starting a session when there are no flash messages #}
+                    {% if app.request.hasPreviousSession %}
+                        {% for label, messages in app.flashes %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ label }}">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}        
+                        {% endfor %}
+                    {% endif %}
+                {% endblock %}
 
-            {% block footer %}
-            {% endblock %}
+                {% block footer %}
+                {# <footer class="bg-dark text-center p-3 " >
+                    <p class="text-light">C'est moi le footer</p>
+                </footer> #}
+                {% endblock %}
+            </div>
         {% endblock %}
         {% block javascripts %}
         {% endblock %}

@@ -1,6 +1,9 @@
 *{
     box-sizing: border-box;
 }
+/* #wrapper{
+    min-height: 100vh;
+} */
 section{
     display:flex;
     flex-wrap: wrap;
@@ -14,7 +17,9 @@ section{
 } */
 
 
-
+.dropdown-menu>a:hover{
+    background-color:#3c4247;
+}
 
 div.address{
     border: 1px solid black;
@@ -133,27 +138,64 @@ input{
     font-size: 20px;
 }
 
-/* ---------------------------- Login ----------------  */
-#sectionLogin form{
+/* ---------------------------- Login & Register ----------------  */
+#sectionLogin form, #sectionRegister form{
     width: 100%;
     padding: 1.5em; 
 }
-#sectionLogin form input{
+#sectionLogin form input, #sectionRegister form input{
     margin-bottom: 1em;
 }
-#sectionLogin form input::placeholder{
+#sectionLogin form input::placeholder, #sectionRegister form input::placeholder{
     font-style: italic;
 }
-#sectionLogin form button{
+#sectionLogin form button, #sectionRegister form button{
+    width: 100%;
+}
+#registerButton{
+    margin-top: 1em;
+}
+
+/* ---------------------------- User ----------------  */
+#sectionInfos, #sectionAddresses{
+    padding: 1em;
+    
+}
+#sectionInfos h2, #sectionAddresses h2{
+    width: 100vw;
+    text-align: center;
+}
+#sectionInfos form{
+    width: 100vw;
+}
+#sectionInfos form button{
     display: block;
     margin: auto;
 }
+.adressesContainer{
+    width: 100vw;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.addressContainer{
+    display: flex;
+    justify-content: space-evenly;
+    width: 100vw;
+    margin: 16px;
+    padding: 10px;
+    border: 1px solid #b2bfca;
+}
+.addressContainer p{
+    width: 45vw;
+}
+.addressContainer a{
+    height: 38px;
+}
 
 
 
-
-
-/* ---------------------------- Register ----------------  */
+/* ---------------------------- Footer ----------------  */
 
 
 /* -----------------------------Responsive ------------------- */
@@ -168,21 +210,42 @@ input{
         margin: 0 1em 1em 0;
     }
     /* --------- Cart -------------*/
+    #cartFooter{
+        width: 100%;
+    }
+    /* ---------------------------- Login ----------------  */
+    #sectionLogin form, #sectionRegister form, #sectionInfos form{
+        width: 60%;
+    } 
+    /* ---------------------------- User ----------------  */
+
+    .addressContainer{
+        width: 45vw;
+    }
+
 
 
 } 
  @media (min-width:1450px)
+
 {
+    div.container-address{
+        display: flex;
+        justify-content: center;
+    }
     /* --------- Store -------------*/
     article{
         width:25vw;
     }
     /* --------- Cart -------------*/
 
-    div.container-address{
-        display: flex;
-        justify-content: center;
+    /* ---------------------------- Login ----------------  */
+    #sectionLogin form, #sectionRegister form, #sectionInfos form{
+        width: 45%;
     } 
+    .addressContainer{
+        width: 25vw;
+    }
 
 
 } 
