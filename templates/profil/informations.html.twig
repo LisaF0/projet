@@ -9,8 +9,6 @@
         <section id="sectionInfos">
             <h2 class="h3 mb-3 font-weight-normal">Informations personnelles</h2>
             {{ form(formUserEmail) }}
-           
-            {# <a href="{{ path('infos_edit', {'id': app.user.id }) }}" class="btn btn-primary">Modifier mes informations</a> #}
         </section>
         <section id="sectionAddresses">
             <h2 class="h3 mb-3 font-weight-normal">Carnet d'adresses</h2>
@@ -35,6 +33,7 @@
         </section>
         <section id="sectionPassword">
             <h2 class="h3 mb-3 font-weight-normal">Changer de mot de passe</h2>
+            {{ form(formUserPassword) }}
         </section>
         <section>
         <a href="{{ path('account_delete', {'id': app.user.id }) }}" class="btn btn-danger">Supprimer votre compte</a>

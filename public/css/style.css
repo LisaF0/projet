@@ -157,18 +157,18 @@ input{
 }
 
 /* ---------------------------- User ----------------  */
-#sectionInfos, #sectionAddresses{
+#sectionInfos, #sectionAddresses, #sectionPassword{
     padding: 1em;
     
 }
-#sectionInfos h2, #sectionAddresses h2{
+#sectionInfos h2, #sectionAddresses h2, #sectionPassword h2{
     width: 100vw;
     text-align: center;
 }
-#sectionInfos form{
+#sectionInfos form, #sectionPassword form{
     width: 100vw;
 }
-#sectionInfos form button{
+#sectionInfos form button, #sectionPassword form button{
     display: block;
     margin: auto;
 }
@@ -214,7 +214,7 @@ input{
         width: 100%;
     }
     /* ---------------------------- Login ----------------  */
-    #sectionLogin form, #sectionRegister form, #sectionInfos form{
+    #sectionLogin form, #sectionRegister form, #sectionInfos form, #sectionPassword form{
         width: 60%;
     } 
     /* ---------------------------- User ----------------  */
@@ -240,7 +240,7 @@ input{
     /* --------- Cart -------------*/
 
     /* ---------------------------- Login ----------------  */
-    #sectionLogin form, #sectionRegister form, #sectionInfos form{
+    #sectionLogin form, #sectionRegister form, #sectionInfos form, #sectionPassword form{
         width: 45%;
     } 
     .addressContainer{

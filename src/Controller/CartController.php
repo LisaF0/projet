@@ -109,28 +109,21 @@ class CartController extends AbstractController
         $newFacture = new Facture();
         $newFacture->setUserId($this->getUser()->getId());
         $newOrder->setFacture($newFacture);
-        // remplir les données de l'adresse de facturation à partir de la facture précédente
-        
         $lastFacture = $fr->findLastFacture($this->getUser()->getId());
         if($lastFacture){
-            
             $newFacture->setUserId($lastFacture->getUserId());
             $newFacture->setFirstname($lastFacture->getFirstname());
             $newFacture->setLastname($lastFacture->getLastname());
             $newFacture->setCity($lastFacture->getCity());
             $newFacture->setZipcode($lastFacture->getZipcode());
             $newFacture->setAddress($lastFacture->getAddress());
-
         }
-        
-
         foreach($this->cart->getFullCart() as $cartLine){
             $incart[] = [
                 'product' => $cartLine['product'],
                 'quantity' => $cartLine['quantity']
             ];
         }
-       
         $total = $this->cart->getTotal($incart);
         $formOrder = $this->createForm(OrderType::class, $newOrder);
         $formOrder->handleRequest($request);
@@ -138,20 +131,15 @@ class CartController extends AbstractController
             $newOrder->setUser($this->getUser());
             $newOrder->getFacture()->setOrdering($newOrder);
             $manager->persist($newOrder);
-            
             foreach($this->cart->getFullCart() as $cartLine){
-                
                 $newProductOrder = new ProductOrdering();
                 $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
                 $newProductOrder->setProduct($product);
                 $newProductOrder->setQuantity($cartLine['quantity']);
-                
                 $newOrder->addProductOrdering($newProductOrder);
                 $manager->persist($newProductOrder);
             }
             $manager->flush();
-            
-            
             return $this->render('checkout/index.html.twig', [
                 'items' => $incart,
                 'total' => $total,

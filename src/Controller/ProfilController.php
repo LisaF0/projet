@@ -3,14 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Form\UserType;
 use App\Entity\ShipAddress;
 use App\Form\UserEmailType;
 use App\Form\ShipAddressType;
-use Doctrine\ORM\EntityManager;
+use App\Form\UserPasswordType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,42 +19,65 @@ class ProfilController extends AbstractController
     /**
      * @Route("/profil/infos", name="profil_infos")
      */
-    public function infosUser(Request $request, EntityManagerInterface $manager){
+    public function infosUser(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $passwordEncoder){
         $user = $this->getUser();
         if($user){
             $addresses = $user->getShipAddresses();
-            $form = $this->createForm(UserEmailType::class, $user);
-            $form->handleRequest($request);
-            if($form->isSubmitted() && $form->isValid()){
+            $formEmail = $this->createForm(UserEmailType::class, $user);
+            $formEmail->handleRequest($request);
+            if($formEmail->isSubmitted() && $formEmail->isValid()){
                 $manager->flush();
-                $this->addFlash('success', 'Vos informations ont bien été modifiées');
+                $this->addFlash('success', 'Votre email a bien été modifié');
 
+                return $this->redirectToRoute("profil_infos");
+            }
+            $formPassword = $this->createForm(UserPasswordType::class, $user);
+            $formPassword->handleRequest($request);
+            if($formPassword->isSubmitted() && $formPassword->isValid()){
+                // dd($user->getPassword());
+                $validPassword = $passwordEncoder->isPasswordValid(
+                    $user,
+                    $formPassword->get('oldPlainPassword')->getData()
+                );
+                if($validPassword){
+                    $user->setPassword(
+                        $passwordEncoder->encodePassword(
+                            $user,
+                            $formPassword->get('newPlainPassword')->getData()
+                        )
+                        );
+                    $manager->flush();
+                    $this->addFlash('success', 'Votre mot de passe a bien été modifié');
+                }
+                $this->addFlash('danger', 'Votre mot de passe ne correspond pas');
                 return $this->redirectToRoute("profil_infos");
             }
             return $this->render('profil/informations.html.twig', [
                 'user' => $user,
                 'addresses' => $addresses,
-                'formUserEmail' => $form->createView()
+                'formUserEmail' => $formEmail->createView(),
+                'formUserPassword' => $formPassword->createView(),
             ]);  
         }
         return $this->redirectToRoute('app_login'); 
     }
 
-    /**
-     * @Route("profil/addresses", name="profil_addresses")
-     */
-    public function addressesUser(){
+    // /**
+    //  * @Route("profil/addresses", name="profil_addresses")
+    //  */
+    // public function addressesUser(){
        
-        $user = $this->getUser();
-        if($user){
-            $addresses = $user->getShipAddresses();
-            return $this->render('profil/addresses.html.twig', [
-                'addresses' => $addresses,
-            ]);
-        }
-        return $this->redirectToRoute('app_login');  
-    }
+    //     $user = $this->getUser();
+    //     if($user){
+    //         $addresses = $user->getShipAddresses();
+    //         return $this->render('profil/addresses.html.twig', [
+    //             'addresses' => $addresses,
+    //         ]);
+    //     }
+    //     return $this->redirectToRoute('app_login');  
+    // }
 
+    
     /**
      * @Route("/profil/orders", name="profil_orders")
      */
@@ -71,34 +92,6 @@ class ProfilController extends AbstractController
         return $this->redirectToRoute('app_login');  
     }
 
-    /**
-     * @Route("/profil/editInfos/{id}", name="infos_edit")
-     */
-    public function editEmail(User $user = null, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $manager, Request $request)
-    {
-        if(!$user || $this->getUser() !== $user){
-            return $this->redirectToRoute('app_login');
-        } else {
-            $form = $this->createForm(UserType::class, $user);
-            $form->handleRequest($request);
-            if($form->isSubmitted() && $form->isValid()){
-                $user->setPassword(
-                    $passwordEncoder->encodePassword(
-                        $user,
-                        $form->get('plainPassword')->getData()
-                    )
-                );
-                $manager->flush();
-                $this->addFlash('success', 'Vos informations ont bien été modifiées');
-
-                return $this->redirectToRoute("profil_infos");
-            }
-
-            return $this->render('profil/editProfil.html.twig', [
-                'formUser' => $form->createView()
-            ]);
-        }
-    }
 
     /**
      * @Route("/profil/editAddress/{id}", name="address_edit")
@@ -175,7 +168,7 @@ class ProfilController extends AbstractController
             $manager->persist($shipAddress);
             $manager->flush();
 
-            return $this->redirectToRoute('profil_addresses');
+            return $this->redirectToRoute('profil_infos');
             
         }
 

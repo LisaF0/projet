@@ -53,9 +53,9 @@
                                         Panier <i class="fas fa-shopping-cart">
                                         {% if app.session.get('cart') %} 
                                         {# on vérifie que le panier n'est pas null #}
-                                            {% if app.session.get('cart').getQuantity > 0 %}
+                                            {# {% if app.session.get('cart').getQuantity > 0 %} fou la merde après le paiement du paiement #}
                                                 <span class="badge badge-pill badge-secondary">{{ app.session.get('cart').getQuantity }}</span> 
-                                            {% endif %}
+                                            {# {% endif %} #}
                                         {% endif %}
                                         </i> 
                                     </a>

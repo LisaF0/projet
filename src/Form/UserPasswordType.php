@@ -16,11 +16,16 @@ class UserPasswordType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        
-            ->add('plainPassword', PasswordType::class, [
+
+            ->add('oldPlainPassword', PasswordType::class,[
+                'mapped' => false,
+                'label' => 'Mot de passe actuel',
+            ])
+            ->add('newPlainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
+                'label' => 'Nouveau mot de passe',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter a password',
