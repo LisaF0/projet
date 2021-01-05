@@ -11,17 +11,33 @@
                 <a href="#" class="btn btn-secondary dropdown-toggle filterButton" role="button" id="dropdownMenuLink" 
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filtrer par</a>
                 <div class="dropdown-menu filterContainer" aria-labelledby="dropdownMenuLink">
-                    {{ form(formFilter) }}
+                    {# {{ form(formFilter) }} #}
+                    {{ form_start(formFilter)}}
+                        <h4>Appellations</h4>
+                        {{ form_row(formFilter.appellations) }}
+                        <h4>Domaines</h4>
+                        {{ form_row(formFilter.domains) }}
+                        <h4>Types</h4>
+                        {{ form_row(formFilter.types) }}
+                        <h4>Prix</h4>
+                        <div>
+                            {{ form_row(formFilter.min)}}
+                            {{ form_row(formFilter.max)}}
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+                    {{ form_end(formFilter) }}
                 </div>
             </div>
             <div class="dropdown show sortedDropdown">
-            <a href="#" class="btn btn-secondary dropdown-toggle sortedButton" role="button" id="dropdownMenuLink" 
+            {{ knp_pagination_sortable(products, 'Prix', 'p.unitPrice', {}, {}, '@KnpPaginator/Pagination/twitter_bootstrap_v4_font_awesome_sortable_link.html.twig')  }}
+            
+            {# <a href="#" class="btn btn-secondary dropdown-toggle sortedButton" role="button" id="dropdownMenuLink" 
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Trier par</a>
                 <div class="dropdown-menu sortedContainer" aria-labelledby="dropdownMenuLink">
                     <a href="{{ path('products_index', {sortBy : 'unitPrice', order : 'ASC'}) }}" class="btn">du - cher au + cher</a>
                     <a href="{{ path('products_index', {sortBy : 'unitPrice', order : 'DESC'}) }}" class="btn">du + cher au - cher</a>
                     <a href="{{ path('products_index', {sortBy : 'name', order : 'ASC'}) }}" class="btn">ordre alphabétique</a>
-                </div>
+                </div> #}
             </div>
         </section>
         <section id="sectionProducts">
@@ -32,7 +48,7 @@
             {% if products|length > 0 %}
                 {% for product in products %}
                     <article>
-                        <img src="{{ asset('img/' ~ product.photo )}}" alt="{{ 'Bouteille de ' ~ product.name }}" class="winePhoto">
+                        <img src="{{ ('img/' ~ product.photo )}}" alt="{{ 'Bouteille de ' ~ product.name }}" class="winePhoto">
                         <div>
                             <h2 class="productName">{{ product.name ~ " " ~ product.year}}</h2>
                             <p>Domaine {{ product.domain }}</p>
@@ -56,6 +72,9 @@
                         </div>
                     </article>
                 {% endfor %}
+                <div id="productFooter" >
+                    {{ knp_pagination_render(products, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig' )}}
+                </div>
             {% else %}
                 <div>
                     <p>Aucun article ne correspond à votre recherche.</p>

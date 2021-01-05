@@ -3,15 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Cart;
-use App\Entity\Facture;
 use App\Entity\Product;
-use App\Form\OrderType;
-use App\Entity\Ordering;
-use App\Entity\ShipAddress;
-use App\Form\ShipAddressType;
-use App\Entity\ProductOrdering;
-use App\Repository\FactureRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -31,13 +23,13 @@ class CartController extends AbstractController
     {
         $incart = [];
         
-        
         foreach($this->cart->getFullCart() as $cartLine){
             $incart[] = [
                 'product' => $cartLine['product'],
                 'quantity' => $cartLine['quantity']
             ];
         }
+
         $total = $this->cart->getTotal($incart);
 
         return $this->render('cart/index.html.twig', [
@@ -49,23 +41,40 @@ class CartController extends AbstractController
     /**
     * @Route("/cart/add/{id}", name="cart_add")
     */
-    public function add(Request $request, Product $product, SessionInterface $session)
+    public function add(Request $request, Product $product = null, SessionInterface $session)
     {
-        // Vérifier qu'il y'en ai en stock et que le produit existe
+        // Vérifier que le produit existe
+        if(!$product){
+            $this->addFlash('warning', 'Le produit n\'existe pas');
+            return $this->redirectToRoute("products_index"); 
+        }
         $qtt = $request->request->get("quantity");
-        $this->cart->add($product, $qtt);
-        $session->set('cart', $this->cart);
+        // Vérifier que la quantité de produit de dépasse pas la quantité en stock et qu'elle est supérieur à 0
+    
+        if($qtt <= $product->getUnitStock() && $qtt > 0){
 
-        $this->addFlash('success', 'Le produit a été ajouté au panier');
-        
-        return $this->redirectToRoute("products_index");
+            $this->cart->add($product, $qtt);
+            $session->set('cart', $this->cart);
+    
+            $this->addFlash('success', 'Le produit a été ajouté au panier');
+            
+            return $this->redirectToRoute("products_index");
+        } else {
+            $this->addFlash('warning', 'La quantité du produit demandé est supérieur à celle du stock');
+            return $this->redirectToRoute("products_index"); 
+        }
     }
 
     /**
      * @Route("/cart/remove/{id}", name="cart_remove")
      */
-    public function remove(Product $product, SessionInterface $session)
+    public function remove(Product $product = null, SessionInterface $session)
     {
+        if(!$product){
+            $this->addFlash('warning', 'Le produit que vous souhaitez supprimer n\'existe pas');
+
+            return $this->redirectToRoute("cart_index");
+        }
         $this->cart->remove($product);
         $session->set('cart', $this->cart);
 
@@ -74,83 +83,7 @@ class CartController extends AbstractController
         return $this->redirectToRoute("cart_index");
     }
 
-    /**
-     * @Route("/ShipAddress/add", name="shipAdd_add")
-     */
-    public function addShipAddress(Request $request, EntityManagerInterface $manager ){
-        $shipAddress = new ShipAddress();
-        $form = $this->createForm(ShipAddressType::class, $shipAddress);
-        $form->handleRequest($request);
-        
-        if($form->isSubmitted() && $form->isValid()){
-            $shipAddress = $form->getData();
-            $shipAddress->setUser($this->getUser());
-            $manager->persist($shipAddress);
-            $manager->flush();
 
-            return $this->redirectToRoute('choose_address');
-        }
-
-        return $this->render('cart/addShipAddress.html.twig', [
-            'formAddShip' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/chooseAdd", name="choose_address")
-     */
-    public function buy(Request $request, EntityManagerInterface $manager, FactureRepository $fr)
-    {
-        $user = $this->getUser();
-        if(!$user){
-            return $this->redirectToRoute("app_login");
-        }
-        $newOrder = new Ordering();
-        $newFacture = new Facture();
-        $newFacture->setUserId($this->getUser()->getId());
-        $newOrder->setFacture($newFacture);
-        $lastFacture = $fr->findLastFacture($this->getUser()->getId());
-        if($lastFacture){
-            $newFacture->setUserId($lastFacture->getUserId());
-            $newFacture->setFirstname($lastFacture->getFirstname());
-            $newFacture->setLastname($lastFacture->getLastname());
-            $newFacture->setCity($lastFacture->getCity());
-            $newFacture->setZipcode($lastFacture->getZipcode());
-            $newFacture->setAddress($lastFacture->getAddress());
-        }
-        foreach($this->cart->getFullCart() as $cartLine){
-            $incart[] = [
-                'product' => $cartLine['product'],
-                'quantity' => $cartLine['quantity']
-            ];
-        }
-        $total = $this->cart->getTotal($incart);
-        $formOrder = $this->createForm(OrderType::class, $newOrder);
-        $formOrder->handleRequest($request);
-        if($formOrder->isSubmitted() && $formOrder->isValid()){
-            $newOrder->setUser($this->getUser());
-            $newOrder->getFacture()->setOrdering($newOrder);
-            $manager->persist($newOrder);
-            foreach($this->cart->getFullCart() as $cartLine){
-                $newProductOrder = new ProductOrdering();
-                $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
-                $newProductOrder->setProduct($product);
-                $newProductOrder->setQuantity($cartLine['quantity']);
-                $newOrder->addProductOrdering($newProductOrder);
-                $manager->persist($newProductOrder);
-            }
-            $manager->flush();
-            return $this->render('checkout/index.html.twig', [
-                'items' => $incart,
-                'total' => $total,
-                'order' => $newOrder,
-                'reference' => $newOrder->getOrderingReference(),
-            ]);
-        }
-        return $this->render('cart/addresses.html.twig', [
-            'formOrder' => $formOrder->createView(),
-        ]);
-    }
 
     /**
      * @Route("clearCart", name="cart_clear")

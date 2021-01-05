@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CartController!{% endblock %}
+{% block title %}Panier{% endblock %}
 {% block stylesheets %}
     {{ parent()  }}
 {% endblock %}
@@ -10,7 +10,7 @@
     {% endblock %}
     <section class="cartSection">
         <div id="cartHeader">
-            <h1>Mon panier : {{ items|length }} articles</h1>
+            <h1>Mon panier</h1>
             {% if items|length > 0 %}
                 <a href="{{ path('cart_clear') }}"class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vider le panier"><i class="fas fa-trash"></i></a>
             {% endif %}
@@ -19,7 +19,7 @@
         {% for item in items %}
 
             <article>
-                <img src="{{ asset('img/' ~ item.product.photo )}}" alt="{{ 'Bouteille de ' ~ item.product.name }}" class="winePhoto">
+                <img src="{{ ('img/' ~ item.product.photo )}}" alt="{{ 'Bouteille de ' ~ item.product.name }}" class="winePhoto">
                 <div class="descProduct">
                     <h2>{{ item.product.name ~ " " ~ item.product.year ~ " Domaine " ~ item.product.domain.name }}</h2>
                     
@@ -49,43 +49,7 @@
         
 
         
-            {# <table class="table">
-                <thead>
-                    <tr>
-                        <th>Produit</th>
-                        <th>Prix</th>
-                        <th>Quantité</th>
-                        <th>Total</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for item in items %}
-                        <tr>
-                            <td>{{ item.product.name }}</td>
-                            <td>{{ item.product.unitprice ~ '€' }}</td>
-                            <td>{{ item.quantity }}</td>
-                            <td>{{ item.product.unitprice * item.quantity ~ '€' }}</td>
-                            <td>
-                                <a href="{{ path('cart_remove', {'id': item.product.id }) }}" class="btn btn-danger btn-sm">
-                                    <i class="fas fa-times"></i>
-                                </a>  
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="3" class="text-right">Total : </td>
-                        <td>{{ total ~ '€'}}</td>
-                        {% if app.user %}
-                            <td><a href="{{ path('choose_address') }}" class="btn btn-primary">Passer la commande</a> </td>
-                        {% else %}
-                            <td><a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a></td>
-                        {% endif %}
-                    </tr>
-                </tfoot>
-            </table> #}
+            
         {% else %}
             <p>Votre panier est vide.</p>
         {% endif %}

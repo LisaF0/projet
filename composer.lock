@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c67ea9469702e0fe3d943303df1e73cc",
+    "content-hash": "46bc4a631971755fa816d3f83864a32a",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -1401,6 +1401,150 @@
             "time": "2020-09-26T15:48:38+00:00"
         },
         {
+            "name": "knplabs/knp-components",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KnpLabs/knp-components.git",
+                "reference": "246b700fdc40020f1db1c887cd462b9b9d3b79b0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KnpLabs/knp-components/zipball/246b700fdc40020f1db1c887cd462b9b9d3b79b0",
+                "reference": "246b700fdc40020f1db1c887cd462b9b9d3b79b0",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3 || ^8.0",
+                "symfony/event-dispatcher-contracts": "^1.1 || ^2.0",
+                "symfony/http-foundation": "^4.4 || ^5.1"
+            },
+            "require-dev": {
+                "doctrine/mongodb-odm": "^2.0",
+                "doctrine/orm": "^2.7",
+                "doctrine/phpcr-odm": "^1.2",
+                "jackalope/jackalope-doctrine-dbal": "^1.2",
+                "phpunit/phpunit": "^9.4",
+                "ruflin/elastica": "^1.0",
+                "symfony/http-kernel": "^4.4 || ^5.1",
+                "symfony/property-access": "^4.4 || ^5.1"
+            },
+            "suggest": {
+                "doctrine/common": "to allow usage pagination with Doctrine ArrayCollection",
+                "doctrine/mongodb-odm": "to allow usage pagination with Doctrine ODM MongoDB",
+                "doctrine/orm": "to allow usage pagination with Doctrine ORM",
+                "doctrine/phpcr-odm": "to allow usage pagination with Doctrine ODM PHPCR",
+                "propel/propel1": "to allow usage pagination with Propel ORM",
+                "ruflin/elastica": "to allow usage pagination with ElasticSearch Client",
+                "solarium/solarium": "to allow usage pagination with Solarium Client",
+                "symfony/property-access": "To allow sorting arrays"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Knp\\Component\\": "src/Knp/Component"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "KnpLabs Team",
+                    "homepage": "https://knplabs.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://github.com/KnpLabs/knp-components/contributors"
+                }
+            ],
+            "description": "Knplabs component library",
+            "homepage": "http://github.com/KnpLabs/knp-components",
+            "keywords": [
+                "components",
+                "knp",
+                "knplabs",
+                "pager",
+                "paginator"
+            ],
+            "time": "2020-11-30T09:24:34+00:00"
+        },
+        {
+            "name": "knplabs/knp-paginator-bundle",
+            "version": "v5.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/KnpLabs/KnpPaginatorBundle.git",
+                "reference": "8a7255062dd9f6ff8a3a4712a4b34bdbbc9f31f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/KnpLabs/KnpPaginatorBundle/zipball/8a7255062dd9f6ff8a3a4712a4b34bdbbc9f31f7",
+                "reference": "8a7255062dd9f6ff8a3a4712a4b34bdbbc9f31f7",
+                "shasum": ""
+            },
+            "require": {
+                "knplabs/knp-components": "^2.4 || ^3.0",
+                "php": "^7.3 || ^8.0",
+                "symfony/config": "^4.4 || ^5.0",
+                "symfony/dependency-injection": "^4.4 || ^5.0",
+                "symfony/event-dispatcher": "^4.4 || ^5.0",
+                "symfony/http-foundation": "^4.4 || ^5.0",
+                "symfony/http-kernel": "^4.4 || ^5.0",
+                "symfony/routing": "^4.4 || ^5.0",
+                "symfony/translation": "^4.4 || ^5.0",
+                "twig/twig": "^2.0 || ^3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5 || ^9.4",
+                "symfony/expression-language": "^4.4 || ^5.0",
+                "symfony/templating": "^4.4 || ^5.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Knp\\Bundle\\PaginatorBundle\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "KnpLabs Team",
+                    "homepage": "http://knplabs.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://github.com/KnpLabs/KnpPaginatorBundle/contributors"
+                }
+            ],
+            "description": "Paginator bundle for Symfony to automate pagination and simplify sorting and other features",
+            "homepage": "http://github.com/KnpLabs/KnpPaginatorBundle",
+            "keywords": [
+                "bundle",
+                "knp",
+                "knplabs",
+                "pager",
+                "pagination",
+                "paginator",
+                "symfony"
+            ],
+            "time": "2020-12-17T08:19:16+00:00"
+        },
+        {
             "name": "knplabs/knp-snappy",
             "version": "v1.2.1",
             "source": {
@@ -2645,16 +2789,16 @@
         },
         {
             "name": "symfony/config",
-            "version": "v5.1.7",
+            "version": "v5.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "6ad8be6e1280f6734150d8a04a9160dd34ceb191"
+                "reference": "85464ec1a8fc797b83c3b7335ec785de372dc6e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/6ad8be6e1280f6734150d8a04a9160dd34ceb191",
-                "reference": "6ad8be6e1280f6734150d8a04a9160dd34ceb191",
+                "url": "https://api.github.com/repos/symfony/config/zipball/85464ec1a8fc797b83c3b7335ec785de372dc6e2",
+                "reference": "85464ec1a8fc797b83c3b7335ec785de372dc6e2",
                 "shasum": ""
             },
             "require": {
@@ -2678,11 +2822,6 @@
                 "symfony/yaml": "To use the yaml reference dumper"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.1-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Config\\": ""
@@ -2721,7 +2860,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-02T16:23:27+00:00"
+            "time": "2020-12-09T18:49:55+00:00"
         },
         {
             "name": "symfony/console",
@@ -2818,16 +2957,16 @@
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v5.1.7",
+            "version": "v5.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "2dea4a3ef2eb79138354c1d49e9372cc921af20b"
+                "reference": "fc3b9cd059ad4ee780db01b7d1ab767117b670e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/2dea4a3ef2eb79138354c1d49e9372cc921af20b",
-                "reference": "2dea4a3ef2eb79138354c1d49e9372cc921af20b",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/fc3b9cd059ad4ee780db01b7d1ab767117b670e1",
+                "reference": "fc3b9cd059ad4ee780db01b7d1ab767117b670e1",
                 "shasum": ""
             },
             "require": {
@@ -2860,11 +2999,6 @@
                 "symfony/yaml": ""
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.1-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\DependencyInjection\\": ""
@@ -2903,7 +3037,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-01T12:14:45+00:00"
+            "time": "2020-12-18T08:02:46+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -3157,16 +3291,16 @@
         },
         {
             "name": "symfony/error-handler",
-            "version": "v5.1.7",
+            "version": "v5.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/error-handler.git",
-                "reference": "5e4d8ef8d71822922d1eebd130219ae3491a5ca9"
+                "reference": "cd4b46ee88e49ad3219fc6faa675d0b30c08c87e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/error-handler/zipball/5e4d8ef8d71822922d1eebd130219ae3491a5ca9",
-                "reference": "5e4d8ef8d71822922d1eebd130219ae3491a5ca9",
+                "url": "https://api.github.com/repos/symfony/error-handler/zipball/cd4b46ee88e49ad3219fc6faa675d0b30c08c87e",
+                "reference": "cd4b46ee88e49ad3219fc6faa675d0b30c08c87e",
                 "shasum": ""
             },
             "require": {
@@ -3181,11 +3315,6 @@
                 "symfony/serializer": "^4.4|^5.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.1-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\ErrorHandler\\": ""
@@ -3224,20 +3353,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-02T08:49:02+00:00"
+            "time": "2020-12-09T18:49:55+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v5.1.7",
+            "version": "v5.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "d5de97d6af175a9e8131c546db054ca32842dd0f"
+                "reference": "2c8d69babd624ed845d6c7a21f0f13a720ae0096"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/d5de97d6af175a9e8131c546db054ca32842dd0f",
-                "reference": "d5de97d6af175a9e8131c546db054ca32842dd0f",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/2c8d69babd624ed845d6c7a21f0f13a720ae0096",
+                "reference": "2c8d69babd624ed845d6c7a21f0f13a720ae0096",
                 "shasum": ""
             },
             "require": {
@@ -3268,11 +3397,6 @@
                 "symfony/http-kernel": ""
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.1-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\EventDispatcher\\": ""
@@ -3311,7 +3435,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-18T14:27:32+00:00"
+            "time": "2020-12-18T08:02:46+00:00"
         },
         {
             "name": "symfony/event-dispatcher-contracts",
@@ -3457,16 +3581,16 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v5.1.7",
+            "version": "v5.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "1a8697545a8d87b9f2f6b1d32414199cc5e20aae"
+                "reference": "fa8f8cab6b65e2d99a118e082935344c5ba8c60d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/1a8697545a8d87b9f2f6b1d32414199cc5e20aae",
-                "reference": "1a8697545a8d87b9f2f6b1d32414199cc5e20aae",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/fa8f8cab6b65e2d99a118e082935344c5ba8c60d",
+                "reference": "fa8f8cab6b65e2d99a118e082935344c5ba8c60d",
                 "shasum": ""
             },
             "require": {
@@ -3474,11 +3598,6 @@
                 "symfony/polyfill-ctype": "~1.8"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.1-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Filesystem\\": ""
@@ -3517,7 +3636,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-27T14:02:37+00:00"
+            "time": "2020-11-30T17:05:38+00:00"
         },
         {
             "name": "symfony/finder",
@@ -4054,16 +4173,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v5.1.7",
+            "version": "v5.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "353b42e7b4fd1c898aab09a059466c9cea74039b"
+                "reference": "1069be6ca52c9f86e2ba29b5e31a3f5b01496e58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/353b42e7b4fd1c898aab09a059466c9cea74039b",
-                "reference": "353b42e7b4fd1c898aab09a059466c9cea74039b",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/1069be6ca52c9f86e2ba29b5e31a3f5b01496e58",
+                "reference": "1069be6ca52c9f86e2ba29b5e31a3f5b01496e58",
                 "shasum": ""
             },
             "require": {
@@ -4082,11 +4201,6 @@
                 "symfony/mime": "To use the file extension guesser"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.1-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\HttpFoundation\\": ""
@@ -4125,20 +4239,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-27T14:14:57+00:00"
+            "time": "2020-12-18T08:02:46+00:00"
         },
         {
             "name": "symfony/http-kernel",
-            "version": "v5.1.7",
+            "version": "v5.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "1764b87d2f10d5c9ce6e4850fe27934116d89708"
+                "reference": "006feae3085f3ae2ee392dd419e910fdfd20a2ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/1764b87d2f10d5c9ce6e4850fe27934116d89708",
-                "reference": "1764b87d2f10d5c9ce6e4850fe27934116d89708",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/006feae3085f3ae2ee392dd419e910fdfd20a2ea",
+                "reference": "006feae3085f3ae2ee392dd419e910fdfd20a2ea",
                 "shasum": ""
             },
             "require": {
@@ -4196,11 +4310,6 @@
                 "symfony/dependency-injection": ""
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.1-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\HttpKernel\\": ""
@@ -4239,7 +4348,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-04T07:57:28+00:00"
+            "time": "2020-12-18T13:43:29+00:00"
         },
         {
             "name": "symfony/intl",
@@ -5582,16 +5691,16 @@
         },
         {
             "name": "symfony/routing",
-            "version": "v5.1.7",
+            "version": "v5.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/routing.git",
-                "reference": "720348c2ae011f8c56964c0fc3e992840cb60ccf"
+                "reference": "fb0f2aa1199b8d910364462170bfa70b1b4ee37d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/routing/zipball/720348c2ae011f8c56964c0fc3e992840cb60ccf",
-                "reference": "720348c2ae011f8c56964c0fc3e992840cb60ccf",
+                "url": "https://api.github.com/repos/symfony/routing/zipball/fb0f2aa1199b8d910364462170bfa70b1b4ee37d",
+                "reference": "fb0f2aa1199b8d910364462170bfa70b1b4ee37d",
                 "shasum": ""
             },
             "require": {
@@ -5621,11 +5730,6 @@
                 "symfony/yaml": "For using the YAML loader"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.1-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Routing\\": ""
@@ -5670,7 +5774,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-02T13:05:43+00:00"
+            "time": "2020-12-08T17:02:38+00:00"
         },
         {
             "name": "symfony/security-bundle",
@@ -7137,6 +7241,73 @@
                 }
             ],
             "time": "2020-05-28T08:20:44+00:00"
+        },
+        {
+            "name": "symfony/webpack-encore-bundle",
+            "version": "v1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/webpack-encore-bundle.git",
+                "reference": "c879bc50c69f6b4f2984b2bb5fe8190bbc5befdd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/webpack-encore-bundle/zipball/c879bc50c69f6b4f2984b2bb5fe8190bbc5befdd",
+                "reference": "c879bc50c69f6b4f2984b2bb5fe8190bbc5befdd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.3",
+                "symfony/asset": "^3.4 || ^4.0 || ^5.0",
+                "symfony/config": "^3.4 || ^4.0 || ^5.0",
+                "symfony/dependency-injection": "^3.4 || ^4.0 || ^5.0",
+                "symfony/http-kernel": "^3.4 || ^4.0 || ^5.0",
+                "symfony/service-contracts": "^1.0 || ^2.0"
+            },
+            "require-dev": {
+                "symfony/framework-bundle": "^3.4 || ^4.0 || ^5.0",
+                "symfony/phpunit-bridge": "^4.3.5 || ^5.0",
+                "symfony/twig-bundle": "^3.4 || ^4.0 || ^5.0",
+                "symfony/web-link": "^3.4 || ^4.0 || ^5.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "thanks": {
+                    "name": "symfony/webpack-encore",
+                    "url": "https://github.com/symfony/webpack-encore"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\WebpackEncoreBundle\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Integration with your Symfony app & Webpack Encore!",
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-10-28T17:07:25+00:00"
         },
         {
             "name": "symfony/yaml",

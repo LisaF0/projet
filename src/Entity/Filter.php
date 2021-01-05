@@ -21,6 +21,21 @@ class Filter
      * @var Domain[]
      */
     public $domains = [];
+
+    /**
+     * @var null|integer
+     */
+    public $max;
+
+    /**
+     * @var null|integer
+     */
+    public $min;
+
+    /**
+     * @var integer
+     */
+    public $page = 1;
 }
 
 

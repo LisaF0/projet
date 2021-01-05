@@ -58,7 +58,7 @@ class Facture
     private $linkPDF;
 
      /**
-     * @ORM\OneToOne(targetEntity=Ordering::class, cascade={"all"})
+     * @ORM\OneToOne(targetEntity=Ordering::class)
      * @ORM\JoinColumn(name="ordering_id", onDelete="SET NULL")
      */
     private $ordering;

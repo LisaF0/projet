@@ -59,7 +59,7 @@ class Ordering
     private $productOrderings;
 
     /**
-     * @ORM\OneToOne(targetEntity=Facture::class, cascade={"all"})
+     * @ORM\OneToOne(targetEntity=Facture::class, cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $facture;

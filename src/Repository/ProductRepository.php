@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Filter;
 use App\Entity\Product;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
@@ -15,12 +16,20 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class ProductRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var PaginatorInterface
+     */
+    private $paginator;
+
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Product::class);
+        $this->paginator = $paginator;
     }
 
-    public function findByFilter(Filter $filter){
+
+    public function findByFilter(Filter $filter)
+    {
         $query =  $this->createQueryBuilder('p')
             ->select('a', 'p', 'd', 't')
             ->join('p.appellation', 'a')
@@ -44,9 +53,24 @@ class ProductRepository extends ServiceEntityRepository
                     ->andWhere('t.id IN (:types)')
                     ->setParameter('types', $filter->types);
             }
-            return $query
-            ->getQuery()
-            ->getResult();
+            if(!empty($filter->min)){
+                $query = $query
+                    ->andWhere('p.unitPrice >= :min')
+                    ->setParameter('min', $filter->min);
+            }
+            if(!empty($filter->max)){
+                $query = $query
+                    ->andWhere('p.unitPrice <= :max')
+                    ->setParameter('max', $filter->max);
+            }
+
+            $query = $query->getQuery();
+            return $this->paginator->paginate(
+                $query,
+                $filter->page,
+                9
+            );
+            // return $query->getQuery()->getResult();
     }
 
 
