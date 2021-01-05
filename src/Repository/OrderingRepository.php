@@ -19,6 +19,14 @@ class OrderingRepository extends ServiceEntityRepository
         parent::__construct($registry, Ordering::class);
     }
 
+    public function findTenLast(){
+        return $this->createQueryBuilder('o')
+                ->orderBy('o.createdAt', 'ASC')
+                ->setMaxResults(10)
+                ->getQuery()
+                ->getResult()
+            ;
+    }
     // public function findOneByReference($reference){
     //     return $this->createQueryBuilder('o')
     //         ->andWhere('o.orderingReference = :reference')

@@ -77,6 +77,12 @@ class Product
      */
     private $year;
 
+    public function __construct()
+    {
+        $this->reference = uniqid();
+        $this->available = 1;
+        
+    }
 
     public function getId(): ?int
     {

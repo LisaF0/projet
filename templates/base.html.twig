@@ -32,6 +32,11 @@
                         </button>
                         <div class="collapse navbar-collapse justify-content-end" id="nav">
                             <ul class="navbar-nav text-right">
+                                {% if is_granted("ROLE_USER") %}
+                                    <li class="nav-item">
+                                    <a href="{{ path('admin') }}" class=" nav-link text-light font-weight-bold text-uppercase">Commande</a>
+                                    </li>
+                                {% endif %}
                                 <li class="nav-item">
                                     <a href="{{ path('products_index') }}" class=" nav-link text-light font-weight-bold text-uppercase">
                                         Produits <i class="fas fa-wine-bottle"></i>

@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter/Modifier un produit{% endblock %}
+
+{% block body %}
+    {% block nav %}
+        {{ parent() }}
+    {% endblock %}
+{{ form(formProduct) }}
+{% endblock %}

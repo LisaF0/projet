@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block body %}
+    {% block nav %}
+        {{ parent() }}
+    {% endblock %}
+
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Référence</td>
+                <td>Utilisateur</td>
+                <td>Adresse de livraison</td>
+                <td>Adresse de facturation</td>
+                <td>Statut de la commande</td>
+                <td>Produits commandés</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in lastOrders %}
+                <tr>
+                    <td>{{ order.orderingReference }}</td>
+                    <td>{{ order.user.email }}</td>
+                    <td>{{ order.shipAddress }}</td>
+                    <td>{{ order.facture }}</td>
+                    <td>
+                        {% if order.orderingStatus == 1 %}
+                            <a href="{{ path('statusToSend', {'id':order.id}) }}">{{ order.getStatusOrder }}</a>
+                        {% else %}
+                            {{ order.getStatusOrder }}
+                        {% endif %}
+                    </td>
+                    {% for productOrder in order.productOrderings %}
+                        <td>{{ productOrder.product.reference ~ " " ~ productOrder.product.name ~ " domaine " ~ productOrder.product.domain.name ~ " " ~ productOrder.product.year ~ " x" ~ productOrder.quantity }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+        
+{% endblock %}

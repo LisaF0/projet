@@ -30,44 +30,46 @@ class Ordering
      */
     private $createdAt;
 
-    const STATUS_ORDER = [
-        0 => "en attente",
-        1 => "Payée",
-        2 => "Paiement refusé"
-    ];
-
+    
     /**
      * @ORM\Column(type="integer")
      */
     private $orderingStatus;
-
+    
     /**
      * @ORM\ManyToOne(targetEntity=ShipAddress::class, inversedBy="orderings")
      * @ORM\JoinColumn(nullable=true)
      */
     private $shipAddress;
-
+    
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="orderings")
      * @ORM\JoinColumn(nullable=true)
      */
     private $user;
-
+    
     /**
      * @ORM\OneToMany(targetEntity=ProductOrdering::class, mappedBy="ordering", cascade={"all"})
      */
     private $productOrderings;
-
+    
     /**
      * @ORM\OneToOne(targetEntity=Facture::class, cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $facture;
-
+    
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $stripeSessionId;
+
+    const STATUS_ORDER = [
+        0 => "en attente de paiement",
+        1 => "Payée",
+        2 => "Paiement refusé",
+        3 => "Commande envoyé",
+    ];
 
     public function __construct()
     {
@@ -159,6 +161,11 @@ class Ordering
     public function getOrderingStatus(): ?int
     {
         return $this->orderingStatus;
+    }
+
+    public function getStatusOrder()
+    {
+        return self::STATUS_ORDER[$this->orderingStatus];
     }
 
     public function setOrderingStatus(int $orderingStatus): self

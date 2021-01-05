@@ -52,6 +52,7 @@ class User implements UserInterface
     {
         $this->shipAddresses = new ArrayCollection();
         $this->orderings = new ArrayCollection();
+        $this->roles[] = 'ROLE_USER'; 
     }
 
     public function getId(): ?int

@@ -198,8 +198,19 @@ class CheckoutController extends AbstractController
   /**
    * @Route("/error/{CHECKOUT_SESSION_ID}", name="error")
    */
-  public function error()
+  public function error($stripeSessionId, OrderingRepository $or, UserRepository $ur, SessionInterface $session, EntityManagerInterface $manager)
   {
-    return $this->render('checkout/error.html.twig', []);
+    $order = $or->findOneByStripeSessionId($stripeSessionId);
+    $user = $ur->findOneById($order->getUser()->getId());
+    if(!$order || $user != $this->getUser()){
+      return $this->redirectToRoute('home_index');
+    }
+
+    if($order->getOrderingStatus() == 0){
+      $order->setOrderingStatus(2);
+      $manager->flush();
+    }
+    $this->addFlash('danger', 'Une erreur est survenue lors de votre paiement ou votre paiement a été refusé, veuillez réessayer');
+    return $this->redirectToRoute('cart_index');
   }
 }
