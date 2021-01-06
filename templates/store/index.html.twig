@@ -8,7 +8,7 @@
     {% endblock %}
         <section id="sectionFilters">
             <div class="dropdown show filterDropdown">
-                <a href="#" class="btn btn-secondary dropdown-toggle filterButton" role="button" id="dropdownMenuLink" 
+                <a href="#" class=" dropdown-toggle filterButton" role="button" id="dropdownMenuLink" 
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filtrer par</a>
                 <div class="dropdown-menu filterContainer" aria-labelledby="dropdownMenuLink">
                     {# {{ form(formFilter) }} #}
@@ -31,7 +31,7 @@
             <div class="dropdown show sortedDropdown">
             {{ knp_pagination_sortable(products, 'Prix', 'p.unitPrice', {}, {}, '@KnpPaginator/Pagination/twitter_bootstrap_v4_font_awesome_sortable_link.html.twig')  }}
             
-            {# <a href="#" class="btn btn-secondary dropdown-toggle sortedButton" role="button" id="dropdownMenuLink" 
+            {# <a href="#" class=" dropdown-toggle sortedButton" role="button" id="dropdownMenuLink" 
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Trier par</a>
                 <div class="dropdown-menu sortedContainer" aria-labelledby="dropdownMenuLink">
                     <a href="{{ path('products_index', {sortBy : 'unitPrice', order : 'ASC'}) }}" class="btn">du - cher au + cher</a>
@@ -44,15 +44,15 @@
             <div id="productHeader">
                 <h3>Nos Vins </h3>
                 <p>{{ products|length }} articles</p>
-                {% if is_granted('ROLE_ADMIN') %}
+                {% if is_granted('ROLE_ADMIN') %} 
                     <a href="{{ path('add_product') }}" class="btn btn-primary">Ajouter un produit</a>
-                {% endif %}
+                {% endif %} 
             </div>
             {% if products|length > 0 %}
                 {% for product in products %}
                     <article>
                         <img src="{{ ('img/' ~ product.photo )}}" alt="{{ 'Bouteille de ' ~ product.name }}" class="winePhoto">
-                        <div>
+                        <div class="productContainer">
                             <h2 class="productName">{{ product.name ~ " " ~ product.year}}</h2>
                             <p>Domaine {{ product.domain }}</p>
                             <p>{{product.description }}</p>
@@ -73,9 +73,9 @@
                             </form>
                             {% endif %}
                             {% if is_granted('ROLE_ADMIN') %}
-                                <div>
-                                    <a href="{{ path('edit_product', {'id': product.id}) }}">Modifier</a>
-                                    <a href="{{ path('delete_product', {'id': product.id}) }}">Supprimer</a>
+                                <div class="adminButtonContainer">
+                                    <a href="{{ path('edit_product', {'id': product.id}) }}" class="btn btn-primary">Modifier</a>
+                                    <a href="{{ path('delete_product', {'id': product.id}) }}" class="btn btn-danger">Supprimer</a>
                                 </div>
                             {% endif %}
                         </div>

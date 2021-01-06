@@ -17,20 +17,18 @@ class AdminController extends AbstractController
 {
     /**
      * @Route("/admin", name="admin")
-     * @IsGranted("ROLE_ADMIN")
      */
     public function index(OrderingRepository $or): Response
     {
-        $lastOrderings = $or->findTenLast();
+        $orderings = $or->findAll();
 
         return $this->render('admin/index.html.twig', [
-            'lastOrders' => $lastOrderings,
+            'orders' => $orderings,
         ]);
     }
     /**
      * @Route("/admin/addProduct", name="add_product")
      * @Route("/admin/updateProduct/{id}", name="edit_product")
-     * @IsGranted("ROLE_ADMIN")
      */
     public function addProduct(Product $product = null, Request $request, EntityManagerInterface $manager)
     {
@@ -52,7 +50,6 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/admin/deleteProduct/{id}", name="delete_product")
-     * @IsGranted("ROLE_ADMIN")
      */
     public function deleteProduct(Product $product = null, EntityManagerInterface $manager)
     {
@@ -65,7 +62,6 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/admin/statusToSend/{id}", name="statusToSend")
-     * @IsGranted("ROLE_ADMIN")
      */
     public function statusToSend(Ordering $ordering, EntityManagerInterface $manager)
     {

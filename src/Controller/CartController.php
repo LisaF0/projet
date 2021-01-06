@@ -18,6 +18,8 @@ class CartController extends AbstractController
     }
     /**
      * @Route("/cart", name="cart_index")
+     * 
+     * Fonction permettant d'afficher le panier
      */
     public function index()
     {
@@ -40,6 +42,8 @@ class CartController extends AbstractController
 
     /**
     * @Route("/cart/add/{id}", name="cart_add")
+    * 
+    * Fonction permettant d'ajouter un produit au panier
     */
     public function add(Request $request, Product $product = null, SessionInterface $session)
     {
@@ -60,13 +64,15 @@ class CartController extends AbstractController
             
             return $this->redirectToRoute("products_index");
         } else {
-            $this->addFlash('warning', 'La quantité du produit demandé est supérieur à celle du stock');
+            $this->addFlash('warning', 'La quantité de produit que vous souhaitez ajouter au panier est insuffisante par rapport au stock');
             return $this->redirectToRoute("products_index"); 
         }
     }
 
     /**
      * @Route("/cart/remove/{id}", name="cart_remove")
+     * 
+     * Fonction permettant de supprimer un produit du panier
      */
     public function remove(Product $product = null, SessionInterface $session)
     {
@@ -87,6 +93,8 @@ class CartController extends AbstractController
 
     /**
      * @Route("clearCart", name="cart_clear")
+     * 
+     * Fonction permettant de vider le panier
      */
     public function clearCart(){
         $incart = [];

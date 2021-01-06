@@ -59,11 +59,13 @@ class CheckoutController extends AbstractController
     $newOrder = new Ordering();
     $newFacture = new Facture();
     $cart = $session->get('cart', new Cart());
+    //on récupère l'id du user uniquement
     $newFacture->setUserId($this->getUser()->getId());
+    // set la new facture dans la new commande
     $newOrder->setFacture($newFacture);
-    //on récuppère la dernière facture
+    // afin de récupérer la dernière facture
     $lastFacture = $fr->findLastFacture($this->getUser()->getId());
-    // Pré rempli la nouvelle facture
+    // pour pré remplir la nouvelle facture
     if($lastFacture){
       $newFacture->setUserId($lastFacture->getUserId());
       $newFacture->setFirstname($lastFacture->getFirstname());
@@ -85,14 +87,20 @@ class CheckoutController extends AbstractController
     $formOrder = $this->createForm(OrderType::class, $newOrder);
     $formOrder->handleRequest($request);
     if($formOrder->isSubmitted() && $formOrder->isValid()){
+      // set user dans order
       $newOrder->setUser($this->getUser());
+      // set order dans la new facture
       $newOrder->getFacture()->setOrdering($newOrder);
+      // on persist à ce moment pour pouvoir addPorudctOrdering sur qq chose de "réel"
       $manager->persist($newOrder);
       foreach($cart->getFullCart() as $cartLine){
         $newProductOrder = new ProductOrdering();
         $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
+        //set product To newProductOrder
         $newProductOrder->setProduct($product);
+        //set quantity To newProductOrder
         $newProductOrder->setQuantity($cartLine['quantity']);
+        //Hydrate newOrder avec le newProductOrder
         $newOrder->addProductOrdering($newProductOrder);
         $manager->persist($newProductOrder);
       }
@@ -116,7 +124,6 @@ class CheckoutController extends AbstractController
   {
     $order = $or->findOneByOrderingReference($reference);
   
-    //Vérifier que c'est le bon user
 
     $YOUR_DOMAIN = 'http://127.0.0.1:8000';
     $productsForStripe = [];
@@ -181,11 +188,11 @@ class CheckoutController extends AbstractController
       $cart = $session->get('cart', new Cart());
       //je vide le panier
       $cart->clear($cart->getFullCart());
-      return $this->render('checkout/success.html.twig', [
-        'order' => $order,
-        'total' => $total,
-        'quantityTotal' => $quantityTotal,
-      ]);
+      // return $this->render('checkout/success.html.twig', [
+      //   'order' => $order,
+      //   'total' => $total,
+      //   'quantityTotal' => $quantityTotal,
+      // ]);
     }
     return $this->render('checkout/success.html.twig', [
       'order' => $order,

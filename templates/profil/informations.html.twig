@@ -20,10 +20,11 @@
                                 {{ address.address|title }}<br>
                                 {{  address.zipCode ~ " " ~ address.city|capitalize }}
                             </p>
-                                
-                            <a href="{{ path('address_edit', {'id': address.id }) }}" class="btn btn-primary">Modifier </a>
+                            {% if address.Orderings|length < 1 %}
+                                <a href="{{ path('address_edit', {'id': address.id }) }}" class="btn btn-primary">Modifier </a>
+                                <a href="{{ path('address_delete', {'id': address.id }) }}" class="btn btn-danger">Supprimer</a>
+                            {% endif %}    
                         </div>
-                        {# <a href="{{ path('address_delete', {'id': address.id }) }}" class="btn btn-danger">Supprimer</a> #}
                     {% endfor %}    
                 {% else %}
                     <p>Vous n'avez aucune adresse enregistrée.</p>

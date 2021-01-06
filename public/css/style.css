@@ -40,10 +40,21 @@ div.address{
 }
 .filterDropdown, .sortedDropdown{
     width: 50%;
+    background-color: #6c757d;
+    border-color: #6c757d;
+    text-align: center;
 }
-.filterButton, .sortedButton{
+.filterDropdown a, .sortedDropdown a{
     width: 100%;
-    border-radius: 0; 
+    border-radius: 0;
+    color: #fff;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    text-decoration: none;
+    vertical-align: middle;
+    
+
 }
 .form-check-input{
     position: inherit;
@@ -81,7 +92,16 @@ article{
     width: auto;
     height: 300px;
     margin: 0 1em 0 0;
-    
+}
+.productContainer{
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.adminButtonContainer{
+    width: 100%;
+    padding: 10px;
+    text-align: center;
 }
 .productName{
     font-size: 22px;

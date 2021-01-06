@@ -21,6 +21,7 @@ class ProfilController extends AbstractController
      */
     public function infosUser(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $passwordEncoder){
         $user = $this->getUser();
+        // plus besoin de vérifier l'user grâce au { path: ^/profil, roles: ROLE_USER } dans security.yaml
         if($user){
             $addresses = $user->getShipAddresses();
             $formEmail = $this->createForm(UserEmailType::class, $user);
@@ -98,8 +99,11 @@ class ProfilController extends AbstractController
      */
     public function editAddress(ShipAddress $shipAddress = null, Request $request, EntityManagerInterface $manager)
     {
-        if(!$shipAddress || $this->getUser() !== $shipAddress->getUser()){
-            
+        // on vérifie : 
+            //  l'adresse existe
+            // user connecté correspond au user de l'adresse
+            // que l'adresse n'a pas été utilisé pour une commande
+        if(!$shipAddress || $this->getUser() !== $shipAddress->getUser() || count($shipAddress->getOrderings()) > 0){
             return $this->redirectToRoute('app_login');
         } else {
             $form = $this->createForm(ShipAddressType::class, $shipAddress);
@@ -115,20 +119,24 @@ class ProfilController extends AbstractController
         }
     }
 
-    // /**
-    //  * @Route("/profil/deleteAddress/{id}", name="address_delete")
-    //  */
-    // public function deleteAddress(ShipAddress $shipAddress = null, EntityManagerInterface $manager)
-    // {
-    //     if(!$shipAddress || $this->getUser() !== $shipAddress->getUser()){
-    //         return $this->redirectToRoute('app_login');
-    //     } else {
-    //         $manager->remove($shipAddress);
-    //         $manager->flush();
+    /**
+     * @Route("/profil/deleteAddress/{id}", name="address_delete")
+     */
+    public function deleteAddress(ShipAddress $shipAddress = null, EntityManagerInterface $manager)
+    {
+        // on vérifie : 
+            //  l'adresse existe
+            // user connecté correspond au user de l'adresse
+            // que l'adresse n'a pas été utilisé pour une commande
+        if(!$shipAddress || $this->getUser() !== $shipAddress->getUser() || count($shipAddress->getOrderings()) > 0){
+            return $this->redirectToRoute('app_login');
+        } else {
+            $manager->remove($shipAddress);
+            $manager->flush();
             
-    //         return $this->redirectToRoute('profil_addresses');
-    //     }
-    // }
+            return $this->redirectToRoute('profil_addresses');
+        }
+    }
 
     /**
      * @Route("/profil/deleteAccount/{id}", name="account_delete")

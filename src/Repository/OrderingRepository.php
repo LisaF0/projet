@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Ordering;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Knp\Component\Pager\PaginatorInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Ordering|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,18 +15,29 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class OrderingRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var PaginatorInterface
+     */
+    private $paginator;
+    
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
     {
         parent::__construct($registry, Ordering::class);
+        $this->paginator = $paginator;
     }
 
-    public function findTenLast(){
-        return $this->createQueryBuilder('o')
+    public function findAll(){
+        $query = $this->createQueryBuilder('o')
                 ->orderBy('o.createdAt', 'ASC')
-                ->setMaxResults(10)
                 ->getQuery()
-                ->getResult()
+                
             ;
+        return $this->paginator->paginate(
+            $query,
+            1,
+            //$request->query->get('page', 1)/*page number*/,
+            10
+        );
     }
     // public function findOneByReference($reference){
     //     return $this->createQueryBuilder('o')

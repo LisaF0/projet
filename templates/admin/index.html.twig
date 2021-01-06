@@ -19,7 +19,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for order in lastOrders %}
+            {% for order in orders %}
                 <tr>
                     <td>{{ order.orderingReference }}</td>
                     <td>{{ order.user.email }}</td>
@@ -39,6 +39,9 @@
             {% endfor %}
         </tbody>
     </table>
+    <div>
+        {{ knp_pagination_render(orders, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig' )}}
+    </div>
 
         
 {% endblock %}
