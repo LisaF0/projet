@@ -2,22 +2,32 @@
 
 namespace App\Controller;
 
+use App\Entity\Cart;
 use App\Entity\User;
+use App\Entity\Facture;
+use App\Entity\Product;
+use App\Form\OrderType;
+use App\Entity\Ordering;
 use App\Entity\ShipAddress;
 use App\Form\UserEmailType;
 use App\Form\ShipAddressType;
 use App\Form\UserPasswordType;
+use App\Entity\ProductOrdering;
+use App\Repository\FactureRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class ProfilController extends AbstractController
+class UserController extends AbstractController
 {
     /**
      * @Route("/profil/infos", name="profil_infos")
+     * 
+     * Fonction permettant d'afficher le profil de l'utilisateur contenant son email, ses adresses, et la possibilité de changer son password et son email
      */
     public function infosUser(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $passwordEncoder){
         $user = $this->getUser();
@@ -35,7 +45,6 @@ class ProfilController extends AbstractController
             $formPassword = $this->createForm(UserPasswordType::class, $user);
             $formPassword->handleRequest($request);
             if($formPassword->isSubmitted() && $formPassword->isValid()){
-                // dd($user->getPassword());
                 $validPassword = $passwordEncoder->isPasswordValid(
                     $user,
                     $formPassword->get('oldPlainPassword')->getData()
@@ -53,7 +62,7 @@ class ProfilController extends AbstractController
                 $this->addFlash('danger', 'Votre mot de passe ne correspond pas');
                 return $this->redirectToRoute("profil_infos");
             }
-            return $this->render('profil/informations.html.twig', [
+            return $this->render('user/profilInfos.html.twig', [
                 'user' => $user,
                 'addresses' => $addresses,
                 'formUserEmail' => $formEmail->createView(),
@@ -63,39 +72,26 @@ class ProfilController extends AbstractController
         return $this->redirectToRoute('app_login'); 
     }
 
-    // /**
-    //  * @Route("profil/addresses", name="profil_addresses")
-    //  */
-    // public function addressesUser(){
-       
-    //     $user = $this->getUser();
-    //     if($user){
-    //         $addresses = $user->getShipAddresses();
-    //         return $this->render('profil/addresses.html.twig', [
-    //             'addresses' => $addresses,
-    //         ]);
-    //     }
-    //     return $this->redirectToRoute('app_login');  
-    // }
-
-    
     /**
      * @Route("/profil/orders", name="profil_orders")
+     * 
+     * Fonction permettant d'afficher l'historique des commandes de l'utilisateur
      */
     public function ordersUser(){
         $user = $this->getUser();
         if($user){
            $orders = $user->getOrderings();
-            return $this->render('profil/orders.html.twig', [
+            return $this->render('user/profilOrders.html.twig', [
                 'orders' => $orders,
             ]); 
         }
         return $this->redirectToRoute('app_login');  
-    }
-
+    }   
 
     /**
      * @Route("/profil/editAddress/{id}", name="address_edit")
+     * 
+     * Fonction permettant à l'utilisateur de modifier l'une de ses adresses si elle n'a pas été utilisé pour une commande
      */
     public function editAddress(ShipAddress $shipAddress = null, Request $request, EntityManagerInterface $manager)
     {
@@ -113,14 +109,17 @@ class ProfilController extends AbstractController
                 $this->addFlash('success', 'Cette adresse a bien été modifiée');
                 return $this->redirectToRoute('profil_infos');
             }
-            return $this->render('profil/editAddress.html.twig', [
+            return $this->render('user/editAddress.html.twig', [
                 'formAddress' => $form->createView()
             ]);
         }
     }
+    
 
     /**
      * @Route("/profil/deleteAddress/{id}", name="address_delete")
+     * 
+     * Fonction permettant à l'utilisateur de supprimer l'une de ses adresses si elle n'a pas été utilisé pour une commande
      */
     public function deleteAddress(ShipAddress $shipAddress = null, EntityManagerInterface $manager)
     {
@@ -133,15 +132,19 @@ class ProfilController extends AbstractController
         } else {
             $manager->remove($shipAddress);
             $manager->flush();
+            $this->addFlash('success', 'Votre adresse a bien été supprimé');
             
-            return $this->redirectToRoute('profil_addresses');
+            return $this->redirectToRoute('profil_infos');
         }
     }
 
+
     /**
      * @Route("/profil/deleteAccount/{id}", name="account_delete")
+     * 
+     * Fonction permettant à l'utilisateur de supprimer son compte
      */
-    public function deleteAccount(User $user = null, EntityManagerInterface $manager, SessionInterface $session)
+    public function deleteAccount(User $user = null, EntityManagerInterface $manager)
     {
 
         if(!$user || $user !== $this->getUser()){
@@ -163,6 +166,8 @@ class ProfilController extends AbstractController
 
     /**
      * @Route("/profil/addAddress", name="address_add")
+     * 
+     * Fonction permettant à l'utilisateur d'ajouter une adresse
      */
     public function addAddress(Request $request, EntityManagerInterface $manager)
     {
@@ -175,13 +180,88 @@ class ProfilController extends AbstractController
             $shipAddress->setUser($this->getUser());
             $manager->persist($shipAddress);
             $manager->flush();
-
+            $this->addFlash('success', 'Vous avez ajoutez une nouvelle adresse');
             return $this->redirectToRoute('profil_infos');
             
         }
 
-        return $this->render('cart/addShipAddress.html.twig', [
+        return $this->render('user/addShipAddress.html.twig', [
             'formAddShip' => $form->createView(),
         ]);
+    }    
+    //rediriger sur le profil ou sur le panier en fonction d'où l'utilisateur vient
+
+
+
+/**
+   * @Route("/chooseAdd", name="choose_address")
+   */
+  public function chooseAddress(Request $request, EntityManagerInterface $manager, FactureRepository $fr, SessionInterface $session)
+  {
+    $incart = [];
+    $user = $this->getUser();
+    if(!$user){
+      return $this->redirectToRoute("app_login");
     }
+      
+    $newOrder = new Ordering();
+    $newFacture = new Facture();
+    $cart = $session->get('cart', new Cart());
+    //on récupère l'id du user uniquement
+    $newFacture->setUserId($this->getUser()->getId());
+    // set la new facture dans la new commande
+    $newOrder->setFacture($newFacture);
+    // afin de récupérer la dernière facture
+    $lastFacture = $fr->findLastFacture($this->getUser()->getId());
+    // pour pré remplir la nouvelle facture
+    if($lastFacture){
+      $newFacture->setUserId($lastFacture->getUserId());
+      $newFacture->setFirstname($lastFacture->getFirstname());
+      $newFacture->setLastname($lastFacture->getLastname());
+      $newFacture->setCity($lastFacture->getCity());
+      $newFacture->setZipcode($lastFacture->getZipcode());
+      $newFacture->setAddress($lastFacture->getAddress());
+    }
+    foreach($cart->getFullCart() as $cartLine){
+      $incart[] = [
+        'product' => $cartLine['product'],
+        'quantity' => $cartLine['quantity']
+      ];
+    }
+    if(empty($incart)){
+      return $this->render('bundles/TwigBundle/Exception/error404.html.twig');
+    }
+    $total = $cart->getTotal($incart);
+    $formOrder = $this->createForm(OrderType::class, $newOrder);
+    $formOrder->handleRequest($request);
+    if($formOrder->isSubmitted() && $formOrder->isValid()){
+      // set user dans order
+      $newOrder->setUser($this->getUser());
+      // set order dans la new facture
+      $newOrder->getFacture()->setOrdering($newOrder);
+      // on persist à ce moment pour pouvoir addPorudctOrdering sur qq chose de "réel"
+      $manager->persist($newOrder);
+      foreach($cart->getFullCart() as $cartLine){
+        $newProductOrder = new ProductOrdering();
+        $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
+        //set product To newProductOrder
+        $newProductOrder->setProduct($product);
+        //set quantity To newProductOrder
+        $newProductOrder->setQuantity($cartLine['quantity']);
+        //Hydrate newOrder avec le newProductOrder
+        $newOrder->addProductOrdering($newProductOrder);
+        $manager->persist($newProductOrder);
+      }
+      $manager->flush();
+      return $this->render('checkout/index.html.twig', [
+        'items' => $incart,
+        'total' => $total,
+        'order' => $newOrder,
+        'reference' => $newOrder->getOrderingReference(),
+      ]);
+    }
+    return $this->render('user/chooseAddresses.html.twig', [
+      'formOrder' => $formOrder->createView(),
+    ]);
+  }
 }

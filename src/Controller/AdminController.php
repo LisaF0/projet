@@ -17,6 +17,8 @@ class AdminController extends AbstractController
 {
     /**
      * @Route("/admin", name="admin")
+     * 
+     * Fonction permettant d'afficher toute les commandes pour l'admin
      */
     public function index(OrderingRepository $or): Response
     {
@@ -29,6 +31,8 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/addProduct", name="add_product")
      * @Route("/admin/updateProduct/{id}", name="edit_product")
+     * 
+     * Fonction permettant à l'admin d'ajouter/editer un produit
      */
     public function addProduct(Product $product = null, Request $request, EntityManagerInterface $manager)
     {
@@ -50,6 +54,8 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/admin/deleteProduct/{id}", name="delete_product")
+     * 
+     * Fonction permettant à l'admin de delete un produit
      */
     public function deleteProduct(Product $product = null, EntityManagerInterface $manager)
     {
@@ -62,6 +68,8 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/admin/statusToSend/{id}", name="statusToSend")
+     * 
+     * Fonction permettant à l'admin de modifier le statut de la commande
      */
     public function statusToSend(Ordering $ordering, EntityManagerInterface $manager)
     {

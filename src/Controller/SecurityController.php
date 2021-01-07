@@ -15,6 +15,8 @@ class SecurityController extends AbstractController
 {
     /**
      * @Route("/login", name="app_login")
+     * 
+     * Fonction permettant à un utilisateur de se connecter
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -32,6 +34,8 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/logout", name="app_logout")
+     * 
+     * Fonction permettant à un utilisateur de se déconnecter
      */
     public function logout()
     {
@@ -40,6 +44,8 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/register", name="app_register")
+     * 
+     * Fonction permettant à un utilisateur de s'inscrire
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {

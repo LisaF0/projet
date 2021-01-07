@@ -16,6 +16,8 @@ class StoreController extends AbstractController
 {
     /**
      * @Route("/products/{sortBy}/{order}", name="products_index")
+     * 
+     * Fonction permettant d'afficher la liste des produits, et de les filtrer
      */
     public function index($sortBy = null, $order = null, Request $request, ProductRepository $pr, PaginatorInterface $paginator): Response
     {

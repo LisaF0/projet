@@ -23,99 +23,29 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CheckoutController extends AbstractController
 {
-  /**
-   * @Route("/ShipAddress/add", name="shipAdd_add")
-   */
-  public function addShipAddress(Request $request, EntityManagerInterface $manager ){
-    $shipAddress = new ShipAddress();
-    $form = $this->createForm(ShipAddressType::class, $shipAddress);
-    $form->handleRequest($request);
+  // /**
+  //  * @Route("/ShipAddress/add", name="shipAdd_add")
+  //  */
+  // public function addShipAddress(Request $request, EntityManagerInterface $manager ){
+  //   $shipAddress = new ShipAddress();
+  //   $form = $this->createForm(ShipAddressType::class, $shipAddress);
+  //   $form->handleRequest($request);
     
-    if($form->isSubmitted() && $form->isValid()){
-      $shipAddress = $form->getData();
-      $shipAddress->setUser($this->getUser());
-      $manager->persist($shipAddress);
-      $manager->flush();
+  //   if($form->isSubmitted() && $form->isValid()){
+  //     $shipAddress = $form->getData();
+  //     $shipAddress->setUser($this->getUser());
+  //     $manager->persist($shipAddress);
+  //     $manager->flush();
 
-      return $this->redirectToRoute('choose_address');
-    }
+  //     return $this->redirectToRoute('choose_address');
+  //   }
 
-    return $this->render('cart/addShipAddress.html.twig', [
-      'formAddShip' => $form->createView(),
-    ]);
-  }
+  //   return $this->render('cart/addShipAddress.html.twig', [
+  //     'formAddShip' => $form->createView(),
+  //   ]);
+  // }
 
-  /**
-   * @Route("/chooseAdd", name="choose_address")
-   */
-  public function chooseAddress(Request $request, EntityManagerInterface $manager, FactureRepository $fr, SessionInterface $session)
-  {
-    $incart = [];
-    $user = $this->getUser();
-    if(!$user){
-      return $this->redirectToRoute("app_login");
-    }
-      
-    $newOrder = new Ordering();
-    $newFacture = new Facture();
-    $cart = $session->get('cart', new Cart());
-    //on récupère l'id du user uniquement
-    $newFacture->setUserId($this->getUser()->getId());
-    // set la new facture dans la new commande
-    $newOrder->setFacture($newFacture);
-    // afin de récupérer la dernière facture
-    $lastFacture = $fr->findLastFacture($this->getUser()->getId());
-    // pour pré remplir la nouvelle facture
-    if($lastFacture){
-      $newFacture->setUserId($lastFacture->getUserId());
-      $newFacture->setFirstname($lastFacture->getFirstname());
-      $newFacture->setLastname($lastFacture->getLastname());
-      $newFacture->setCity($lastFacture->getCity());
-      $newFacture->setZipcode($lastFacture->getZipcode());
-      $newFacture->setAddress($lastFacture->getAddress());
-    }
-    foreach($cart->getFullCart() as $cartLine){
-      $incart[] = [
-        'product' => $cartLine['product'],
-        'quantity' => $cartLine['quantity']
-      ];
-    }
-    if(empty($incart)){
-      return $this->render('bundles/TwigBundle/Exception/error404.html.twig');
-    }
-    $total = $cart->getTotal($incart);
-    $formOrder = $this->createForm(OrderType::class, $newOrder);
-    $formOrder->handleRequest($request);
-    if($formOrder->isSubmitted() && $formOrder->isValid()){
-      // set user dans order
-      $newOrder->setUser($this->getUser());
-      // set order dans la new facture
-      $newOrder->getFacture()->setOrdering($newOrder);
-      // on persist à ce moment pour pouvoir addPorudctOrdering sur qq chose de "réel"
-      $manager->persist($newOrder);
-      foreach($cart->getFullCart() as $cartLine){
-        $newProductOrder = new ProductOrdering();
-        $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
-        //set product To newProductOrder
-        $newProductOrder->setProduct($product);
-        //set quantity To newProductOrder
-        $newProductOrder->setQuantity($cartLine['quantity']);
-        //Hydrate newOrder avec le newProductOrder
-        $newOrder->addProductOrdering($newProductOrder);
-        $manager->persist($newProductOrder);
-      }
-      $manager->flush();
-      return $this->render('checkout/index.html.twig', [
-        'items' => $incart,
-        'total' => $total,
-        'order' => $newOrder,
-        'reference' => $newOrder->getOrderingReference(),
-      ]);
-    }
-    return $this->render('cart/addresses.html.twig', [
-      'formOrder' => $formOrder->createView(),
-    ]);
-  }
+  
   
   /**
    * @Route("/create-checkout-session/{reference}", name="create-checkout-session")
