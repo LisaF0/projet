@@ -20,6 +20,10 @@
 #menu, #underMenu{
     background-color: var(--dark-color);
 }
+#underMenu>a:hover, #underMenu>a:active{
+    color:var(--light-color);
+    background-color: var(--inter-color);
+}
 #menu>a{
     text-transform: uppercase;
 }

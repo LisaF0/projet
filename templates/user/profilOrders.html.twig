@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Mes commandes{% endblock %}
-
+{% block stylesheets %}
+{{ parent() }}
+{% endblock %}
 {% block body %}
     {% block nav %}
         {{ parent() }}
@@ -41,7 +43,5 @@
         <p>Vous n'avez pas de commande</p>
     {% endif %}
 
-    {% block footer %}
-        {{ parent() }}
-    {% endblock %}
+
 {% endblock %}

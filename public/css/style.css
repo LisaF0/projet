@@ -5,6 +5,19 @@
 }
 *{
     box-sizing: border-box;
+    font-family: belleza;
+    font-size: 20px;
+}
+/* ------------------ BTN ------------- */
+.btn{
+    background-color: var(--inter-color);
+    color:white;
+    border-color: var(--inter-color);
+}
+.btn:hover, .btn:active{
+    background-color: var(--dark-color);
+    border-color: var(--dark-color);
+    color: var(--light-color);
 }
 
 section{
@@ -23,6 +36,10 @@ section{
 #menu, #underMenu{
     background-color: var(--dark-color);
 }
+#underMenu>a:hover, #underMenu>a:active{
+color:var(--light-color);
+background-color: var(--inter-color);
+}
 #menu>a{
     text-transform: uppercase;
 }
@@ -31,6 +48,9 @@ section{
     font-weight: bold;
     text-decoration: none;
     font-size: 16px;
+}
+#menu>.nav-a{
+    font-size: 14px;
 }
 
 
@@ -239,7 +259,8 @@ input{
 /* -----------------------------Responsive ------------------- */
  @media (min-width:900px)
 {
-    #navbar .nav-a{
+    /* ------------------ NAV ------------- */
+    #menu .nav-a{
         font-size: 16px;
     }
 /* --------- Store -------------*/
@@ -270,7 +291,7 @@ input{
  @media (min-width:1450px)
 
 {
-    #navbar .nav-a{
+    #menu .nav-a{
         font-size: 20px;
     }
     div.container-address{
