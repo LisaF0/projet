@@ -6,6 +6,8 @@ use App\Entity\Product;
 use App\Entity\Ordering;
 use App\Form\ProductType;
 use App\Repository\OrderingRepository;
+use App\Repository\ProductOrderingRepository;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,10 +36,15 @@ class AdminController extends AbstractController
      * 
      * Fonction permettant à l'admin d'ajouter/editer un produit
      */
-    public function addProduct(Product $product = null, Request $request, EntityManagerInterface $manager)
+    public function addProduct(Product $product = null, Request $request, EntityManagerInterface $manager, ProductOrderingRepository $por)
     {
         if(!$product){
             $product = new Product();
+        }
+        // On vérifie que le produit n'appartient pas déjà à une commande
+        if($por->findByProductId($product->getId())){
+            $this->addFlash('warning', 'Ce produit ne peut pas être modifié');
+            return $this->redirectToRoute('products_index');
         }
         $formProduct = $this->createForm(ProductType::class, $product);
         $formProduct->handleRequest($request);
@@ -57,13 +64,32 @@ class AdminController extends AbstractController
      * 
      * Fonction permettant à l'admin de delete un produit
      */
-    public function deleteProduct(Product $product = null, EntityManagerInterface $manager)
+    public function deleteProduct(Product $product = null, EntityManagerInterface $manager, ProductOrderingRepository $por)
     {
         if($product){
+            if($por->findByProductId($product->getId())){
+                $this->addFlash('warning', 'Ce produit ne peut pas être supprimé');
+                return $this->redirectToRoute('products_index');
+            }
             $manager->remove($product);
             $manager->flush();
+            $this->addFlash('success', 'Le produit a bien été supprimé');
         }
         return $this->redirectToRoute('products_index'); 
+    }
+
+    /**
+     * @Route("/admin/desactiveProduct/{id}", name="desactive_product")
+     * 
+     * Fonction permettant à l'admin d'activer ou de désactiver un produit
+     */
+    public function desactivate(Product $product, EntityManagerInterface $manager)
+    {
+        $activeState = $product->getActivate() ? false : true;
+        $product->setActivate($activeState);
+        $manager->flush();
+
+        return $this->redirectToRoute('products_index');
     }
 
     /**

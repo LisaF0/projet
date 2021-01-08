@@ -28,13 +28,16 @@ class ProductRepository extends ServiceEntityRepository
     }
 
 
-    public function findByFilter(Filter $filter)
+    public function findByFilterAndActivate($filter)
     {
         $query =  $this->createQueryBuilder('p')
             ->select('a', 'p', 'd', 't')
+            ->andWhere('p.activate = :activate')
+            ->setParameter('activate', 0)
             ->join('p.appellation', 'a')
             ->join('p.domain', 'd')
-            ->join('p.type', 't');
+            ->join('p.type', 't')
+        ;
 
             if(!empty($filter->appellations)){
                 $query = $query
@@ -71,6 +74,51 @@ class ProductRepository extends ServiceEntityRepository
                 9
             );
             // return $query->getQuery()->getResult();
+    }
+
+    public function findByFilter($filter)
+    {
+        $query =  $this->createQueryBuilder('p')
+            ->select('a', 'p', 'd', 't')
+            ->join('p.appellation', 'a')
+            ->join('p.domain', 'd')
+            ->join('p.type', 't')
+        ;
+
+            if(!empty($filter->appellations)){
+                $query = $query
+                    ->andWhere('a.id IN (:appellations)')
+                    ->setParameter('appellations', $filter->appellations);
+            }
+            
+            if(!empty($filter->domains)){
+                $query = $query
+                    ->andWhere('d.id IN (:domains)')
+                    ->setParameter('domains', $filter->domains);
+            }
+
+            if(!empty($filter->types)){
+                $query = $query
+                    ->andWhere('t.id IN (:types)')
+                    ->setParameter('types', $filter->types);
+            }
+            if(!empty($filter->min)){
+                $query = $query
+                    ->andWhere('p.unitPrice >= :min')
+                    ->setParameter('min', $filter->min);
+            }
+            if(!empty($filter->max)){
+                $query = $query
+                    ->andWhere('p.unitPrice <= :max')
+                    ->setParameter('max', $filter->max);
+            }
+
+            $query = $query->getQuery();
+            return $this->paginator->paginate(
+                $query,
+                $filter->page,
+                9
+            );
     }
 
 

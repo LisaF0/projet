@@ -19,6 +19,15 @@ class ProductOrderingRepository extends ServiceEntityRepository
         parent::__construct($registry, ProductOrdering::class);
     }
 
+    public function findByProductId($id)
+    {
+        return $this->createQueryBuilder('po')
+            ->andWhere('po.product = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     // /**
     //  * @return ProductOrdering[] Returns an array of ProductOrdering objects
     //  */

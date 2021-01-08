@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use Dompdf\Dompdf;
 use Stripe\Stripe;
+
+use Dompdf\Options;
 use App\Entity\Cart;
 use App\Entity\Facture;
 use App\Entity\Product;
@@ -23,29 +26,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CheckoutController extends AbstractController
 {
-  // /**
-  //  * @Route("/ShipAddress/add", name="shipAdd_add")
-  //  */
-  // public function addShipAddress(Request $request, EntityManagerInterface $manager ){
-  //   $shipAddress = new ShipAddress();
-  //   $form = $this->createForm(ShipAddressType::class, $shipAddress);
-  //   $form->handleRequest($request);
-    
-  //   if($form->isSubmitted() && $form->isValid()){
-  //     $shipAddress = $form->getData();
-  //     $shipAddress->setUser($this->getUser());
-  //     $manager->persist($shipAddress);
-  //     $manager->flush();
-
-  //     return $this->redirectToRoute('choose_address');
-  //   }
-
-  //   return $this->render('cart/addShipAddress.html.twig', [
-  //     'formAddShip' => $form->createView(),
-  //   ]);
-  // }
-
-  
   
   /**
    * @Route("/create-checkout-session/{reference}", name="create-checkout-session")
@@ -129,6 +109,45 @@ class CheckoutController extends AbstractController
       'total' => $total,
       'quantityTotal' => $quantityTotal,
       
+    ]);
+  }
+
+  /**
+   * @Route("/downloadPDF/{stripeSessionId}", name="dl_facture")
+   */
+  public function dlPDF($stripeSessionId, OrderingRepository $or, UserRepository $ur)
+  {
+    $order = $or->findOneByStripeSessionId($stripeSessionId);
+    // $user = $ur->findOneById($order->getUser()->getId());
+    $total = $order->getTotal();
+    $quantityTotal = $order->getQuantityTotal();
+    // Configure Dompdf according to your needs
+    $pdfOptions = new Options();
+    $pdfOptions->set('defaultFont', 'Arial');
+    
+    // Instantiate Dompdf with our options
+    $dompdf = new Dompdf($pdfOptions);
+    
+    // Retrieve the HTML generated in our twig file
+    $html = $this->renderView('checkout/success.html.twig', [
+      'order' => $order,
+      'total' => $total,
+      'quantityTotal' => $quantityTotal,
+      'title' => "Votre Facture"
+    ]);
+    
+    // Load HTML to Dompdf
+    $dompdf->loadHtml($html);
+    
+    // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+    $dompdf->setPaper('A4', 'portrait');
+
+    // Render the HTML as PDF
+    $dompdf->render();
+
+    // Output the generated PDF to Browser (force download)
+    $dompdf->stream("Facture".$order->getFacture()->getFactureReference(), [
+        "Attachment" => true
     ]);
   }
 

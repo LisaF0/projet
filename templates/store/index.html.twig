@@ -6,12 +6,17 @@
     {% block nav %}
         {{ parent() }}
     {% endblock %}
+    {% if is_granted('ROLE_ADMIN') %}
+        {% set products = allProducts %}
+    {% else %}
+        {% set products = productsActive %}
+    {% endif %}
+
         <section id="sectionFilters">
             <div class="dropdown show filterDropdown">
                 <a href="#" class=" dropdown-toggle filterButton" role="button" id="dropdownMenuLink" 
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filtrer par</a>
                 <div class="dropdown-menu filterContainer" aria-labelledby="dropdownMenuLink">
-                    {# {{ form(formFilter) }} #}
                     {{ form_start(formFilter)}}
                         <h4>Appellations</h4>
                         {{ form_row(formFilter.appellations) }}
@@ -28,16 +33,8 @@
                     {{ form_end(formFilter) }}
                 </div>
             </div>
-            <div class="dropdown show sortedDropdown">
+            <div class="sortedDropdown">
             {{ knp_pagination_sortable(products, 'Prix', 'p.unitPrice', {}, {}, '@KnpPaginator/Pagination/twitter_bootstrap_v4_font_awesome_sortable_link.html.twig')  }}
-            
-            {# <a href="#" class=" dropdown-toggle sortedButton" role="button" id="dropdownMenuLink" 
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Trier par</a>
-                <div class="dropdown-menu sortedContainer" aria-labelledby="dropdownMenuLink">
-                    <a href="{{ path('products_index', {sortBy : 'unitPrice', order : 'ASC'}) }}" class="btn">du - cher au + cher</a>
-                    <a href="{{ path('products_index', {sortBy : 'unitPrice', order : 'DESC'}) }}" class="btn">du + cher au - cher</a>
-                    <a href="{{ path('products_index', {sortBy : 'name', order : 'ASC'}) }}" class="btn">ordre alphabétique</a>
-                </div> #}
             </div>
         </section>
         <section id="sectionProducts">
@@ -48,8 +45,10 @@
                     <a href="{{ path('add_product') }}" class="btn btn-primary">Ajouter un produit</a>
                 {% endif %} 
             </div>
+            
             {% if products|length > 0 %}
                 {% for product in products %}
+                
                     <article>
                         <img src="{{ ('img/' ~ product.photo )}}" alt="{{ 'Bouteille de ' ~ product.name }}" class="winePhoto">
                         <div class="productContainer">
@@ -74,13 +73,20 @@
                             {% endif %}
                             {% if is_granted('ROLE_ADMIN') %}
                                 <div class="adminButtonContainer">
-                                    <a href="{{ path('edit_product', {'id': product.id}) }}" class="btn btn-primary">Modifier</a>
-                                    <a href="{{ path('delete_product', {'id': product.id}) }}" class="btn btn-danger">Supprimer</a>
+
+                                    <a href="{{ path('edit_product', {'id': product.id }) }}" class="btn btn-primary">Modifier</a>
+                                    <a href="{{ path('delete_product', {'id': product.id }) }}" class="btn btn-danger">Supprimer</a>
+                                    {% if product.activate == 0 %}
+                                        <a href="{{ path('desactive_product', {'id': product.id}) }}" class="btn btn-primary">Activer</a>
+                                    {% else %}
+                                        <a href="{{ path('desactive_product', {'id': product.id}) }}" class="btn btn-primary">Désactiver</a>
+                                    {% endif %}
                                 </div>
                             {% endif %}
                         </div>
                         
                     </article>
+                
                 {% endfor %}
                 <div id="productFooter" >
                     {{ knp_pagination_render(products, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig' )}}
@@ -91,31 +97,11 @@
                 </div>
             {% endif %}
         </section>
-    {% block footer %}
-        {{ parent() }}
-    {% endblock %}
+
 {% endblock %}
 {% block javascripts %}
     <script>
     // $('.dropdown-toggle').dropdown()
-    // document.getElementById('filter_submit').addEventListener("click", function(e){
-    //     e.preventDefault()
-    //     let filtres = document.getElementsByClassName('form-check-input')
-    //     let type = document.getElementById('filter_types_1')
-    //     let labels = []
-    //     for(var i = 0; i < filtres.length; i++){
-    //         if(filtres[i].checked){
-    //             labels.push(filtres[i].nextElementSibling.innerText)
-    //         }
-    //     }
-    //     let label = type.nextElementSibling
-    //     console.log(labels)
-        
-    // })
-
-    
-
-    
     </script>
 {% endblock %}
 

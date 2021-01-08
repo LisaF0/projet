@@ -1,0 +1,195 @@
+:root{
+    --light-color: #E3D7C8;
+    --inter-color: #7D766E;
+    --dark-color: #3D3A36;
+}
+*{
+    box-sizing: border-box;
+    font-family: belleza;
+    font-size: 20px;
+}
+.flex{
+    display: flex;
+    font-weight: bold;
+}
+/* ------------------ NAV ------------- */
+#menu>a{
+    align-self: center;
+    padding: 10px;
+}
+#menu, #underMenu{
+    background-color: var(--dark-color);
+}
+
+#menu .nav-a{
+    color: var(--light-color);
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+
+/* ------------------ BANNER ------------- */
+#banner{
+    display:none;
+    width: 100vw;
+    background-image: url("../img/caveau.jpg");
+    background-size: cover;
+    background-position: center;
+    height : 40vh;
+}
+/* ------------------ MAIN ------------- */
+h1, h2{
+    color: var(--dark-color);
+    font-size: 28px;
+}
+
+/* ------------------ SECTION PRESENTATION ------------- */
+
+#presentation article img{
+    width: 100vw;
+}
+#presentation article div{
+    padding: 15px;
+    text-align: center;
+}
+#presentation div p>a{
+    color: var(--inter-color);
+    font-weight: bold;
+    text-transform: uppercase;
+}
+#presentation div p>a:hover{
+    color:var(--dark-color);
+}
+
+/* ------------------ SECTION INFORMATIONS ------------- */
+#informations{
+    padding: 20px;
+    background-color: var(--light-color);
+}
+
+#informations h2, #horaire{
+    text-align: center;
+}
+#contact{
+    border-bottom: 1px solid var(--dark-color);
+    padding-bottom: 20px;
+}
+#contact div{
+    width: 100%;
+}
+#contact p{
+    width: 60%;
+    text-align: right;
+    padding: 10px;
+    margin:0;
+    align-self: flex-end;
+}
+
+#contact span{
+    width: auto;
+    padding: 10px;
+    align-self: center;
+    color: var(--dark-color);
+}
+#horaire ul{
+    list-style: none;
+    padding:0;
+}
+/* ------------------ SECTION GALLERY ------------- */
+
+#gallery-imgs figure{
+    margin: 0;
+    flex: 1;
+    height: 200px;
+    overflow: hidden;
+    cursor: pointer;
+}
+#gallery-imgs figure img{
+    padding: 5px;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+/* ------------------ SECTION FOOTER ------------- */
+footer{
+    padding: 0px 16px;
+    text-align: center;
+    background-color: var(--dark-color);
+    color:white;
+}
+footer nav{
+    padding-top: 6px;
+}
+footer #socialNetworks nav>ul>li{
+    padding-top: 10px;
+}
+footer #socialNetworks ul{
+    list-style: none;
+    padding:0;
+    margin:0;
+}
+footer #socialNetworks ul li{
+    display: inline-block;
+}
+footer a{
+    color: white;
+}
+footer #socialNetworks a:hover{
+    font-size:20px;
+}
+
+footer a:hover{
+    color: #CFC3B6;
+}
+/* ------------------ SECTION MODAL ------------- */
+#modal{
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top:0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(128, 128, 128, 0.609);
+}
+#modal-content{
+    display: flex; 
+    overflow: hidden;
+    justify-content: center;
+    animation: modalReveal 1s;
+}
+
+.modal-img{
+    max-width: 80%;
+} 
+#modal.modal-active{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modal-close{
+    color: white;
+    font-size: 3em;
+    padding: 0.5em;
+}
+.modal-close:hover, .close:focus{
+    text-shadow: 3px 3px 3px var(--color-o);
+    cursor: pointer;
+} 
+@keyframes modalReveal{
+    from{
+        width:0vw;
+        opacity: 0;
+    }
+    to{
+        max-width: 80vw;
+        opacity: 1;
+    }
+}
+
+
+
+

@@ -28,8 +28,7 @@ class ShipAddressRepository extends ServiceEntityRepository
             ->andWhere('sa.user = :user')
             ->setParameter('user', $user)
             ->getQuery()
-            ->getResult()
-            
+            ->getResult() 
         ;
     }
 

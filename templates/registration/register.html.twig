@@ -17,13 +17,10 @@
 
             {{ form_row(registrationForm.email) }}
             {{ form_row(registrationForm.plainPassword) }}
-            {# {{ form_row(registrationForm.agreeTerms, {'label': 'J\'ai lu et accepté la politique de confidentialité'}) }} #}
+            {{ form_row(registrationForm.agreeTerms) }}
 
             <button type="submit" class="btn btn-lg btn-primary">Valider</button>
             <p>Nous nous engageons à garder ces informations strictement confidentielles. <a href="">Pour en savoir plus sur la politique de confidentialité.</a></p>
         {{ form_end(registrationForm) }}
     </section>
-    {% block footer %}
-        {{ parent() }}
-    {% endblock %}
 {% endblock %}

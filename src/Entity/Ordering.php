@@ -64,6 +64,7 @@ class Ordering
      */
     private $stripeSessionId;
 
+
     const STATUS_ORDER = [
         0 => "en attente de paiement",
         1 => "Payée",
@@ -77,6 +78,7 @@ class Ordering
         $this->orderingReference = $this->createdAt->format('dmY').'-'.uniqid();
         $this->orderingStatus = self::STATUS_ORDER[0];
         $this->productOrderings = new ArrayCollection();
+        
     }
 
     public function getId(): ?int
@@ -225,5 +227,7 @@ class Ordering
         }
         return $totalQuantity;
     }
+
+
 
 }

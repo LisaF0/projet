@@ -56,6 +56,6 @@
                 <p>Adresse: {{ order.facture.address }}</p>
             </div>          
         </div>
-        <button class="btn btn-primary">Télécharger la facture</button>
+        <a href="{{ path('dl_facture', {'stripeSessionId': order.stripeSessionId }) }}" class="btn btn-primary">Télécharger la facture</a>
 {% endblock %}
 

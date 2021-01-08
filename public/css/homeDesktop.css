@@ -1,0 +1,41 @@
+@media screen and (min-width: 1150px)
+{
+    /* ------------------ BANNER ------------- */
+    #banner{
+    display:block; 
+    }
+    /* ------------------ SECTION PRESENTATION ------------- */
+    #presentation article{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 15vw;
+    }
+    #presentation article img{
+        width: 30vw;
+    }
+    #presentation article div{
+        padding: 15px;
+        text-align: center;
+    }
+    #presentation div p>a{
+        color: var(--inter-color);
+        font-weight: bold;
+    }
+    #presentation div p>a:hover{
+        color:var(--dark-color);
+    }
+    /* ------------------ SECTION INFORMATIONS ------------- */
+    #informations{
+        display: flex;
+        justify-content: space-between;
+    }
+    #informations section{
+        width: 50%;
+        padding: 20px;
+    }
+    #informations #contact{
+        border-bottom: none;
+        border-right: 1px solid var(--dark-color);
+    }
+}

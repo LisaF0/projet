@@ -30,15 +30,17 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['placeholder' => 'Votre Email']
 
             ])
-            // ->add('agreeTerms', CheckboxType::class, [
-            //     'mapped' => false,
-                
-            //     'constraints' => [
-            //         new IsTrue([
-            //             'message' => 'Vous devez accepter nos conditions.',
-            //         ]),
-            //     ],
-            // ])
+            ->add('agreeTerms', CheckboxType::class, [
+                'mapped' => false,
+                'require' => true,
+                'label' => 'En cochant, vous acceptez nos mentions légales et notre politique de confidentialité et de ventes,
+                pour plus d\informations veuillez vous référer au bas de la page',
+                'constraints' => [
+                    new IsTrue([
+                        'message' => 'Vous devez accepter nos conditions.',
+                    ]),
+                ],
+            ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller

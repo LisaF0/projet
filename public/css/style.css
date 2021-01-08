@@ -1,9 +1,12 @@
+:root{
+    --light-color: #E3D7C8;
+    --inter-color: #7D766E;
+    --dark-color: #3D3A36;
+}
 *{
     box-sizing: border-box;
 }
-/* #wrapper{
-    min-height: 100vh;
-} */
+
 section{
     display:flex;
     flex-wrap: wrap;
@@ -12,14 +15,23 @@ section{
 .alert{
     margin:0;
 }
-/* img{
-    margin: 10px;
-} */
-
-
-.dropdown-menu>a:hover{
-    background-color:#3c4247;
+/* ------------------ NAV ------------- */
+#menu>a{
+    align-self: center;
+    padding: 10px;
 }
+#menu, #underMenu{
+    background-color: var(--dark-color);
+}
+
+#menu .nav-a{
+    color: var(--light-color);
+    text-transform: uppercase;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 16px;
+}
+
 
 div.address{
     border: 1px solid black;
@@ -226,6 +238,9 @@ input{
 /* -----------------------------Responsive ------------------- */
  @media (min-width:900px)
 {
+    #navbar .nav-a{
+        font-size: 20px;
+    }
 /* --------- Store -------------*/
     #sectionProducts{
         flex-wrap: wrap;

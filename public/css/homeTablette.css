@@ -1,0 +1,42 @@
+@media screen and (min-width: 850px)
+{
+    /* ------------------ NAV ------------- */
+    #navbar .nav-a{
+        font-size: 20px;
+    }
+    /* ------------------ SECTION FOOTER ------------- */
+
+    footer{
+        padding-top:10px;
+    }
+    #socialNetworks nav ul{
+        display: inline;
+    }
+    footer #socialNetworks nav>ul>li{
+        padding-left: 10px;
+        padding-top:0;
+    }
+    footer #socialNetworks ul{
+        list-style: none;
+        padding:0;
+    }
+    #legalMention{
+        display: flex;
+        justify-content: space-evenly;
+    }
+    /* ------------------ SECTION GALLERY ------------- */
+    #gallery-imgs{
+        display: flex;
+        flex-wrap:wrap; 
+    }
+    /* ------------------ MODAL ------------- */
+    #modal-content{ 
+        height: 80%;
+        width: auto;
+    }
+    .modal-img{
+        max-height: 100%;
+        max-width: 90%;
+    }
+
+}

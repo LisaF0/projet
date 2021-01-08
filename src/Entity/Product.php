@@ -77,6 +77,11 @@ class Product
      */
     private $year;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $activate;
+
     public function __construct()
     {
         $this->reference = uniqid();
@@ -217,6 +222,18 @@ class Product
     public function setYear(int $year): self
     {
         $this->year = $year;
+
+        return $this;
+    }
+
+    public function getActivate(): ?bool
+    {
+        return $this->activate;
+    }
+
+    public function setActivate(bool $activate): self
+    {
+        $this->activate = $activate;
 
         return $this;
     }

@@ -26,28 +26,12 @@ class StoreController extends AbstractController
         $filter->page = $request->get('page', 1);
         $formFilter = $this->createForm(FilterType::class, $filter);
         $formFilter->handleRequest($request);
-       
-        $products = $pr->findByFilter($filter);
+        $productsActive = $pr->findByFilterAndActivate($filter);
+        $allProducts = $pr->findByFilter($filter);
         
-        // if($formFilter->isSubmitted() && $formFilter->isValid())
-        // {
-    
-        //     $products = $pr->findByFilter($filter);
-
-        // } else {
-        //     if($sortBy == "name" || $sortBy == 'unitPrice' || $order == 'ASC' || $order == 'DESC'){
-        //         $sortField = ($sortBy) ? $sortBy : "name";
-        //         $sortOrder = ($order) ? $order : "ASC";
-        //         $products = $this->getDoctrine()
-        //         ->getRepository(Product::class)
-        //         ->findBy([], [$sortField => $sortOrder]);
-        //     } else {
-        //         $products = $this->getDoctrine()->getRepository(Product::class)->findAll();
-        //     }
-            
-        // }
         return $this->render('store/index.html.twig', [
-            'products' => $products,
+            'allProducts' => $allProducts,
+            'productsActive' => $productsActive,
             'formFilter' => $formFilter->createView()
         ]);
     }
