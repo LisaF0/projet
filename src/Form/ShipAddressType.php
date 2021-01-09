@@ -39,7 +39,7 @@ class ShipAddressType extends AbstractType
             ->add('address', TextType::class, [
                 'label' => 'Adresse',
             ])
-            ->add('save', SubmitType::class)
+            ->add('ajouter', SubmitType::class)
         ;
     }
 

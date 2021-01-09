@@ -24,7 +24,7 @@ class CartController extends AbstractController
     public function index()
     {
         $incart = [];
-        
+        //il faut réhydrater le produit afin de récupérer le nom de domaine
         foreach($this->cart->getFullCart() as $cartLine){
             $incart[] = [
                 'product' => $cartLine['product'],

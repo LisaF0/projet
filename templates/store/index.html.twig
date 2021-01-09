@@ -14,7 +14,7 @@
 
         <section id="sectionFilters">
             <div class="dropdown show filterDropdown">
-                <a href="#" class=" dropdown-toggle filterButton" role="button" id="dropdownMenuLink" 
+                <a href="#" class=" dropdown-toggle filterButton btn btn-primary" role="button" id="dropdownMenuLink" 
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filtrer par</a>
                 <div class="dropdown-menu filterContainer" aria-labelledby="dropdownMenuLink">
                     {{ form_start(formFilter)}}
@@ -33,7 +33,7 @@
                     {{ form_end(formFilter) }}
                 </div>
             </div>
-            <div class="sortedDropdown">
+            <div class="sortedDropdown ">
             {{ knp_pagination_sortable(products, 'Prix', 'p.unitPrice', {}, {}, '@KnpPaginator/Pagination/twitter_bootstrap_v4_font_awesome_sortable_link.html.twig')  }}
             </div>
         </section>
@@ -52,22 +52,22 @@
                     <article>
                         <img src="{{ ('img/' ~ product.photo )}}" alt="{{ 'Bouteille de ' ~ product.name }}" class="winePhoto">
                         <div class="productContainer">
-                            <h2 class="productName">{{ product.name ~ " " ~ product.year}}</h2>
+                            <h2 class="productName font-weight-bold">{{ product.name ~ " " ~ product.year}}</h2>
                             <p>Domaine {{ product.domain }}</p>
                             <p>{{product.description }}</p>
                             <div class="priceAndAvailableProduct">
                                 <p>{{ product.unitprice ~ '€'}}</p>
                                 {% if product.unitstock > 0 %}
-                                    <p><i class="fas fa-check greenColor"></i> Disponible</p>
+                                    <p><i class="fas fa-check text-success"></i> Disponible</p>
                                 {% else %}
-                                    <p><i class="fas fa-times redColor"></i> Indisponible</p>
+                                    <p><i class="fas fa-times text-danger"></i> Indisponible</p>
                                 {% endif %}
                             </div>
                             {% if product.unitstock > 0 %}
                             <form method="post" action="{{ path('cart_add', {'id': product.id} ) }}">
                                 <div class="qteAdd">
                                     <input type="number" id="quantity" name="quantity" min="1" max="{{ product.unitstock }}" value="1">
-                                    <button type="submit" class="btn btn-secondary cartAdd"><i class="fas fa-cart-plus"></i> Ajouter au panier</button>
+                                    <button type="submit" class="btn btn-primary cartAdd"><i class="fas fa-cart-plus"></i> Ajouter au panier</button>
                                 </div>
                             </form>
                             {% endif %}

@@ -8,6 +8,7 @@
     {% block nav %}
         {{ parent() }}
     {% endblock %}
+    <section id="recapSection">
     {% if items | length > 0 %}
         <h2>Récapitulatif de la commande</h2>
         <h3>Panier</h3>
@@ -18,7 +19,6 @@
                     <th>Prix</th>
                     <th>Quantité</th>
                     <th>Total</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -28,11 +28,6 @@
                         <td>{{ item.product.unitprice ~ '€' }}</td>
                         <td>{{ item.quantity }}</td>
                         <td>{{ item.product.unitprice * item.quantity ~ '€' }}</td>
-                        <td>
-                            <a href="{{ path('cart_remove', {'id': item.product.id }) }}" class="btn btn-danger btn-sm">
-                                <i class="fas fa-trash"></i>
-                            </a>  
-                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -75,6 +70,7 @@
         <p>Votre panier est vide.</p>
     {% endif %}
 
+    </section>
 {% endblock %}
 {% block javascripts %}
     <script type="text/javascript">

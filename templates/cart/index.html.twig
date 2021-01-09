@@ -12,7 +12,7 @@
         <div id="cartHeader">
             <h1>Mon panier</h1>
             {% if items|length > 0 %}
-                <a href="{{ path('cart_clear') }}"class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Vider le panier"><i class="fas fa-trash"></i></a>
+                <a href="{{ path('cart_clear') }}" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Vider le panier"><i class="fas fa-trash"></i></a>
             {% endif %}
         </div>
         {% if items|length > 0 %}
@@ -21,20 +21,21 @@
             <article>
                 <img src="{{ ('img/' ~ item.product.photo )}}" alt="{{ 'Bouteille de ' ~ item.product.name }}" class="winePhoto">
                 <div class="descProduct">
-                    <h2>{{ item.product.name ~ " " ~ item.product.year ~ " Domaine " ~ item.product.domain.name }}</h2>
+                    <h2 class="font-weight-bold">{{ item.product.name ~ " " ~ item.product.year ~ " Domaine " ~ item.product.domain.name }}</h2>
+                  
                     
                     <p>Prix à l'unité : {{ item.product.unitprice ~ '€'}}</p>
                     {% if item.product.unitstock > 0 %}
-                        <p><i class="fas fa-check greenColor"></i> Disponible</p>
+                        <p><i class="fas fa-check text-success"></i> Disponible</p>
                     {% else %}
-                        <p><i class="fas fa-times redColor"></i> Indisponible</p>
+                        <p><i class="fas fa-times text-danger"></i> Indisponible</p>
                     {% endif %}
                     
                     <p>Quantité : {{ item.quantity }}</p>
                     <p>Sous-total : {{ item.product.unitprice * item.quantity ~ '€' }}</p>
                 </div>
                     <a href="{{ path('cart_remove', {'id': item.product.id }) }}" class="btn btn-sm cartRemoveButton">
-                        <i class="fas fa-times"></i>
+                        <i class="fas fa-times text-primary"></i>
                     </a>  
             </article>
         {% endfor %}
