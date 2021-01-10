@@ -7,6 +7,17 @@
         {{ parent() }}
     {% endblock %}
 <section id="adminOrdersSection">
+    <div>
+        <p>Le(s) produit(s) le(s) plus vendu(s) : 
+            <ul>
+                {% for product in productMostSold %}
+                    <li>
+                        {{ product.productName ~ ", domaine " ~ product.domain|title ~ " commandé: " ~ product.quantity ~ " fois. " }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </p>
+    </div>
     <table class="table table-responsive table-striped">
         <thead>
             <tr>
@@ -18,7 +29,7 @@
                 <td>Produits commandés</td>
             </tr>
         </thead>
-        <tbody class="">
+        <tbody>
             {% for order in orders %}
                 <tr>
                     <td>Commande : {{ order.orderingReference }} Facture : {{ order.facture.factureReference }}</td>

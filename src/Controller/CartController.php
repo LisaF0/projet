@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Cart;
 use App\Entity\Product;
+use App\Repository\DomainRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -21,17 +22,19 @@ class CartController extends AbstractController
      * 
      * Fonction permettant d'afficher le panier
      */
-    public function index()
+    public function index(DomainRepository $dr)
     {
         $incart = [];
         //il faut réhydrater le produit afin de récupérer le nom de domaine
         foreach($this->cart->getFullCart() as $cartLine){
+            $domain = $dr->findOneById($cartLine['product']->getDomain()->getId());
             $incart[] = [
                 'product' => $cartLine['product'],
+                'domain' => $domain,
                 'quantity' => $cartLine['quantity']
             ];
         }
-
+        
         $total = $this->cart->getTotal($incart);
 
         return $this->render('cart/index.html.twig', [

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Product;
 use App\Entity\Ordering;
 use App\Form\ProductType;
+use App\Repository\DomainRepository;
 use App\Repository\OrderingRepository;
 use App\Repository\ProductOrderingRepository;
 use App\Repository\ProductRepository;
@@ -23,7 +24,7 @@ class AdminController extends AbstractController
      * 
      * Fonction permettant d'afficher toute les commandes pour l'admin
      */
-    public function index(OrderingRepository $or, Request $request, PaginatorInterface $paginator): Response
+    public function index(OrderingRepository $or, Request $request, PaginatorInterface $paginator, ProductRepository $pr, DomainRepository $dr): Response
     {
         
         $donnees = $or->findAll();
@@ -32,8 +33,27 @@ class AdminController extends AbstractController
             $request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
             5 // Nb de résultat par page
         );
+        $productMostSold = $pr->findMostSold(); // [[]] on récupère le ou les produits les plus vendu, ainsi que la quantité qui a été vendu 
+
+        $array = [];
+        foreach($productMostSold as $productLine){
+            //on récupère le produit par son nom
+            $product = $pr->findOneByName($productLine['name']);
+            // on récupère l'id du domaine
+            $domainId = $product->getDomain()->getId();
+            // et récupère le nom du domaine
+            $domain = $dr->findOneById($domainId);
+            
+            $array[] = [
+                'productName' => $productLine['name'],
+                'domain' => $domain->getName(),
+                'quantity' => array_pop($productLine)
+            ];
+        }
+        // dd($array);
         return $this->render('admin/index.html.twig', [
             'orders' => $orderings,
+            'productMostSold' => $array
         ]);
     }
     /**

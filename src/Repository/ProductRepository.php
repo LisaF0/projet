@@ -27,6 +27,41 @@ class ProductRepository extends ServiceEntityRepository
         $this->paginator = $paginator;
     }
 
+    public function findMostSold(){
+        
+    //    $query1 =  $this->createQueryBuilder('p')
+    //         ->select('COUNT(p), p.name')
+    //         ->from('App\Entity\ProductOrdering', 'po')
+    //         ->andWhere('p.id = po.product')
+    //         ->groupBy('p.id')
+    //         ->(1)
+    //         ->getQuery()
+    //         ->getSingleScalarResult()
+    //         ;
+
+    //     return $this->createQueryBuilder('p')
+    //         ->select('COUNT(p), p.name')
+    //         ->from('App\Entity\ProductOrdering', 'po')
+    //         ->andWhere('p.id = po.product')
+    //         ->groupBy('p.name')
+    //         ->having('COUNT(p) >= '.$query1)
+    //         ->getQuery()
+    //         ->getResult()
+    //         ;
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            "SELECT p.name, COUNT(p.id)
+            FROM App\Entity\Product p, App\Entity\ProductOrdering po
+            WHERE p = po.product
+            GROUP BY p.id
+            HAVING COUNT(p.id) >= ALL(SELECT COUNT(p1.id)
+                                        FROM App\Entity\Product p1, App\Entity\ProductOrdering po1
+                                        WHERE p1 = po1.product
+                                        GROUP BY p1.id)"
+        );
+        return $query->execute();
+    }
+
 
     public function findByFilterAndActivate($filter)
     {
@@ -113,13 +148,16 @@ class ProductRepository extends ServiceEntityRepository
                     ->setParameter('max', $filter->max);
             }
 
-            $query = $query->getQuery();
+            // return $query->getQuery()->getResult();
             return $this->paginator->paginate(
                 $query,
                 $filter->page,
                 9
-            );
+            )
+            ;
     }
+
+
 
 
     // /**

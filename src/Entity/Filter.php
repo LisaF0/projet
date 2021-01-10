@@ -32,10 +32,10 @@ class Filter
      */
     public $min;
 
-    /**
-     * @var integer
-     */
-    public $page = 1;
+    // /**
+    //  * @var integer
+    //  */
+    // public $page = 1;
 }
 
 

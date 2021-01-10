@@ -58,6 +58,9 @@
                             <div class="priceAndAvailableProduct">
                                 <p>{{ product.unitprice ~ '€'}}</p>
                                 {% if product.unitstock > 0 %}
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <p>Quantité en stock : {{ product.unitstock }}</p>
+                                {% endif %}
                                     <p><i class="fas fa-check text-success"></i> Disponible</p>
                                 {% else %}
                                     <p><i class="fas fa-times text-danger"></i> Indisponible</p>

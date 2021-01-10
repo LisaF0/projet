@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 class UserController extends AbstractController
 {
@@ -196,6 +197,13 @@ class UserController extends AbstractController
         $shipAddress = new ShipAddress();
         $form = $this->createForm(ShipAddressType::class, $shipAddress);
         $form->handleRequest($request);
+
+        $referer = $request->headers->get('referer');
+        $refererPathInfo = Request::create($referer)->getPathInfo();
+        $routeInfos = $this->get('router')->match($refererPathInfo);
+        $refererRoute = $routeInfos['_route'] ?? '';
+        $refererRoute = strval($refererRoute);
+        // dd($refererRoute);
         
         if($form->isSubmitted() && $form->isValid()){
             $shipAddress = $form->getData();
@@ -203,6 +211,10 @@ class UserController extends AbstractController
             $manager->persist($shipAddress);
             $manager->flush();
             $this->addFlash('success', 'Vous avez ajoutez une nouvelle adresse');
+            // return $this->redirectToRoute($refererRoute);
+            // if(!\is_string($referer) || $referer){
+            //     return $this->redirectToRoute('profil_infos');
+            // }
             return $this->redirectToRoute('profil_infos');
         }
         
@@ -235,6 +247,7 @@ class UserController extends AbstractController
         $newOrder->setFacture($newFacture);
         // afin de récupérer la dernière facture
         $lastFacture = $fr->findLastFacture($this->getUser()->getId());
+        // dd($lastFacture);
         // pour pré remplir la nouvelle facture
         if($lastFacture){
             $newFacture->setUserId($lastFacture->getUserId());

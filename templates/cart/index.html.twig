@@ -21,7 +21,7 @@
             <article>
                 <img src="{{ ('img/' ~ item.product.photo )}}" alt="{{ 'Bouteille de ' ~ item.product.name }}" class="winePhoto">
                 <div class="descProduct">
-                    <h2 class="font-weight-bold">{{ item.product.name ~ " " ~ item.product.year ~ " Domaine " ~ item.product.domain.name }}</h2>
+                    <h2 class="font-weight-bold">{{ item.product.name ~ " " ~ item.product.year ~ " Domaine " ~ item.domain.name|title }}</h2>
                   
                     
                     <p>Prix à l'unité : {{ item.product.unitprice ~ '€'}}</p>
