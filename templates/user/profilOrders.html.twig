@@ -8,40 +8,45 @@
     {% block nav %}
         {{ parent() }}
     {% endblock %}
+    <section id="orderSection">
     <h2>Mes commandes</h2>
     {% if orders|length > 0 %}   
         {% for order in orders %}
-        <p>Date de la commande : {{ order.createdAt|date('d/m/Y') }}</p>
-        <p>Référence de la commande : {{ order.orderingReference }}</p>
-        <table class='table'>
-            <thead>
-                <tr>
-                    <td>Produit</td>
-                    <td>Quantité</td>
-                    <td>Prix unitaire</td>
-                    <td>Total</td>
-                </tr>
-            </thead>
-            <tbody>
-                {% for productOrder in order.productOrderings %}
-                <tr>
-                    <td>{{ productOrder.product.name }}</td>
-                    <td>{{ productOrder.quantity }}</td>
-                    <td>{{ productOrder.product.unitPrice }}</td>
-                    <td>{{ productOrder.quantity * productOrder.product.unitPrice }}</td>
-                </tr>
-    
-                {% endfor %}
-            </tbody>
-        </table>
-        <div>
-            <p>Total : {{ order.getTotal }}</p>
-            <p>Nombre de produit total : {{ order.getQuantityTotal }}</p>
+        <div class="orderContainer">
+            <p>Date de la commande : {{ order.createdAt|date('d/m/Y') }}</p>
+            <p>Référence de la commande : {{ order.orderingReference }}</p>
+            <p>Référence de la facture : {{ order.facture.factureReference }}</p>
+            <table class='table'>
+                <thead>
+                    <tr>
+                        <td>Produit</td>
+                        <td>Quantité</td>
+                        <td>Prix unitaire</td>
+                        <td>Total</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for productOrder in order.productOrderings %}
+                    <tr>
+                        <td>{{ productOrder.product.name }}</td>
+                        <td>{{ productOrder.quantity }}</td>
+                        <td>{{ productOrder.product.unitPrice }}€</td>
+                        <td>{{ productOrder.quantity * productOrder.product.unitPrice }}€</td>
+                    </tr>
+        
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div>
+                <p>Total : {{ order.getTotal }}€</p>
+                <p>Nombre de produit total : {{ order.getQuantityTotal }}</p>
+            </div>
         </div>
         {% endfor %}
     {% else %}
         <p>Vous n'avez pas de commande</p>
     {% endif %}
+    </section>
 
 
 {% endblock %}

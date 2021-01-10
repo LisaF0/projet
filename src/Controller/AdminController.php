@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Component\Pager\PaginatorInterface;
 
 class AdminController extends AbstractController
 {
@@ -22,10 +23,15 @@ class AdminController extends AbstractController
      * 
      * Fonction permettant d'afficher toute les commandes pour l'admin
      */
-    public function index(OrderingRepository $or): Response
+    public function index(OrderingRepository $or, Request $request, PaginatorInterface $paginator): Response
     {
-        $orderings = $or->findAll();
-
+        
+        $donnees = $or->findAll();
+        $orderings = $paginator->paginate(
+            $donnees, // Requête qui contient les données
+            $request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
+            5 // Nb de résultat par page
+        );
         return $this->render('admin/index.html.twig', [
             'orders' => $orderings,
         ]);

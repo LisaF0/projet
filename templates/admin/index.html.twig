@@ -6,8 +6,8 @@
     {% block nav %}
         {{ parent() }}
     {% endblock %}
-
-    <table class="table">
+<section id="adminOrdersSection">
+    <table class="table table-responsive table-striped">
         <thead>
             <tr>
                 <td>Référence</td>
@@ -18,10 +18,10 @@
                 <td>Produits commandés</td>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="">
             {% for order in orders %}
                 <tr>
-                    <td>{{ order.orderingReference }}</td>
+                    <td>Commande : {{ order.orderingReference }} Facture : {{ order.facture.factureReference }}</td>
                     <td>{{ order.user.email }}</td>
                     <td>{{ order.shipAddress }}</td>
                     <td>{{ order.facture }}</td>
@@ -32,9 +32,12 @@
                             {{ order.getStatusOrder }}
                         {% endif %}
                     </td>
+                        <td>
                     {% for productOrder in order.productOrderings %}
-                        <td>{{ productOrder.product.reference ~ " " ~ productOrder.product.name ~ " domaine " ~ productOrder.product.domain.name ~ " " ~ productOrder.product.year ~ " x" ~ productOrder.quantity }}</td>
+                        {{ productOrder.product.reference ~ " " ~ productOrder.product.name ~ " domaine " ~ productOrder.product.domain.name ~ " " ~ productOrder.product.year ~ " x" ~ productOrder.quantity }} <hr>
                     {% endfor %}
+                        Total: {{ order.getTotal }}€
+                        </td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -44,4 +47,5 @@
     </div>
 
         
+</section>
 {% endblock %}

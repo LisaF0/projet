@@ -43,6 +43,7 @@ class OrderType extends AbstractType
             ])
             ->add('Facture', FactureType::class, [
                 'label' => 'Choisir une adresse de facturation :',
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                     'message' => 'Veuillez remplir une adresse de facturation.'

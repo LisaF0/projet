@@ -50,7 +50,7 @@
                 {% for product in products %}
                 
                     <article>
-                        <img src="{{ ('img/' ~ product.photo )}}" alt="{{ 'Bouteille de ' ~ product.name }}" class="winePhoto">
+                        <img src="{{ asset('img/' ~ product.photo )}}" alt="{{ 'Bouteille de ' ~ product.name }}" class="winePhoto">
                         <div class="productContainer">
                             <h2 class="productName font-weight-bold">{{ product.name ~ " " ~ product.year}}</h2>
                             <p>Domaine {{ product.domain }}</p>

@@ -20,18 +20,17 @@ class FactureType extends AbstractType
         $builder
             ->add('lastname', TextType::class, [
                 'label' => 'Nom',
+                'required' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Veuillez compléter votre nom de famille',
                     ]),
                     new NotNull([
-                        'message' => 'Veuillez rentrer un nom de famille'
+                        'message' => 'Veuillez compléter votre nom de famille',
                     ]),
                     new Length([
                         'max' => 50,
                         'maxMessage' => 'Votre nom de famille ne peut pas être plus long que 50 caractères',
-                        // 'min' => 10,
-                        // 'minMessage' => 'Votre nom de famille doit contenir plus de 10 caractères'
                     ]),
                 ]
             ])
@@ -79,7 +78,7 @@ class FactureType extends AbstractType
                     'message' => 'Veuillez compléter votre adresse',
                 ])
             ])
-            ;
+        ;
 
     }
 

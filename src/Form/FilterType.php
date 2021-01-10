@@ -55,9 +55,6 @@ class FilterType extends AbstractType
                     'placeholder' => 'Prix max'
                 ]
             ])
-            // ->add('submit', SubmitType::class, [
-            //     'label' => 'Filtrer',
-            // ])
         ;
     }
 

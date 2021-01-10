@@ -27,17 +27,11 @@ class OrderingRepository extends ServiceEntityRepository
     }
 
     public function findAll(){
-        $query = $this->createQueryBuilder('o')
-                ->orderBy('o.createdAt', 'ASC')
+         return $this->createQueryBuilder('o')
+                ->orderBy('o.createdAt', 'DESC')
                 ->getQuery()
-                
+                ->getResult()
             ;
-        return $this->paginator->paginate(
-            $query,
-            1,
-            //$request->query->get('page', 1)/*page number*/,
-            10
-        );
     }
     // public function findOneByReference($reference){
     //     return $this->createQueryBuilder('o')

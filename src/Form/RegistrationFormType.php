@@ -23,6 +23,9 @@ class RegistrationFormType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer un email'
+                    ]),
                     new Email([
                         'message' => 'L\'email {{ value }} n\' est pas valide.' 
                     ])
@@ -33,8 +36,7 @@ class RegistrationFormType extends AbstractType
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
                 'required' => true,
-                'label' => 'En cochant, vous acceptez nos mentions légales et notre politique de confidentialité et de ventes,
-                pour plus d\informations veuillez vous référer au bas de la page',
+                'label' => 'En cochant, vous acceptez nos mentions légales et notre politique de confidentialité et de ventes',
                 'constraints' => [
                     new IsTrue([
                         'message' => 'Vous devez accepter nos conditions.',

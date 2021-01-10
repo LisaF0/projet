@@ -6,5 +6,8 @@
     {% block nav %}
         {{ parent() }}
     {% endblock %}
-{{ form(formProduct) }}
+    <section id="AddProductSection">
+    <h2>Ajouter un produit</h2>
+        {{ form(formProduct) }}
+    </section>
 {% endblock %}

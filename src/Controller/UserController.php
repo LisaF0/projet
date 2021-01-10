@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -38,15 +39,16 @@ class UserController extends AbstractController
     public function infosUser(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $user = $this->getUser();
-        // plus besoin de vérifier l'user grâce au { path: ^/profil, roles: ROLE_USER } dans security.yaml
         $addresses = $user->getShipAddresses();
         //création du formulaire d'email de l'user
         $formEmail = $this->createForm(UserEmailType::class, $user);
         $formEmail->handleRequest($request);
         // Modifier l'email de l'user
         if($formEmail->isSubmitted() && $formEmail->isValid()){
+            
             $manager->flush();
             $this->addFlash('success', 'Votre email a bien été modifié');
+            
 
             return $this->redirectToRoute("profil_infos");
         }
@@ -203,7 +205,7 @@ class UserController extends AbstractController
             $this->addFlash('success', 'Vous avez ajoutez une nouvelle adresse');
             return $this->redirectToRoute('profil_infos');
         }
-
+        
         return $this->render('user/addShipAddress.html.twig', [
             'formAddShip' => $form->createView(),
         ]);
@@ -214,14 +216,15 @@ class UserController extends AbstractController
 
     /**
      * @Route("/chooseAdd", name="choose_address")
+     * @IsGranted("ROLE_USER")
      */
     public function chooseAddress(Request $request, EntityManagerInterface $manager, FactureRepository $fr, SessionInterface $session)
     {
         $incart = [];
         $user = $this->getUser();
-        if(!$user){
-            return $this->redirectToRoute("app_login");
-        }
+        // if(!$user){
+        //     return $this->redirectToRoute("app_login");
+        // }
     
         $newOrder = new Ordering();
         $newFacture = new Facture();
