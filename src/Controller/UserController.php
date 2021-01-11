@@ -44,13 +44,12 @@ class UserController extends AbstractController
         //création du formulaire d'email de l'user
         $formEmail = $this->createForm(UserEmailType::class, $user);
         $formEmail->handleRequest($request);
+        
         // Modifier l'email de l'user
         if($formEmail->isSubmitted() && $formEmail->isValid()){
-            
-            $manager->flush();
+            dd($formEmail->getData());
+            // $manager->flush();
             $this->addFlash('success', 'Votre email a bien été modifié');
-            
-
             return $this->redirectToRoute("profil_infos");
         }
         //création du formulaire de modification du password de l'utilisateur
@@ -125,6 +124,7 @@ class UserController extends AbstractController
             $form->handleRequest($request);
             //modification de l'adresse
             if($form->isSubmitted() && $form->isValid()){
+                dd($form->getData());
                 $manager->flush();
                 $this->addFlash('success', 'Cette adresse a bien été modifiée');
                 return $this->redirectToRoute('profil_infos');

@@ -18,15 +18,15 @@ class UserEmailType extends AbstractType
     {
         $builder
             ->add('email', EmailType::class, [
-                'required' => true,
-            'constraints' => [
-                new NotBlank([
-                    'message' => 'Veuillez entrer un email'
-                ]),
-                new Email([
-                    'message' => 'L\'email {{ value }} n\' est pas valide.' 
-                ])
-            ],
+                
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer un email'
+                    ]),
+                    new Email([
+                        'message' => 'L\'email {{ value }} n\' est pas valide.' 
+                    ])
+                ],
             ])
             ->add('valider', SubmitType::class)
         ;

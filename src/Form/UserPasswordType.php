@@ -20,6 +20,11 @@ class UserPasswordType extends AbstractType
             ->add('oldPlainPassword', PasswordType::class,[
                 'mapped' => false,
                 'label' => 'Mot de passe actuel',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer votre ancien mot de passe',
+                    ]),
+                ]
             ])
             ->add('newPlainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,

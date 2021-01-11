@@ -45,11 +45,16 @@ class ShipAddressType extends AbstractType
             ])
             ->add('zipcode', NumberType::class, [
                 'label' => 'Code Postal',
-                'constraints' => new Length([
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez compléter votre ville',
+                    ]),
+                    new Length([
                     'min' => 5,
                     'max' => 5,
                     'exactMessage' => 'Le code postal doit contenir 5 chiffres.',
-                ])
+                    ]),
+                ]
                 
             ])
             ->add('address', TextType::class, [

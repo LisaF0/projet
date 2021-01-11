@@ -25,9 +25,6 @@ class FactureType extends AbstractType
                     new NotBlank([
                         'message' => 'Veuillez compléter votre nom de famille',
                     ]),
-                    new NotNull([
-                        'message' => 'Veuillez compléter votre nom de famille',
-                    ]),
                     new Length([
                         'max' => 50,
                         'maxMessage' => 'Votre nom de famille ne peut pas être plus long que 50 caractères',

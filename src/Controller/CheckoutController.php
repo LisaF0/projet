@@ -113,11 +113,11 @@ class CheckoutController extends AbstractController
   }
 
   /**
-   * @Route("/downloadPDF/{stripeSessionId}", name="dl_facture")
+   * @Route("/downloadPDF/{id}", name="dl_facture")
    */
-  public function dlPDF($stripeSessionId, OrderingRepository $or, UserRepository $ur)
+  public function dlPDF($id, OrderingRepository $or)
   {
-    $order = $or->findOneByStripeSessionId($stripeSessionId);
+    $order = $or->findOneById($id);
     // $user = $ur->findOneById($order->getUser()->getId());
     $total = $order->getTotal();
     $quantityTotal = $order->getQuantityTotal();

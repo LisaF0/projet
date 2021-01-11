@@ -43,7 +43,7 @@ class Facture
     private $city;
 
     /**
-     * @ORM\Column(type="string", length=10)
+     * @ORM\Column(type="string", length=5)
      */
     private $zipcode;
 
@@ -52,11 +52,7 @@ class Facture
      */
     private $address;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $linkPDF;
-
+   
      /**
      * @ORM\OneToOne(targetEntity=Ordering::class)
      * @ORM\JoinColumn(name="ordering_id", onDelete="SET NULL")
@@ -72,7 +68,6 @@ class Facture
     {
         $this->createdAt = new \DateTime();
         $this->factureReference = $this->createdAt->format('dmY').'-'.uniqid();
-        $this->linkPDF = "Facture".$this->factureReference;
     }
 
     public function getId(): ?int
@@ -109,7 +104,7 @@ class Facture
         return $this->lastname;
     }
 
-    public function setLastname(string $lastname): self
+    public function setLastname(?string $lastname): self
     {
         $this->lastname = $lastname;
 
@@ -121,7 +116,7 @@ class Facture
         return $this->firstname;
     }
 
-    public function setFirstname(string $firstname): self
+    public function setFirstname(?string $firstname): self
     {
         $this->firstname = $firstname;
 
@@ -133,7 +128,7 @@ class Facture
         return $this->city;
     }
 
-    public function setCity(string $city): self
+    public function setCity(?string $city): self
     {
         $this->city = $city;
 
@@ -145,7 +140,7 @@ class Facture
         return $this->zipcode;
     }
 
-    public function setZipcode(string $zipcode): self
+    public function setZipcode(?string $zipcode): self
     {
         $this->zipcode = $zipcode;
 
@@ -157,24 +152,13 @@ class Facture
         return $this->address;
     }
 
-    public function setAddress(string $address): self
+    public function setAddress(?string $address): self
     {
         $this->address = $address;
 
         return $this;
     }
 
-    public function getLinkPDF(): ?string
-    {
-        return $this->linkPDF;
-    }
-
-    public function setLinkPDF(string $linkPDF): self
-    {
-        $this->linkPDF = $linkPDF;
-
-        return $this;
-    }
 
     public function getOrdering(): ?Ordering
     {

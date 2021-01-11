@@ -38,13 +38,13 @@ class Ordering
     
     /**
      * @ORM\ManyToOne(targetEntity=ShipAddress::class, inversedBy="orderings")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $shipAddress;
     
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="orderings")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $user;
     

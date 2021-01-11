@@ -69,7 +69,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
 
-        if (!$user) {
+        if (!$user || !$credentials['password']) {//vérifie si l'user est null (n'existe pas) &&// ou si le password est null également
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Votre identifiant ou votre mot de passe est invalide');
         }

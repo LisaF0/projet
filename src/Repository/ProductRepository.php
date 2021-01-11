@@ -28,26 +28,7 @@ class ProductRepository extends ServiceEntityRepository
     }
 
     public function findMostSold(){
-        
-    //    $query1 =  $this->createQueryBuilder('p')
-    //         ->select('COUNT(p), p.name')
-    //         ->from('App\Entity\ProductOrdering', 'po')
-    //         ->andWhere('p.id = po.product')
-    //         ->groupBy('p.id')
-    //         ->(1)
-    //         ->getQuery()
-    //         ->getSingleScalarResult()
-    //         ;
 
-    //     return $this->createQueryBuilder('p')
-    //         ->select('COUNT(p), p.name')
-    //         ->from('App\Entity\ProductOrdering', 'po')
-    //         ->andWhere('p.id = po.product')
-    //         ->groupBy('p.name')
-    //         ->having('COUNT(p) >= '.$query1)
-    //         ->getQuery()
-    //         ->getResult()
-    //         ;
         $entityManager = $this->getEntityManager();
         $query = $entityManager->createQuery(
             "SELECT p.name, COUNT(p.id)

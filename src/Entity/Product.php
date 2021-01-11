@@ -25,12 +25,12 @@ class Product
     private $reference;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=50)
      */
     private $name;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text")
      */
     private $description;
 
@@ -73,7 +73,7 @@ class Product
     private $photo;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", length=4)
      */
     private $year;
 
@@ -85,8 +85,8 @@ class Product
     public function __construct()
     {
         $this->reference = uniqid();
-        $this->available = 1;
-        
+        $this->available = 1;     
+        $this->activate = 1;
     }
 
     public function getId(): ?int
@@ -111,7 +111,7 @@ class Product
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -135,7 +135,7 @@ class Product
         return $this->unitPrice;
     }
 
-    public function setUnitPrice(float $unitPrice): self
+    public function setUnitPrice(?float $unitPrice): self
     {
         $this->unitPrice = $unitPrice;
 
@@ -147,7 +147,7 @@ class Product
         return $this->unitStock;
     }
 
-    public function setUnitStock(int $unitStock): self
+    public function setUnitStock(?int $unitStock): self
     {
         $this->unitStock = $unitStock;
 
@@ -219,7 +219,7 @@ class Product
         return $this->year;
     }
 
-    public function setYear(int $year): self
+    public function setYear(?int $year): self
     {
         $this->year = $year;
 
