@@ -6,9 +6,10 @@
     {% block nav %}
         {{ parent() }}
     {% endblock %}
-    <h1>Modifier mon adresse</h1>
-
-   {{ form(formAddress) }}
+    <section>
+        <h1 class="h3 mb-3 font-weight-normal text-center">Modifier mon adresse</h1>
+        {{ form(formAddress) }}
+    </section>
 
 
 {% endblock %}

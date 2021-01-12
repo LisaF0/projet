@@ -7,6 +7,7 @@
         {{ parent() }}
     {% endblock %}
 <section id="adminOrdersSection">
+    <h1 class="h3 mb-3 font-weight-normal text-center">Historique des commandes</h1>
     <div>
         <p>Le(s) produit(s) le(s) plus vendu(s) : 
             <ul>
@@ -53,7 +54,7 @@
             {% endfor %}
         </tbody>
     </table>
-    <div>
+    <div id="ordersFooter">
         {{ knp_pagination_render(orders, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig' )}}
     </div>
 

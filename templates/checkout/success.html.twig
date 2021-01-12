@@ -7,9 +7,9 @@
 {% block body %}
     {% block nav %}{{ parent() }}{% endblock %}
     <section id="factureSection">
-        <h1>Votre commande a bien été effectuée</h1>
-        <h3>Récapitulatif de la commande n° {{order.orderingReference}}</h3>
-        <h3>Facture n° {{ order.facture.factureReference }}</h3>
+        <h1 class="h3 mb-3 font-weight-normal text-center">Votre commande a bien été effectuée</h1>
+        <h2 class="h4 mb-3 font-weight-normal">Récapitulatif de la commande n° {{order.orderingReference}}</h2>
+        <h2 class="h4 mb-3 font-weight-normal">Facture n° {{ order.facture.factureReference }}</h2>
         <table class="table">
             <thead>
                 <tr>

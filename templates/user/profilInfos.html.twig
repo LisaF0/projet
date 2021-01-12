@@ -9,37 +9,37 @@
         {{ parent() }}
     {% endblock %}
         <section id="sectionInfos">
-            <h2 class="h3 mb-3 font-weight-normal">Informations personnelles</h2>
+            <h1 class="h3 mb-3 font-weight-normal text-center">Informations personnelles</h1>
             {{ form(formUserEmail) }}
-        </section>
-        <section id="sectionAddresses">
-            <h2 class="h3 mb-3 font-weight-normal">Carnet d'adresses</h2>
-            <div class="adressesContainer">
-                {% if addresses|length > 0 %}
-                    {% for address in addresses %}
-                        <div class="addressContainer">
-                            <p>{{ address.lastname|capitalize ~ " " ~ address.firstname|capitalize }}<br>
-                                {{ address.address|title }}<br>
-                                {{  address.zipCode ~ " " ~ address.city|capitalize }}
-                            </p>
-                            {% if address.Orderings|length < 1 %}
-                                <a href="{{ path('address_edit', {'id': address.id }) }}" class="btn btn-primary">Modifier </a>
-                                <a href="{{ path('address_delete', {'id': address.id }) }}" class="btn btn-danger">Supprimer</a>
-                            {% endif %}    
-                        </div>
-                    {% endfor %}    
-                {% else %}
-                    <p>Vous n'avez aucune adresse enregistrée.</p>
-                {% endif %}
-            </div>
-            <a href="{{ path('address_add') }}" class="btn btn-primary">Ajouter une adresse</a>
-        </section>
-        <section id="sectionPassword">
-            <h2 class="h3 mb-3 font-weight-normal">Changer de mot de passe</h2>
-            {{ form(formUserPassword) }}
-        </section>
-        <section>
-        <a href="{{ path('account_delete', {'id': app.user.id }) }}" class="btn btn-danger">Supprimer votre compte</a>
+            <section id="sectionAddresses">
+                <h2 class="h4 mb-3 font-weight-normal">Carnet d'adresses</h2>
+                <div class="adressesContainer">
+                    {% if addresses|length > 0 %}
+                        {% for address in addresses %}
+                            <div class="addressContainer">
+                                <p>{{ address.lastname|capitalize ~ " " ~ address.firstname|capitalize }}<br>
+                                    {{ address.address|title }}<br>
+                                    {{  address.zipCode ~ " " ~ address.city|capitalize }}
+                                </p>
+                                {% if address.Orderings|length < 1 %}
+                                    <a href="{{ path('address_edit', {'id': address.id }) }}" class="btn btn-primary">Modifier </a>
+                                    <a href="{{ path('address_delete', {'id': address.id }) }}" class="btn btn-danger">Supprimer</a>
+                                {% endif %}    
+                            </div>
+                        {% endfor %}    
+                    {% else %}
+                        <p>Vous n'avez aucune adresse enregistrée.</p>
+                    {% endif %}
+                </div>
+                <a href="{{ path('address_add') }}" class="btn btn-primary">Ajouter une adresse</a>
+            </section>
+            <section id="sectionPassword">
+                <h2 class="h4 mb-3 font-weight-normal">Changer de mot de passe</h2>
+                {{ form(formUserPassword) }}
+            </section>
+            <section>
+            <a href="{{ path('account_delete', {'id': app.user.id }) }}" class="btn btn-danger">Supprimer votre compte</a>
+            </section>
         </section>
 
 {% endblock %}

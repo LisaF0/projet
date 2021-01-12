@@ -9,7 +9,7 @@
         {{ parent() }}
     {% endblock %}
     <section id="orderSection">
-    <h2>Mes commandes</h2>
+    <h1 class="h3 mb-3 font-weight-normal text-center">Mes commandes</h1>
     {% if orders|length > 0 %}   
         {% for order in orders %}
         <div class="orderContainer">

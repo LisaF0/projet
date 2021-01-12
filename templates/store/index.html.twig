@@ -77,12 +77,12 @@
                             {% if is_granted('ROLE_ADMIN') %}
                                 <div class="adminButtonContainer">
 
-                                    <a href="{{ path('edit_product', {'id': product.id }) }}" class="btn btn-primary">Modifier</a>
-                                    <a href="{{ path('delete_product', {'id': product.id }) }}" class="btn btn-danger">Supprimer</a>
+                                    <a href="{{ path('edit_product', {'id': product.id }) }}" class="btn btn-primary"><i class="fas fa-pen"></i></a>
+                                    <a href="{{ path('delete_product', {'id': product.id }) }}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
                                     {% if product.activate == 0 %}
-                                        <a href="{{ path('desactive_product', {'id': product.id}) }}" class="btn btn-primary">Activer</a>
+                                        <a href="{{ path('desactive_product', {'id': product.id}) }}" class="btn btn-primary"><i class="fas fa-lock-open"></i></a>
                                     {% else %}
-                                        <a href="{{ path('desactive_product', {'id': product.id}) }}" class="btn btn-primary">Désactiver</a>
+                                        <a href="{{ path('desactive_product', {'id': product.id}) }}" class="btn btn-primary"><i class="fas fa-lock"></i></a>
                                     {% endif %}
                                 </div>
                             {% endif %}
