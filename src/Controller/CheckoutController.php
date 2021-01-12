@@ -19,6 +19,7 @@ use App\Repository\FactureRepository;
 use App\Repository\OrderingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -58,7 +59,7 @@ class CheckoutController extends AbstractController
         $productsForStripe
       ]],
       'mode' => 'payment',
-      'success_url' => $YOUR_DOMAIN.'/success/{CHECKOUT_SESSION_ID}',
+      'success_url' => $YOUR_DOMAIN.'/success/{CHECKOUT_SESSION_ID}?paiement=ok',
       'cancel_url' => $YOUR_DOMAIN.'/error/{CHECKOUT_SESSION_ID}',
     ]);
 
@@ -70,8 +71,11 @@ class CheckoutController extends AbstractController
   /**
    * @Route("/success/{stripeSessionId}", name="success")
    */
-  public function success($stripeSessionId, OrderingRepository $or, UserRepository $ur, SessionInterface $session, EntityManagerInterface $manager)
+  public function success($stripeSessionId, OrderingRepository $or, UserRepository $ur, SessionInterface $session, EntityManagerInterface $manager, Request $request)
   {
+    if($request->query->get('paiement') && $request->query->get('paiement') == 'ok'){
+      // dd('save facture');
+    }
     $order = $or->findOneByStripeSessionId($stripeSessionId);
     // on hydrate car order ne récup que l'id du user
     $user = $ur->findOneById($order->getUser()->getId());
@@ -97,7 +101,7 @@ class CheckoutController extends AbstractController
       
       $cart = $session->get('cart', new Cart());
       //je vide le panier
-      $cart->clear($cart->getFullCart());
+      $cart->clear();
       // return $this->render('checkout/success.html.twig', [
       //   'order' => $order,
       //   'total' => $total,
@@ -129,7 +133,7 @@ class CheckoutController extends AbstractController
     $dompdf = new Dompdf($pdfOptions);
     
     // Retrieve the HTML generated in our twig file
-    $html = $this->renderView('checkout/success.html.twig', [
+    $html = $this->renderView('checkout/facture.html.twig', [
       'order' => $order,
       'total' => $total,
       'quantityTotal' => $quantityTotal,
@@ -149,12 +153,14 @@ class CheckoutController extends AbstractController
     $dompdf->stream("Facture".$order->getFacture()->getFactureReference(), [
         "Attachment" => true
     ]);
+
+    return new Response('', 200, [  'Content-Type' => 'application/pdf',]);
   }
 
   /**
-   * @Route("/error/{CHECKOUT_SESSION_ID}", name="error")
+   * @Route("/error/{stripeSessionId}", name="error")
    */
-  public function error($stripeSessionId, OrderingRepository $or, UserRepository $ur, SessionInterface $session, EntityManagerInterface $manager)
+  public function error($stripeSessionId, OrderingRepository $or, UserRepository $ur, EntityManagerInterface $manager)
   {
     $order = $or->findOneByStripeSessionId($stripeSessionId);
     $user = $ur->findOneById($order->getUser()->getId());
@@ -166,7 +172,8 @@ class CheckoutController extends AbstractController
       $order->setOrderingStatus(2);
       $manager->flush();
     }
-    $this->addFlash('danger', 'Une erreur est survenue lors de votre paiement ou votre paiement a été refusé, veuillez réessayer');
-    return $this->redirectToRoute('cart_index');
+    $this->addFlash('danger', 'Une erreur est survenue lors de votre paiement, veuillez réessayer');
+
+    return $this->render('checkout/error.html.twig');
   }
 }

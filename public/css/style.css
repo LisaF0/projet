@@ -19,6 +19,7 @@ section{
 
 h1, h2, form, section div{
     width: 100%;
+    margin: auto;
 }
 form button{
     width: 100%;
@@ -45,31 +46,7 @@ form button{
 }
 
 
-/* ------------------------ Section Filters --------------------------- */
-#sectionFilters{
-    position: sticky;
-    top: 53px; /* taille de la navbar */
-    padding: 0;
-}
-.filterDropdown, .sortedDropdown{
-    width: 50%;
-}
-#sectionFilters .filterButton, .sortedButton{
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
-    background-color: var(--inter-color);
-}
-.form-check-input{
-    position: inherit;
-}
-.filterContainer{
-    width: 25%;
-    padding: 0 1em 1em 1em;
-}
-.filterContainer form{
-    width: 100%;
-}
+
 
 
 
@@ -82,6 +59,25 @@ form button{
     align-items: baseline;
 }
 
+/* ------------------------  Filters --------------------------- */
+
+.filterDropdown{
+    width: auto;
+    margin: 0;
+}
+ #productHeader .filterButton, .sortedButton{
+    background-color: var(--inter-color);
+}
+.form-check-input{
+    position: inherit;
+}
+.filterContainer{
+    width: 25%;
+    padding: 0 1em 1em 1em;
+}
+.filterContainer form{
+    width: 100%;
+}
 article{
     border: 1px solid #b2bfca;
     padding: 1em;
@@ -97,6 +93,10 @@ article{
     display:flex;
     flex-direction: column;
     justify-content: space-between;
+    margin: 0;
+}
+.productContainer>div{
+    margin:0;
 }
 .adminButtonContainer{
     width: 100%;
@@ -212,8 +212,8 @@ input{
 div.address{
     border: 1px solid black;
     padding: 1em;
-    width : 350px;
-    margin: 1em;
+    width : 80%;
+    margin: 1em auto;
 }
 
 
@@ -226,6 +226,7 @@ div.address{
     form{
         width: 60%;
     } 
+    
 
     /* --------- Store -------------*/
     #sectionProducts{
@@ -241,7 +242,11 @@ div.address{
     }
  
     /* ---------------------------- User ----------------  */
-
+    /* --------- div Address -------------*/
+    div.container-address{
+        display: flex;
+        justify-content: center;
+    }
     .addressContainer{
         width: 45vw;
     }
@@ -253,13 +258,14 @@ div.address{
     form{
         width: 45%;
     }
-    /* --------- div Address -------------*/
-    div.container-address{
-        display: flex;
-        justify-content: center;
+    
+    div.address{
+        margin: 1em;
+        width: 25%;
     }
     .addressContainer{
         width: 25vw;
+        
     }
     /* --------- Store -------------*/
     article{

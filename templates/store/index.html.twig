@@ -11,8 +11,14 @@
     {% else %}
         {% set products = productsActive %}
     {% endif %}
-
-        <section id="sectionFilters">
+    
+    <section id="sectionProducts">
+        <div id="productHeader">
+            <h3>Nos Vins </h3>
+            <p>{{ products|length }} articles</p>
+            {% if is_granted('ROLE_ADMIN') %} 
+                <a href="{{ path('add_product') }}" class="btn btn-primary">Ajouter un produit</a>
+            {% endif %}
             <div class="dropdown show filterDropdown">
                 <a href="#" class=" dropdown-toggle filterButton btn btn-primary" role="button" id="dropdownMenuLink" 
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Filtrer par</a>
@@ -32,26 +38,17 @@
                         <button type="submit" class="btn btn-primary w-100">Filtrer</button>
                     {{ form_end(formFilter) }}
                 </div>
-            </div>
-            <div class="sortedDropdown ">
-            {{ knp_pagination_sortable(products, 'Prix', 'p.unitPrice', {}, {}, '@KnpPaginator/Pagination/twitter_bootstrap_v4_font_awesome_sortable_link.html.twig')  }}
-            </div>
-        </section>
-        <section id="sectionProducts">
-            <div id="productHeader">
-                <h3>Nos Vins </h3>
-                <p>{{ products|length }} articles</p>
-                {% if is_granted('ROLE_ADMIN') %} 
-                    <a href="{{ path('add_product') }}" class="btn btn-primary">Ajouter un produit</a>
-                {% endif %} 
-            </div>
-            
-            {% if products|length > 0 %}
-                {% for product in products %}
-                
-                    <article>
-                        <img src="{{ asset('img/' ~ product.photo )}}" alt="{{ 'Bouteille de ' ~ product.name }}" class="winePhoto">
-                        <div class="productContainer">
+                {{ knp_pagination_sortable(products, 'Prix', 'p.unitPrice', {}, {}, '@KnpPaginator/Pagination/twitter_bootstrap_v4_font_awesome_sortable_link.html.twig')  }}
+            </div> 
+        </div>
+   
+        
+        {% if products|length > 0 %}
+            {% for product in products %} 
+                <article>
+                    <img src="{{ asset('img/' ~ product.photo )}}" alt="{{ 'Bouteille de ' ~ product.name }}" class="winePhoto">
+                    <div class="productContainer">
+                        <div>
                             <h2 class="productName font-weight-bold">{{ product.name ~ " " ~ product.year}}</h2>
                             <p>Domaine {{ product.domain }}</p>
                             <p>{{product.description }}</p>
@@ -66,13 +63,15 @@
                                     <p><i class="fas fa-times text-danger"></i> Indisponible</p>
                                 {% endif %}
                             </div>
+                        </div>
+                        <div>
                             {% if product.unitstock > 0 %}
-                            <form method="post" action="{{ path('cart_add', {'id': product.id} ) }}">
-                                <div class="qteAdd">
-                                    <input type="number" id="quantity" name="quantity" min="1" max="{{ product.unitstock }}" value="1">
-                                    <button type="submit" class="btn btn-primary cartAdd"><i class="fas fa-cart-plus"></i> Ajouter au panier</button>
-                                </div>
-                            </form>
+                                <form method="post" action="{{ path('cart_add', {'id': product.id} ) }}">
+                                    <div class="qteAdd">
+                                        <input type="number" id="quantity" name="quantity" min="1" max="{{ product.unitstock }}" value="1">
+                                        <button type="submit" class="btn btn-primary cartAdd"><i class="fas fa-cart-plus"></i> Ajouter au panier</button>
+                                    </div>
+                                </form>
                             {% endif %}
                             {% if is_granted('ROLE_ADMIN') %}
                                 <div class="adminButtonContainer">
@@ -87,20 +86,19 @@
                                 </div>
                             {% endif %}
                         </div>
-                        
-                    </article>
-                
-                {% endfor %}
-                <div id="productFooter" >
-                    {{ knp_pagination_render(products, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig' )}}
-                </div>
-            {% else %}
-                <div>
-                    <p>Aucun article ne correspond à votre recherche.</p>
-                </div>
-            {% endif %}
-        </section>
-
+                    </div>
+                </article>
+            
+            {% endfor %}
+            <div id="productFooter" >
+                {{ knp_pagination_render(products, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig' )}}
+            </div>
+        {% else %}
+            <div class="text-center">
+                <p>Aucun article ne correspond à votre recherche.</p>
+            </div>
+        {% endif %}
+    </section>
 {% endblock %}
 {% block javascripts %}
     <script>

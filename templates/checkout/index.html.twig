@@ -9,67 +9,66 @@
         {{ parent() }}
     {% endblock %}
     <section id="recapSection">
-    {% if items | length > 0 %}
-        <h1 class="h3 mb-3 font-weight-normal text-center">Récapitulatif de la commande</h1>
-        <h2 class="h4 mb-3 font-weight-normal">Panier</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Produit</th>
-                    <th>Prix</th>
-                    <th>Quantité</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in items %}
+        {% if items | length > 0 %}
+            <h1 class="h3 mb-3 font-weight-normal text-center">Récapitulatif de la commande</h1>
+            <h2 class="h4 mb-3 font-weight-normal">Panier</h2>
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>{{ item.product.name }}</td>
-                        <td>{{ item.product.unitprice ~ '€' }}</td>
-                        <td>{{ item.quantity }}</td>
-                        <td>{{ item.product.unitprice * item.quantity ~ '€' }}</td>
+                        <th>Produit</th>
+                        <th>Prix</th>
+                        <th>Quantité</th>
+                        <th>Total</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="3" class="text-right">Total : </td>
-                    <td>{{ total ~ '€'}}</td>
-                    {% if app.user %}
-                        <td> </td>
-                    {% else %}
-                        <td> </td>
-                    {% endif %}
-                </tr>
-            </tfoot>
-        </table>
-        <div class="container-address">
-            <div class="address">
-                <h3>Adresse de livraison</h3>
-                <p>Nom: {{ order.shipAddress.lastname }}</p>
-                <p>Prénom: {{ order.shipAddress.firstname }}</p>
-                <p>Ville: {{ order.shipAddress.city }}</p>
-                <p>Code Postal: {{ order.shipAddress.zipcode }}</p>
-                <p>Adresse: {{ order.shipAddress.address }}</p>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.product.unitprice ~ '€' }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.product.unitprice * item.quantity ~ '€' }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-right">Total : </td>
+                        <td>{{ total ~ '€'}}</td>
+                        {% if app.user %}
+                            <td> </td>
+                        {% else %}
+                            <td> </td>
+                        {% endif %}
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="container-address">
+                <div class="address">
+                    <h3>Adresse de livraison</h3>
+                    <p>Nom: {{ order.shipAddress.lastname }}</p>
+                    <p>Prénom: {{ order.shipAddress.firstname }}</p>
+                    <p>Ville: {{ order.shipAddress.city }}</p>
+                    <p>Code Postal: {{ order.shipAddress.zipcode }}</p>
+                    <p>Adresse: {{ order.shipAddress.address }}</p>
+                </div>
+                <div class="address">
+                    <h3>Adresse de facturation</h3>
+                    <p>Nom: {{ order.facture.lastname }}</p>
+                    <p>Prénom: {{ order.facture.firstname }}</p>
+                    <p>Ville: {{ order.facture.city }}</p>
+                    <p>Code Postal: {{ order.facture.zipcode }}</p>
+                    <p>Adresse: {{ order.facture.address }}</p>
+                </div>          
             </div>
-            <div class="address">
-                <h3>Adresse de facturation</h3>
-                <p>Nom: {{ order.facture.lastname }}</p>
-                <p>Prénom: {{ order.facture.firstname }}</p>
-                <p>Ville: {{ order.facture.city }}</p>
-                <p>Code Postal: {{ order.facture.zipcode }}</p>
-                <p>Adresse: {{ order.facture.address }}</p>
-            </div>          
-        </div>
-        {% if app.user %}
-            <button class="btn btn-primary" id="checkout-button">Checkout</button>
+            {% if app.user %}
+                <button class="btn btn-primary" id="checkout-button">Checkout</button>
+            {% else %}
+                <p><a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a></p>
+            {% endif %}
         {% else %}
-            <p><a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a></p>
+            <p>Votre panier est vide.</p>
         {% endif %}
-    {% else %}
-        <p>Votre panier est vide.</p>
-    {% endif %}
-
     </section>
 {% endblock %}
 {% block javascripts %}

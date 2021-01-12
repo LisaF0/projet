@@ -8,7 +8,9 @@
     {% block nav %}
         {{ parent() }}
     {% endblock %}
-    <h1 class="h3 mb-3 font-weight-normal text-center">Une erreur est survenue lors de votre commande</h1>
-    <p>Retourner à votre <a href="{{ path('cart_index') }}">panier</a>.</p>
+    <section>
+        <h1 class="h3 mb-3 font-weight-normal text-center">Une erreur est survenue lors de votre commande</h1>
+        <p>Retourner à votre <a href="{{ path('cart_index') }}" class="text-uppercase">panier</a>.</p>
+    </section>
 {% endblock %}
 

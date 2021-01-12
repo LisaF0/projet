@@ -16,41 +16,34 @@
             {% endif %}
         </div>
         {% if items|length > 0 %}
-        {% for item in items %}
-
-            <article>
-                <img src="{{ ('img/' ~ item.product.photo )}}" alt="{{ 'Bouteille de ' ~ item.product.name }}" class="winePhoto">
-                <div class="descProduct">
-                    <h2 class="font-weight-bold">{{ item.product.name ~ " " ~ item.product.year ~ " Domaine " ~ item.domain.name|title }}</h2>
-                  
-                    
-                    <p>Prix à l'unité : {{ item.product.unitprice ~ '€'}}</p>
-                    {% if item.product.unitstock > 0 %}
-                        <p><i class="fas fa-check text-success"></i> Disponible</p>
-                    {% else %}
-                        <p><i class="fas fa-times text-danger"></i> Indisponible</p>
-                    {% endif %}
-                    
-                    <p>Quantité : {{ item.quantity }}</p>
-                    <p>Sous-total : {{ item.product.unitprice * item.quantity ~ '€' }}</p>
-                </div>
+            {% for item in items %}
+                <article>
+                    <img src="{{ ('img/' ~ item.product.photo )}}" alt="{{ 'Bouteille de ' ~ item.product.name }}" class="winePhoto">
+                    <div class="descProduct">
+                        <h2 class="font-weight-bold">{{ item.product.name ~ " " ~ item.product.year ~ " Domaine " ~ item.domain.name|title }}</h2>
+                        <p>Prix à l'unité : {{ item.product.unitprice ~ '€'}}</p>
+                        {% if item.product.unitstock > 0 %}
+                            <p><i class="fas fa-check text-success"></i> Disponible</p>
+                        {% else %}
+                            <p><i class="fas fa-times text-danger"></i> Indisponible</p>
+                        {% endif %}
+                        
+                        <p>Quantité : {{ item.quantity }}</p>
+                        <p>Sous-total : {{ item.product.unitprice * item.quantity ~ '€' }}</p>
+                    </div>
                     <a href="{{ path('cart_remove', {'id': item.product.id }) }}" class="btn btn-sm cartRemoveButton">
                         <i class="fas fa-times text-primary"></i>
                     </a>  
-            </article>
-        {% endfor %}
-        <div id="cartFooter">
-            <p class="cartTotal font-weight-bold m-0 p-2">Total : {{ total ~ " €" }}</p>
-            {% if app.user %}
-                <a href="{{ path('choose_address') }}" class="btn btn-primary cartButton font-weight-bold p-3">Passer commande</a>
-            {% else %}
-                <a href="{{ path('app_login') }}" class="btn btn-primary cartButton font-weight-bold p-3">Passer commande</a>
-            {% endif %}
-        </div>
-        
-
-        
-            
+                </article>
+            {% endfor %}
+            <div id="cartFooter">
+                <p class="cartTotal font-weight-bold m-0 p-2">Total : {{ total ~ " €" }}</p>
+                {% if app.user %}
+                    <a href="{{ path('choose_address') }}" class="btn btn-primary cartButton font-weight-bold p-3">Passer commande</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="btn btn-primary cartButton font-weight-bold p-3">Passer commande</a>
+                {% endif %}
+            </div>
         {% else %}
             <p>Votre panier est vide.</p>
         {% endif %}

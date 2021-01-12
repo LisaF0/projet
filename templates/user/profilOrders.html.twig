@@ -33,7 +33,6 @@
                         <td>{{ productOrder.product.unitPrice }}€</td>
                         <td>{{ productOrder.quantity * productOrder.product.unitPrice }}€</td>
                     </tr>
-        
                     {% endfor %}
                 </tbody>
             </table>
@@ -47,6 +46,4 @@
         <p>Vous n'avez pas de commande</p>
     {% endif %}
     </section>
-
-
 {% endblock %}

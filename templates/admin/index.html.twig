@@ -6,58 +6,56 @@
     {% block nav %}
         {{ parent() }}
     {% endblock %}
-<section id="adminOrdersSection">
-    <h1 class="h3 mb-3 font-weight-normal text-center">Historique des commandes</h1>
-    <div>
-        <p>Le(s) produit(s) le(s) plus vendu(s) : 
-            <ul>
-                {% for product in productMostSold %}
-                    <li>
-                        {{ product.productName ~ ", domaine " ~ product.domain|title ~ " commandé: " ~ product.quantity ~ " fois. " }}
-                    </li>
-                {% endfor %}
-            </ul>
-        </p>
-    </div>
-    <table class="table table-responsive table-striped">
-        <thead>
-            <tr>
-                <td>Référence</td>
-                <td>Utilisateur</td>
-                <td>Adresse de livraison</td>
-                <td>Adresse de facturation</td>
-                <td>Statut de la commande</td>
-                <td>Produits commandés</td>
-            </tr>
-        </thead>
-        <tbody>
-            {% for order in orders %}
-                <tr>
-                    <td>Commande : {{ order.orderingReference }} Facture : {{ order.facture.factureReference }}</td>
-                    <td>{{ order.user.email }}</td>
-                    <td>{{ order.shipAddress }}</td>
-                    <td>{{ order.facture }}</td>
-                    <td>
-                        {% if order.orderingStatus == 1 %}
-                            <a href="{{ path('statusToSend', {'id':order.id}) }}">{{ order.getStatusOrder }}</a>
-                        {% else %}
-                            {{ order.getStatusOrder }}
-                        {% endif %}
-                    </td>
-                        <td>
-                    {% for productOrder in order.productOrderings %}
-                        {{ productOrder.product.reference ~ " " ~ productOrder.product.name ~ " domaine " ~ productOrder.product.domain.name ~ " " ~ productOrder.product.year ~ " x" ~ productOrder.quantity }} <hr>
+    <section id="adminOrdersSection">
+        <h1 class="h3 mb-3 font-weight-normal text-center">Historique des commandes</h1>
+        <div>
+            <p>Le(s) produit(s) le(s) plus vendu(s) : 
+                <ul>
+                    {% for product in productMostSold %}
+                        <li>
+                            {{ product.productName ~ ", domaine " ~ product.domain|title ~ " commandé: " ~ product.quantity ~ " fois. " }}
+                        </li>
                     {% endfor %}
-                        Total: {{ order.getTotal }}€
-                        </td>
+                </ul>
+            </p>
+        </div>
+        <table class="table table-responsive table-striped">
+            <thead>
+                <tr>
+                    <td>Référence</td>
+                    <td>Utilisateur</td>
+                    <td>Adresse de livraison</td>
+                    <td>Adresse de facturation</td>
+                    <td>Statut de la commande</td>
+                    <td>Produits commandés</td>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <div id="ordersFooter">
-        {{ knp_pagination_render(orders, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig' )}}
-    </div>
-
-        
-</section>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>Commande : {{ order.orderingReference }} Facture : {{ order.facture.factureReference }}</td>
+                        <td>{{ order.user.email }}</td>
+                        <td>{{ order.shipAddress }}</td>
+                        <td>{{ order.facture }}</td>
+                        <td>
+                            {% if order.orderingStatus == 1 %}
+                                <a href="{{ path('statusToSend', {'id':order.id}) }}">{{ order.getStatusOrder }}</a>
+                            {% else %}
+                                {{ order.getStatusOrder }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% for productOrder in order.productOrderings %}
+                                {{ productOrder.product.reference ~ " " ~ productOrder.product.name ~ " domaine " ~ productOrder.product.domain.name ~ " " ~ productOrder.product.year ~ " x" ~ productOrder.quantity }} <hr>
+                            {% endfor %}
+                            Total: {{ order.getTotal }}€
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div id="ordersFooter">
+            {{ knp_pagination_render(orders, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig' )}}
+        </div>
+    </section>
 {% endblock %}

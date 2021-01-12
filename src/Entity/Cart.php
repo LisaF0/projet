@@ -50,10 +50,8 @@ class Cart
         return $total;
     }
 
-    public function clear($incart){
-        unset($this->incart);
-
-    return $incart; 
+    public function clear(){
+        $this->incart = [];
     }
 
 }

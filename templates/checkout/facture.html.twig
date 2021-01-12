@@ -1,13 +1,17 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        section{
+            padding:1em;
+        }
+    </style>
+</head>
+<body>
+    
 
-{% block title %}Checkout{% endblock %}
-{% block stylesheets %}
-    {{ parent() }}
-{% endblock %}
-{% block body %}
-    {% block nav %}
-        {{ parent() }}
-    {% endblock %}
+    
     <section id="factureSection">
         <h1 class="h3 mb-3 font-weight-normal text-center">Votre commande a bien été effectuée</h1>
         <h2 class="h4 mb-3 font-weight-normal">Récapitulatif de la commande n° {{order.orderingReference}}</h2>
@@ -60,8 +64,9 @@
             </div>          
         </div>
         <p>
-            <a target="_blank" href="{{ path('dl_facture', {'id': order.id }) }}" class="btn btn-primary">Télécharger la facture</a>
+            <a href="{{ path('dl_facture', {'id': order.id }) }}" class="btn btn-primary">Télécharger la facture</a>
         </p>
     </section>
-{% endblock %}
 
+</body>
+</html>

@@ -7,18 +7,14 @@
         {{ parent() }}
     {% endblock %}
     <section id="sectionRegister">
-
         {{ form_start(registrationForm) }}
-        {% for flashError in app.flashes('verify_email_error') %}
-            <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-        {% endfor %}
-
-        <h1 class="h3 mb-3 font-weight-normal text-center">S'inscrire</h1>
-
+            {% for flashError in app.flashes('verify_email_error') %}
+                <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+            {% endfor %}
+            <h1 class="h3 mb-3 font-weight-normal text-center">S'inscrire</h1>
             {{ form_row(registrationForm.email) }}
             {{ form_row(registrationForm.plainPassword) }}
             {{ form_row(registrationForm.agreeTerms) }}
-
             <button type="submit" class="btn btn-lg btn-primary">Valider</button>
             <p>Nous nous engageons à garder ces informations strictement confidentielles. <a href="">Pour en savoir plus sur la politique de confidentialité.</a></p>
         {{ form_end(registrationForm) }}
