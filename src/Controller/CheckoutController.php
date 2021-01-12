@@ -24,6 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class CheckoutController extends AbstractController
 {
@@ -71,49 +72,52 @@ class CheckoutController extends AbstractController
   /**
    * @Route("/success/{stripeSessionId}", name="success")
    */
-  public function success($stripeSessionId, OrderingRepository $or, UserRepository $ur, SessionInterface $session, EntityManagerInterface $manager, Request $request)
+  public function success($stripeSessionId, OrderingRepository $or, UserRepository $ur, SessionInterface $session, EntityManagerInterface $manager, Request $request, SerializerInterface $serializer)
   {
+    // if(!$order || $user != $this->getUser()){
+    //   return $this->redirectToRoute('home_index');
+    // }
     if($request->query->get('paiement') && $request->query->get('paiement') == 'ok'){
-      // dd('save facture');
-    }
-    $order = $or->findOneByStripeSessionId($stripeSessionId);
-    // on hydrate car order ne récup que l'id du user
-    $user = $ur->findOneById($order->getUser()->getId());
-    if(!$order || $user != $this->getUser()){
-      return $this->redirectToRoute('home_index');
-    }
-    $total = $order->getTotal();
-    $quantityTotal = $order->getQuantityTotal();
-    //je passe le status de la commande à payé
-    if($order->getOrderingStatus() == 0){
-      $order->setOrderingStatus(1);
-      $manager->flush();
-      
+      $order = $or->findOneByStripeSessionId($stripeSessionId);
+      $factureJson = $session->get('facture');
+      $facture = $serializer->deserialize($factureJson, Facture::class, 'json');
+      // dd($facture);
+      // $facture->setUserId($this->getUser()->getId());
+      $facture->setOrdering($order);
+      $order->setFacture($facture);
+      // $manager->persist($facture);
+      // $manager->persist($order);
+      // $manager->flush();
 
-      //je retire des stock la qte de produit qui a été vendu
-      foreach($order->getProductOrderings() as $productLine){
-        $product = $productLine->getProduct();
-        $quantity = $productLine->getQuantity();
-        $value = $product->getUnitStock() - $quantity;
-        $product->setUnitStock($value);
+      $total = $order->getTotal();
+      $quantityTotal = $order->getQuantityTotal();
+      
+      //je passe le status de la commande à payé
+      if($order->getOrderingStatus() == 0){
+        $order->setOrderingStatus(1);
+        $manager->flush();
+        
+  
+        //je retire des stock la qte de produit qui a été vendu
+        foreach($order->getProductOrderings() as $productLine){
+          $product = $productLine->getProduct();
+          $quantity = $productLine->getQuantity();
+          $value = $product->getUnitStock() - $quantity;
+          $product->setUnitStock($value);
+        }
+        $manager->flush();
+        
+        $cart = $session->get('cart', new Cart());
+        //je vide le panier
+        $cart->clear();
       }
-      $manager->flush();
-      
-      $cart = $session->get('cart', new Cart());
-      //je vide le panier
-      $cart->clear();
-      // return $this->render('checkout/success.html.twig', [
-      //   'order' => $order,
-      //   'total' => $total,
-      //   'quantityTotal' => $quantityTotal,
-      // ]);
+      return $this->render('checkout/success.html.twig', [
+        'order' => $order,
+        'total' => $total,
+        'quantityTotal' => $quantityTotal,
+        
+      ]);
     }
-    return $this->render('checkout/success.html.twig', [
-      'order' => $order,
-      'total' => $total,
-      'quantityTotal' => $quantityTotal,
-      
-    ]);
   }
 
   /**

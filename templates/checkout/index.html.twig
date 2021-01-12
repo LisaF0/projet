@@ -54,11 +54,11 @@
                 </div>
                 <div class="address">
                     <h3>Adresse de facturation</h3>
-                    <p>Nom: {{ order.facture.lastname }}</p>
-                    <p>Prénom: {{ order.facture.firstname }}</p>
-                    <p>Ville: {{ order.facture.city }}</p>
-                    <p>Code Postal: {{ order.facture.zipcode }}</p>
-                    <p>Adresse: {{ order.facture.address }}</p>
+                    <p>Nom: {{ facture.lastname }}</p>
+                    <p>Prénom: {{ facture.firstname }}</p>
+                    <p>Ville: {{ facture.city }}</p>
+                    <p>Code Postal: {{ facture.zipcode }}</p>
+                    <p>Adresse: {{ facture.address }}</p>
                 </div>          
             </div>
             {% if app.user %}

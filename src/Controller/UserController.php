@@ -15,17 +15,28 @@ use App\Form\UserPasswordType;
 use App\Entity\ProductOrdering;
 use App\Repository\FactureRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Routing\RouterInterface;
 
 class UserController extends AbstractController
 {
+    // private $route;
+
+    // public function __construct(SessionInterface $session){
+    //     $this->route = $session->get('route', null);
+    // }
     /**
      * @Route("/profil/infos", name="profil_infos")
      * 
@@ -37,8 +48,11 @@ class UserController extends AbstractController
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @return Response
      */
-    public function infosUser(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function infosUser(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $passwordEncoder, SessionInterface $session): Response
     {
+        $session->set('src',"profil_infos");
+        
+        
         $user = $this->getUser();
         $addresses = $user->getShipAddresses();
         //création du formulaire d'email de l'user
@@ -118,7 +132,7 @@ class UserController extends AbstractController
         if(!$shipAddress || $this->getUser() !== $shipAddress->getUser() || count($shipAddress->getOrderings()) > 0){
             return $this->redirectToRoute('app_login');
         } else {
-
+            
             //création du formulaire d'adresse de livraison
             $form = $this->createForm(ShipAddressType::class, $shipAddress);
             $form->handleRequest($request);
@@ -150,6 +164,7 @@ class UserController extends AbstractController
         if(!$shipAddress || $this->getUser() !== $shipAddress->getUser() || count($shipAddress->getOrderings()) > 0){
             return $this->redirectToRoute('app_login');
         } else {
+            
             //supression de l'adresse
             $manager->remove($shipAddress);
             $manager->flush();
@@ -192,18 +207,15 @@ class UserController extends AbstractController
      * 
      * Fonction permettant à l'utilisateur d'ajouter une adresse
      */
-    public function addAddress(Request $request, EntityManagerInterface $manager)
+    public function addAddress(Request $request, EntityManagerInterface $manager, SessionInterface $session)
     {
+        // on récupère la route précédente stocké en session
+        $route = $session->get('src');
         $shipAddress = new ShipAddress();
         $form = $this->createForm(ShipAddressType::class, $shipAddress);
         $form->handleRequest($request);
 
-        $referer = $request->headers->get('referer');
-        $refererPathInfo = Request::create($referer)->getPathInfo();
-        $routeInfos = $this->get('router')->match($refererPathInfo);
-        $refererRoute = $routeInfos['_route'] ?? '';
-        $refererRoute = strval($refererRoute);
-        // dd($refererRoute);
+
         
         if($form->isSubmitted() && $form->isValid()){
             $shipAddress = $form->getData();
@@ -211,18 +223,15 @@ class UserController extends AbstractController
             $manager->persist($shipAddress);
             $manager->flush();
             $this->addFlash('success', 'Vous avez ajoutez une nouvelle adresse');
-            // return $this->redirectToRoute($refererRoute);
-            // if(!\is_string($referer) || $referer){
-            //     return $this->redirectToRoute('profil_infos');
-            // }
-            return $this->redirectToRoute('profil_infos');
+            
+            //rediriger d'où l'on vient
+            return $this->redirectToRoute($route);
         }
         
         return $this->render('user/addShipAddress.html.twig', [
             'formAddShip' => $form->createView(),
         ]);
     }    
-    //rediriger sur le profil ou sur le panier en fonction d'où l'utilisateur vient
 
 
 
@@ -230,8 +239,10 @@ class UserController extends AbstractController
      * @Route("/chooseAdd", name="choose_address")
      * @IsGranted("ROLE_USER")
      */
-    public function chooseAddress(Request $request, EntityManagerInterface $manager, FactureRepository $fr, SessionInterface $session)
+    public function chooseAddress(Request $request, EntityManagerInterface $manager, FactureRepository $fr, SessionInterface $session, SerializerInterface $serializer)
     {
+        // on stock la route
+        $session->set('src',"choose_address");
         $incart = [];
         $user = $this->getUser();
         // if(!$user){
@@ -239,16 +250,16 @@ class UserController extends AbstractController
         // }
     
         $newOrder = new Ordering();
-        $newFacture = new Facture();
         $cart = $session->get('cart', new Cart());
-        //on récupère l'id du user uniquement
-        $newFacture->setUserId($this->getUser()->getId());
-        // set la new facture dans la new commande
+        $newFacture = new Facture();
+
+        // set la new facture dans la new commande + permet d'afficher la facture pré rempli
         $newOrder->setFacture($newFacture);
         // afin de récupérer la dernière facture
-        $lastFacture = $fr->findLastFacture($this->getUser()->getId());
-        // dd($lastFacture);
-        // pour pré remplir la nouvelle facture
+        $lastFacture = $fr->findLastFacture($user->getId());
+        
+
+        // pour pré remplir la nouvelle facture si elle existe
         if($lastFacture){
             $newFacture->setUserId($lastFacture->getUserId());
             $newFacture->setFirstname($lastFacture->getFirstname());
@@ -257,6 +268,7 @@ class UserController extends AbstractController
             $newFacture->setZipcode($lastFacture->getZipcode());
             $newFacture->setAddress($lastFacture->getAddress());
         }
+        
         foreach($cart->getFullCart() as $cartLine){
             $incart[] = [
             'product' => $cartLine['product'],
@@ -269,11 +281,17 @@ class UserController extends AbstractController
         $total = $cart->getTotal($incart);
         $formOrder = $this->createForm(OrderType::class, $newOrder);
         $formOrder->handleRequest($request);
+        
         if($formOrder->isSubmitted() && $formOrder->isValid()){
-            // set user dans order
+            
+            $jsonFacture = $serializer->serialize($newFacture, 'json'
+            ,[AbstractNormalizer::IGNORED_ATTRIBUTES => ['id']]
+            );
+            
+            $session->set('facture', $jsonFacture);
+            $newOrder->setFacture(null);
             $newOrder->setUser($this->getUser());
-            // set order dans la new facture
-            $newOrder->getFacture()->setOrdering($newOrder);
+
             // on persist à ce moment pour pouvoir addPorudctOrdering sur qq chose de "réel"
             $manager->persist($newOrder);
             foreach($cart->getFullCart() as $cartLine){
@@ -292,6 +310,7 @@ class UserController extends AbstractController
             'items' => $incart,
             'total' => $total,
             'order' => $newOrder,
+            'facture' => $newFacture,
             'reference' => $newOrder->getOrderingReference(),
             ]);
         }

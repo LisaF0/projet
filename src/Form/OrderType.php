@@ -41,7 +41,7 @@ class OrderType extends AbstractType
                     'message' => 'Veuillez choisir une adresse de livraison.'
                 ])
             ])
-            ->add('Facture', FactureType::class, [
+            ->add('facture', FactureType::class, [
                 'label' => 'Choisir une adresse de facturation :',
                 'required' => true,
                 'constraints' => [
@@ -54,7 +54,7 @@ class OrderType extends AbstractType
 
                 ]
             ])
-            ->add('Submit', SubmitType::class, [
+            ->add('submit', SubmitType::class, [
                 'label' => 'Passer au paiement'
             ])
 
