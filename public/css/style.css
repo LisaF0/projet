@@ -34,6 +34,9 @@ form button{
 #underMenu{
     text-align: right;
 }
+#menu .nav-a{
+    font-size: 20px;
+}
 .badge{
     position:absolute;
     margin-left: -5px;
@@ -61,8 +64,13 @@ form button{
     position: inherit;
 }
 .filterContainer{
+    width: 25%;
     padding: 0 1em 1em 1em;
 }
+.filterContainer form{
+    width: 100%;
+}
+
 
 
 /* -------------------------- Store -----------------------*/
@@ -218,10 +226,7 @@ div.address{
     form{
         width: 60%;
     } 
-    /* ------------------ NAV ------------- */
-    #menu .nav-a{
-        font-size: 16px;
-    }
+
     /* --------- Store -------------*/
     #sectionProducts{
         flex-wrap: wrap;
@@ -240,17 +245,6 @@ div.address{
     .addressContainer{
         width: 45vw;
     }
-    /* ---------------------------- Section Choose Addresses & AddAdress & RecapSection ----------------  */
-
-    /* #chooseAddressesSection form, #AddAddressSection form, #AddProductSection form{
-        width: 60%;
-        margin:auto
-    } */
-    /* #recapSection .container-address, #factureSection .container-address {
-        display: flex;
-    } */
-
-
 
 } 
  @media (min-width:1450px)
@@ -258,10 +252,6 @@ div.address{
 {
     form{
         width: 45%;
-    }
-    /* --------- Nav -------------*/
-    #menu .nav-a{
-        font-size: 20px;
     }
     /* --------- div Address -------------*/
     div.container-address{
