@@ -28,29 +28,35 @@
                     <td>Adresse de facturation</td>
                     <td>Statut de la commande</td>
                     <td>Produits commandés</td>
+                    <td></td>
                 </tr>
             </thead>
             <tbody>
                 {% for order in orders %}
-                    <tr>
-                        <td>Commande : {{ order.orderingReference }} Facture : {{ order.facture.factureReference }}</td>
-                        <td>{{ order.user.email }}</td>
-                        <td>{{ order.shipAddress }}</td>
-                        <td>{{ order.facture }}</td>
-                        <td>
-                            {% if order.orderingStatus == 1 %}
-                                <a href="{{ path('statusToSend', {'id':order.id}) }}">{{ order.getStatusOrder }}</a>
-                            {% else %}
-                                {{ order.getStatusOrder }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% for productOrder in order.productOrderings %}
-                                {{ productOrder.product.reference ~ " " ~ productOrder.product.name ~ " domaine " ~ productOrder.product.domain.name ~ " " ~ productOrder.product.year ~ " x" ~ productOrder.quantity }} <hr>
-                            {% endfor %}
-                            Total: {{ order.getTotal }}€
-                        </td>
-                    </tr>
+                    {% if order.facture is not null %}
+                        <tr>
+                            <td>Commande : {{ order.orderingReference }} Facture : {{ order.facture.factureReference }}</td>
+                            <td>{{ order.user.email }}</td>
+                            <td>{{ order.shipAddress }}</td>
+                            <td>{{ order.facture }}</td>
+                            <td>
+                                {% if order.orderingStatus == 1 %}
+                                    <a href="{{ path('statusToSend', {'id':order.id}) }}">{{ order.getStatusOrder }}</a>
+                                {% else %}
+                                    {{ order.getStatusOrder }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% for productOrder in order.productOrderings %}
+                                    {{ productOrder.product.reference ~ " " ~ productOrder.product.name ~ " domaine " ~ productOrder.product.domain.name ~ " " ~ productOrder.product.year ~ " x" ~ productOrder.quantity }} <hr>
+                                {% endfor %}
+                                Total: {{ order.getTotal|number_format(2,',') }}€
+                            </td>
+                            <td>
+                                <a href="{{ path('dl_facture', {'id': order.id}) }}">Télécharger la facture</a>
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>

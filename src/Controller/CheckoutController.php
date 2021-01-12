@@ -79,43 +79,42 @@ class CheckoutController extends AbstractController
     // }
     if($request->query->get('paiement') && $request->query->get('paiement') == 'ok'){
       $order = $or->findOneByStripeSessionId($stripeSessionId);
+      if($this->getUser() != $order->getUser()){
+        return $this->redirectToRoute('products_index');
+      }
       $factureJson = $session->get('facture');
       $facture = $serializer->deserialize($factureJson, Facture::class, 'json');
-      // dd($facture);
-      // $facture->setUserId($this->getUser()->getId());
       $facture->setOrdering($order);
       $order->setFacture($facture);
-      // $manager->persist($facture);
-      // $manager->persist($order);
-      // $manager->flush();
-
-      $total = $order->getTotal();
-      $quantityTotal = $order->getQuantityTotal();
-      
-      //je passe le status de la commande à payé
-      if($order->getOrderingStatus() == 0){
-        $order->setOrderingStatus(1);
-        $manager->flush();
+      $manager->persist($facture);
+      $manager->persist($order);
+      $manager->flush();
+    }
+    $total = $order->getTotal();
+    $quantityTotal = $order->getQuantityTotal();
+    
+    //je passe le status de la commande à payé
+    if($order->getOrderingStatus() == 0){
+      $order->setOrderingStatus(1);
+      $manager->flush();
         
   
-        //je retire des stock la qte de produit qui a été vendu
-        foreach($order->getProductOrderings() as $productLine){
-          $product = $productLine->getProduct();
-          $quantity = $productLine->getQuantity();
-          $value = $product->getUnitStock() - $quantity;
-          $product->setUnitStock($value);
-        }
-        $manager->flush();
-        
-        $cart = $session->get('cart', new Cart());
-        //je vide le panier
-        $cart->clear();
+      //je retire des stock la qte de produit qui a été vendu
+      foreach($order->getProductOrderings() as $productLine){
+        $product = $productLine->getProduct();
+        $quantity = $productLine->getQuantity();
+        $value = $product->getUnitStock() - $quantity;
+        $product->setUnitStock($value);
       }
+      $manager->flush();
+      
+      $cart = $session->get('cart', new Cart());
+      //je vide le panier
+      $cart->clear();
       return $this->render('checkout/success.html.twig', [
         'order' => $order,
         'total' => $total,
         'quantityTotal' => $quantityTotal,
-        
       ]);
     }
   }
@@ -180,4 +179,5 @@ class CheckoutController extends AbstractController
 
     return $this->render('checkout/error.html.twig');
   }
+
 }

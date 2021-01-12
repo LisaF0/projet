@@ -15,24 +15,31 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class OrderingRepository extends ServiceEntityRepository
 {
-    /**
-     * @var PaginatorInterface
-     */
-    private $paginator;
-    
-    public function __construct(ManagerRegistry $registry, PaginatorInterface $paginator)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Ordering::class);
-        $this->paginator = $paginator;
+        
     }
 
     public function findAll(){
-         return $this->createQueryBuilder('o')
-                ->orderBy('o.createdAt', 'DESC')
-                ->getQuery()
-                ->getResult()
-            ;
+        return $this->createQueryBuilder('o')
+            ->orderBy('o.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
+
+    public function findByPayed(){
+        return $this->createQueryBuilder('o')
+        ->where('o.orderingStatus != :id')
+        ->setParameter('id', '0')
+        ->orderBy('o.createdAt', 'DESC')
+        ->getQuery()
+        ->getResult()
+        ;
+        
+    }
+
     // public function findOneByReference($reference){
     //     return $this->createQueryBuilder('o')
     //         ->andWhere('o.orderingReference = :reference')

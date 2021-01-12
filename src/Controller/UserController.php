@@ -243,22 +243,19 @@ class UserController extends AbstractController
     {
         // on stock la route
         $session->set('src',"choose_address");
+        
         $incart = [];
         $user = $this->getUser();
-        // if(!$user){
-        //     return $this->redirectToRoute("app_login");
-        // }
     
         $newOrder = new Ordering();
         $cart = $session->get('cart', new Cart());
         $newFacture = new Facture();
-
+        $newFacture->setUserId($user->getId());
         // set la new facture dans la new commande + permet d'afficher la facture pré rempli
         $newOrder->setFacture($newFacture);
-        // afin de récupérer la dernière facture
+        // On récupère la dernière facture de l'utilisateur
         $lastFacture = $fr->findLastFacture($user->getId());
         
-
         // pour pré remplir la nouvelle facture si elle existe
         if($lastFacture){
             $newFacture->setUserId($lastFacture->getUserId());
@@ -269,49 +266,49 @@ class UserController extends AbstractController
             $newFacture->setAddress($lastFacture->getAddress());
         }
         
-        foreach($cart->getFullCart() as $cartLine){
-            $incart[] = [
-            'product' => $cartLine['product'],
-            'quantity' => $cartLine['quantity']
-            ];
-        }
-        if(empty($incart)){
-            return $this->render('bundles/TwigBundle/Exception/error404.html.twig');
-        }
-        $total = $cart->getTotal($incart);
         $formOrder = $this->createForm(OrderType::class, $newOrder);
         $formOrder->handleRequest($request);
         
         if($formOrder->isSubmitted() && $formOrder->isValid()){
-            
-            $jsonFacture = $serializer->serialize($newFacture, 'json'
-            ,[AbstractNormalizer::IGNORED_ATTRIBUTES => ['id']]
-            );
-            
+            // on encode la facture
+            $jsonFacture = $serializer->serialize($newFacture, 'json',[AbstractNormalizer::IGNORED_ATTRIBUTES => ['id']]);
+            // on stock la facture en session
             $session->set('facture', $jsonFacture);
+            //on met la facture de la nouvelle commande à null
             $newOrder->setFacture(null);
+            // on récupère l'user qu'on stock dans la facture
             $newOrder->setUser($this->getUser());
-
+            
             // on persist à ce moment pour pouvoir addPorudctOrdering sur qq chose de "réel"
             $manager->persist($newOrder);
+            // on récupère ce qu'il y a dans le panier
+            // pour l'ajouter à la commande
             foreach($cart->getFullCart() as $cartLine){
-            $newProductOrder = new ProductOrdering();
-            $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
-            //set product To newProductOrder
-            $newProductOrder->setProduct($product);
-            //set quantity To newProductOrder
-            $newProductOrder->setQuantity($cartLine['quantity']);
-            //Hydrate newOrder avec le newProductOrder
-            $newOrder->addProductOrdering($newProductOrder);
-            $manager->persist($newProductOrder);
+                $newProductOrder = new ProductOrdering();
+                $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
+                $newProductOrder->setProduct($product);
+                $newProductOrder->setQuantity($cartLine['quantity']);
+                $newOrder->addProductOrdering($newProductOrder);
+                $manager->persist($newProductOrder);
             }
             $manager->flush();
+            // on récupère le panier pour l'afficher
+            foreach($cart->getFullCart() as $cartLine){
+                $incart[] = [
+                    'product' => $cartLine['product'],
+                    'quantity' => $cartLine['quantity']
+                ];
+            }
+            if(empty($incart)){
+                return $this->render('bundles/TwigBundle/Exception/error404.html.twig');
+            }
+            $total = $cart->getTotal($incart);
             return $this->render('checkout/index.html.twig', [
-            'items' => $incart,
-            'total' => $total,
-            'order' => $newOrder,
-            'facture' => $newFacture,
-            'reference' => $newOrder->getOrderingReference(),
+                'items' => $incart,
+                'total' => $total,
+                'order' => $newOrder,
+                'facture' => $newFacture,
+                'reference' => $newOrder->getOrderingReference(),
             ]);
         }
         return $this->render('user/chooseAddresses.html.twig', [

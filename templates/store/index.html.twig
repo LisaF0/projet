@@ -53,10 +53,10 @@
                             <p>Domaine {{ product.domain }}</p>
                             <p>{{product.description }}</p>
                             <div class="priceAndAvailableProduct">
-                                <p>{{ product.unitprice ~ '€'}}</p>
+                                <p class="price">{{ product.unitprice|number_format(2,',') ~ '€'}}</p>
                                 {% if product.unitstock > 0 %}
                                 {% if is_granted('ROLE_ADMIN') %}
-                                    <p>Quantité en stock : {{ product.unitstock }}</p>
+                                    <p class="text-center">Quantité en stock : {{ product.unitstock }}</p>
                                 {% endif %}
                                     <p><i class="fas fa-check text-success"></i> Disponible</p>
                                 {% else %}

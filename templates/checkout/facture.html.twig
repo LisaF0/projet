@@ -3,15 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <style>
-        section{
-            padding:1em;
-        }
     </style>
 </head>
 <body>
-    
-
-    
     <section id="factureSection">
         <h1 class="h3 mb-3 font-weight-normal text-center">Votre commande a bien été effectuée</h1>
         <h2 class="h4 mb-3 font-weight-normal">Récapitulatif de la commande n° {{order.orderingReference}}</h2>
@@ -27,9 +21,10 @@
             </thead>
             <tbody>
                 {% for item in order.productOrderings %}
+
                     <tr>
-                        <td>{{ item.product.name }}</td>
-                        <td>{{ item.product.unitprice ~ '€' }}</td>
+                        <td>{{ item.product.name ~ ' domaine ' ~ item.product.domain.name ~ ' ' ~ item.product.year }}</td>
+                        <td>{{ item.product.unitprice|number_format(2,',') ~ '€' }}</td>
                         <td>{{ item.quantity }}</td>
                         <td>{{ item.product.unitprice * item.quantity ~ '€' }}</td>
                     </tr>
@@ -63,9 +58,6 @@
                 <p>Adresse: {{ order.facture.address }}</p>
             </div>          
         </div>
-        <p>
-            <a href="{{ path('dl_facture', {'id': order.id }) }}" class="btn btn-primary">Télécharger la facture</a>
-        </p>
     </section>
 
 </body>

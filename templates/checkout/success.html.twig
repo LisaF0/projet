@@ -23,11 +23,12 @@
             </thead>
             <tbody>
                 {% for item in order.productOrderings %}
+                {% set subtotal = item.product.unitprice * item.quantity %}
                     <tr>
                         <td>{{ item.product.name }}</td>
-                        <td>{{ item.product.unitprice ~ '€' }}</td>
+                        <td>{{ item.product.unitprice|number_format(2, ',') ~ '€' }}</td>
                         <td>{{ item.quantity }}</td>
-                        <td>{{ item.product.unitprice * item.quantity ~ '€' }}</td>
+                        <td>{{ subtotal|number_format(2, ',') ~ '€' }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -35,7 +36,7 @@
                 <tr>
                     <td colspan="2" class="text-right">Total : </td>
                     <td>{{ quantityTotal }}</td>
-                    <td>{{ total ~ '€'}}</td>
+                    <td>{{ total|number_format(2, ',') ~ '€'}}</td>
                     
                 </tr>
             </tfoot>

@@ -84,7 +84,7 @@ class Product
 
     public function __construct()
     {
-        $this->reference = uniqid();
+        $this->reference = "VIN".uniqid();
         $this->available = 1;     
         $this->activate = 1;
     }

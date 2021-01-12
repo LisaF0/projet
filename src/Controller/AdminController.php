@@ -27,7 +27,7 @@ class AdminController extends AbstractController
     public function index(OrderingRepository $or, Request $request, PaginatorInterface $paginator, ProductRepository $pr, DomainRepository $dr): Response
     {
         
-        $donnees = $or->findAll();
+        $donnees = $or->findByPayed();
         $orderings = $paginator->paginate(
             $donnees, // Requête qui contient les données
             $request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
