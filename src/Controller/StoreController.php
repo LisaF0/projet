@@ -18,14 +18,21 @@ class StoreController extends AbstractController
      * @Route("/products/", name="products_index")
      * 
      * Fonction permettant d'afficher la liste des produits, et de les filtrer
+     * 
+     * @return Response
      */
-    public function index(Request $request, ProductRepository $pr, PaginatorInterface $paginator): Response
+    public function showProducts(Request $request, ProductRepository $pr): Response
     {
-        //Secu à faire
         $filter = New Filter();
         $filter->page = $request->get('page', 1);
         $formFilter = $this->createForm(FilterType::class, $filter);
         $formFilter->handleRequest($request);
+        if($formFilter->isSubmitted() && $formFilter->isValid()){
+            // Produit pour l'utilisateur
+            $productsActive = $pr->findByFilterAndActivate($filter);
+            // Produit pour l'administrateur
+            $allProducts = $pr->findByFilter($filter);
+        }
         $productsActive = $pr->findByFilterAndActivate($filter);
         $allProducts = $pr->findByFilter($filter);
         

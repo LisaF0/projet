@@ -46,6 +46,7 @@ class UserController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @param UserPasswordEncoderInterface $passwordEncoder
+     * 
      * @return Response
      */
     public function infosUser(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $passwordEncoder, SessionInterface $session): Response
@@ -119,11 +120,13 @@ class UserController extends AbstractController
      * 
      * Fonction permettant à l'utilisateur de modifier l'une de ses adresses si elle n'a pas été utilisé pour une commande
      * 
-     * @param shipAddress $shipAddress
+     * @param ShipAddress $shipAddress
      * @param Request $request
      * @param EntityManagerInterface $manager
+     * 
+     * @return Response
      */
-    public function editAddress(ShipAddress $shipAddress = null, Request $request, EntityManagerInterface $manager)
+    public function editAddress(ShipAddress $shipAddress = null, Request $request, EntityManagerInterface $manager):Response
     {
         // on vérifie : 
             //  l'adresse existe
@@ -154,8 +157,13 @@ class UserController extends AbstractController
      * @Route("/profil/deleteAddress/{id}", name="address_delete")
      * 
      * Fonction permettant à l'utilisateur de supprimer l'une de ses adresses si elle n'a pas été utilisé pour une commande
+     * 
+     * @param ShipAddress $shipAddress
+     * @param EntityManagerInterface
+     * 
+     * @return Response
      */
-    public function deleteAddress(ShipAddress $shipAddress = null, EntityManagerInterface $manager)
+    public function deleteAddress(ShipAddress $shipAddress = null, EntityManagerInterface $manager):Response
     {
         // on vérifie : 
             //  l'adresse existe
@@ -179,8 +187,13 @@ class UserController extends AbstractController
      * @Route("/profil/deleteAccount/{id}", name="account_delete")
      * 
      * Fonction permettant à l'utilisateur de supprimer son compte
+     * 
+     * @param User $user
+     * @param EntityManagerInterface $manager
+     * 
+     * @return Response
      */
-    public function deleteAccount(User $user = null, EntityManagerInterface $manager)
+    public function deleteAccount(User $user = null, EntityManagerInterface $manager):Response
     {
 
         if(!$user || $user !== $this->getUser()){
@@ -206,8 +219,14 @@ class UserController extends AbstractController
      * @Route("/profil/addAddress", name="address_add")
      * 
      * Fonction permettant à l'utilisateur d'ajouter une adresse
+     * 
+     * @param Request $request
+     * @param EntityManager $manager
+     * @param SessionInterface $session
+     * 
+     * @return Response
      */
-    public function addAddress(Request $request, EntityManagerInterface $manager, SessionInterface $session)
+    public function addAddress(Request $request, EntityManagerInterface $manager, SessionInterface $session):Response
     {
         // on récupère la route précédente stocké en session
         $route = $session->get('src');
@@ -238,8 +257,18 @@ class UserController extends AbstractController
     /**
      * @Route("/chooseAdd", name="choose_address")
      * @IsGranted("ROLE_USER")
+     * 
+     * Fonction permettant à l'utilisateur de choisir son adresse de livraison et de facturation pour sa commande avant le paiement
+     * 
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param FactureRepository $fr
+     * @param SessionInterface $session
+     * @param SerializerInterface $serializer
+     * 
+     * @return Response
      */
-    public function chooseAddress(Request $request, EntityManagerInterface $manager, FactureRepository $fr, SessionInterface $session, SerializerInterface $serializer)
+    public function chooseAddress(Request $request, EntityManagerInterface $manager, FactureRepository $fr, SessionInterface $session, SerializerInterface $serializer):Response
     {
         // on stock la route
         $session->set('src',"choose_address");

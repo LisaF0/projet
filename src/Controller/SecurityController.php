@@ -17,6 +17,8 @@ class SecurityController extends AbstractController
      * @Route("/login", name="app_login")
      * 
      * Fonction permettant à un utilisateur de se connecter
+     * 
+     * @return Response
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -36,8 +38,10 @@ class SecurityController extends AbstractController
      * @Route("/logout", name="app_logout")
      * 
      * Fonction permettant à un utilisateur de se déconnecter
+     * 
+     * @return Void
      */
-    public function logout()
+    public function logout():void
     {
         // throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
@@ -46,6 +50,8 @@ class SecurityController extends AbstractController
      * @Route("/register", name="app_register")
      * 
      * Fonction permettant à un utilisateur de s'inscrire
+     * 
+     * @return Response
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {

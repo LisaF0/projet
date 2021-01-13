@@ -8,31 +8,28 @@ use Stripe\Stripe;
 use Dompdf\Options;
 use App\Entity\Cart;
 use App\Entity\Facture;
-use App\Entity\Product;
-use App\Form\OrderType;
-use App\Entity\Ordering;
-use App\Entity\ShipAddress;
-use App\Form\ShipAddressType;
-use App\Entity\ProductOrdering;
 use App\Repository\UserRepository;
-use App\Repository\FactureRepository;
 use App\Repository\OrderingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class CheckoutController extends AbstractController
 {
   
   /**
    * @Route("/create-checkout-session/{reference}", name="create-checkout-session")
+   * 
+   * Fonction permettant à l'utilisateur d'afficher la page de paiement Stripe
+   * 
+   * @return Response
    */
-  public function payment($reference, OrderingRepository $or, EntityManagerInterface $manager)
+  public function payment($reference, OrderingRepository $or, EntityManagerInterface $manager):Response
   {
     $order = $or->findOneByOrderingReference($reference);
   
@@ -71,8 +68,12 @@ class CheckoutController extends AbstractController
 
   /**
    * @Route("/success/{stripeSessionId}", name="success")
+   * 
+   * Fonction qui affiche la page de succès de commande à un utilisateur
+   * 
+   * @return Response
    */
-  public function success($stripeSessionId, OrderingRepository $or, UserRepository $ur, SessionInterface $session, EntityManagerInterface $manager, Request $request, SerializerInterface $serializer)
+  public function success($stripeSessionId, OrderingRepository $or,  SessionInterface $session, EntityManagerInterface $manager, Request $request, SerializerInterface $serializer):Response
   {
     // if(!$order || $user != $this->getUser()){
     //   return $this->redirectToRoute('home_index');
@@ -121,8 +122,12 @@ class CheckoutController extends AbstractController
 
   /**
    * @Route("/downloadPDF/{id}", name="dl_facture")
+   * 
+   * Fonction qui permet de download la facture
+   * 
+   * @return Response
    */
-  public function dlPDF($id, OrderingRepository $or)
+  public function dlPDF($id, OrderingRepository $or):Response
   {
     $order = $or->findOneById($id);
     // $user = $ur->findOneById($order->getUser()->getId());
@@ -162,8 +167,17 @@ class CheckoutController extends AbstractController
 
   /**
    * @Route("/error/{stripeSessionId}", name="error")
+   * 
+   * Fonction qui affiche une page d'erreur suite au paiement de Stripe
+   * 
+   * @param OrderingRepository $or
+   * @param UserRepository $ur
+   * @param EntityManagerInterface $manager
+   * 
+   * 
+   * @return Response
    */
-  public function error($stripeSessionId, OrderingRepository $or, UserRepository $ur, EntityManagerInterface $manager)
+  public function error($stripeSessionId, OrderingRepository $or, UserRepository $ur, EntityManagerInterface $manager):Response
   {
     $order = $or->findOneByStripeSessionId($stripeSessionId);
     $user = $ur->findOneById($order->getUser()->getId());

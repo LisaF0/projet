@@ -235,9 +235,7 @@ div.address{
     
 
     /* --------- Store -------------*/
-    #sectionProducts{
-        flex-wrap: wrap;
-    }
+
     .productContainer form{
         width: 100%;
     }

@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Ordering;
 use Doctrine\Persistence\ManagerRegistry;
-use Knp\Component\Pager\PaginatorInterface;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
@@ -20,15 +20,6 @@ class OrderingRepository extends ServiceEntityRepository
         parent::__construct($registry, Ordering::class);
         
     }
-
-    public function findAll(){
-        return $this->createQueryBuilder('o')
-            ->orderBy('o.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
     public function findByPayed(){
         return $this->createQueryBuilder('o')
         ->where('o.orderingStatus != :id')
@@ -39,6 +30,16 @@ class OrderingRepository extends ServiceEntityRepository
         ;
         
     }
+
+    public function findAll(){
+        return $this->createQueryBuilder('o')
+            ->orderBy('o.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
 
     // public function findOneByReference($reference){
     //     return $this->createQueryBuilder('o')

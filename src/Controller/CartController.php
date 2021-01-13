@@ -6,6 +6,7 @@ use App\Entity\Cart;
 use App\Entity\Product;
 use App\Repository\DomainRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,8 +22,12 @@ class CartController extends AbstractController
      * @Route("/cart", name="cart_index")
      * 
      * Fonction permettant d'afficher le panier
+     * 
+     * @param DomainRepository $dr
+     * 
+     * @return Response
      */
-    public function index(DomainRepository $dr)
+    public function index(DomainRepository $dr):Response
     {
         $incart = [];
         //il faut réhydrater le produit afin de récupérer le nom de domaine
@@ -44,11 +49,17 @@ class CartController extends AbstractController
     }
 
     /**
-    * @Route("/cart/add/{id}", name="cart_add")
-    * 
-    * Fonction permettant d'ajouter un produit au panier
+     * @Route("/cart/add/{id}", name="cart_add")
+     * 
+     * Fonction permettant d'ajouter un produit au panier
+     * 
+     * @param Request $request
+     * @param Product $product
+     * @param SessionInterface $session
+     * 
+     * @return Response
     */
-    public function add(Request $request, Product $product = null, SessionInterface $session)
+    public function add(Request $request, Product $product = null, SessionInterface $session):Response
     {
         // Vérifier que le produit existe
         if(!$product){
@@ -76,8 +87,13 @@ class CartController extends AbstractController
      * @Route("/cart/remove/{id}", name="cart_remove")
      * 
      * Fonction permettant de supprimer un produit du panier
+     * 
+     * @param Product $product
+     * @param SessionInterface $session
+     * 
+     * @return Response
      */
-    public function remove(Product $product = null, SessionInterface $session)
+    public function remove(Product $product = null, SessionInterface $session):Response
     {
         if(!$product){
             $this->addFlash('warning', 'Le produit que vous souhaitez supprimer n\'existe pas');
@@ -98,8 +114,11 @@ class CartController extends AbstractController
      * @Route("clearCart", name="cart_clear")
      * 
      * Fonction permettant de vider le panier
+     * 
+     * @return Response
      */
-    public function clearCart(){
+    public function clearCart():Response
+    {
         $incart = [];
         
         foreach($this->cart->getFullCart() as $cartLine){
