@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Checkout{% endblock %}
+{% block title %}Récapitulatif de commande{% endblock %}
 {% block stylesheets %}
     {{ parent() }}
 {% endblock %}
@@ -8,7 +8,7 @@
     {% block nav %}
         {{ parent() }}
     {% endblock %}
-    <section id="recapSection">
+    <section class="container" id="recapSection">
         {% if items | length > 0 %}
             <h1 class="h3 mb-3 font-weight-normal text-center">Récapitulatif de la commande</h1>
             <h2 class="h4 mb-3 font-weight-normal">Panier</h2>
@@ -76,10 +76,10 @@
     <script type="text/javascript">
         // Create an instance of the Stripe object with your publishable API key
         var stripe = Stripe('pk_test_51HvgjELyEjuAwgbZePdTWvQMgmdhI1uAxfEmwx6zqvuSrYSVru4XukNzFhOEaSNPz6torjLLNySw1kz0JgkUNhBv00vg0FnJ8K');
-        var checkoutButton = document.getElementById('checkout-button');
+        var checkoutButton = $('#checkout-button');
 
 
-        checkoutButton.addEventListener('click', function() {
+        checkoutButton.on('click', function() {
             // Create a new Checkout Session using the server-side endpoint you
             // created in step 3.
             fetch("/create-checkout-session/{{ reference }}", {

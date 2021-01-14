@@ -8,7 +8,7 @@
     {% block nav %}
         {{ parent() }}
     {% endblock %}
-    <section id="orderSection">
+    <section id="orderSection" class="container">
     <h1 class="h3 mb-3 font-weight-normal text-center">Mes commandes</h1>
     {% if orders|length > 0 %}   
         {% for order in orders %}

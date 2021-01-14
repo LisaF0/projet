@@ -39,7 +39,7 @@
                 {{ form(formUserPassword) }}
             </section>
             <section>
-                <a href="{{ path('account_delete', {'id': app.user.id }) }}" class="btn btn-danger">Supprimer votre compte</a>
+                <a href="{{ path('account_delete', {'id': app.user.id }) }}" class="btn btn-danger" onclick="return confirm('Voulez vous supprimer votre compte ?')">Supprimer votre compte</a>
             </section>
         </section>
     </div>

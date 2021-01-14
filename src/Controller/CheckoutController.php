@@ -22,32 +22,31 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class CheckoutController extends AbstractController
 {
   
-  /**
-   * @Route("/create-checkout-session/{reference}", name="create-checkout-session")
-   * 
-   * Fonction permettant à l'utilisateur d'afficher la page de paiement Stripe
-   * 
-   * @return Response
-   */
-  public function payment($reference, OrderingRepository $or, EntityManagerInterface $manager):Response
-  {
+    /**
+     * @Route("/create-checkout-session/{reference}", name="create-checkout-session")
+     * 
+     * Fonction permettant à l'utilisateur d'afficher la page de paiement Stripe
+     * 
+     * @return Response
+     */
+    public function payment($reference, OrderingRepository $or, EntityManagerInterface $manager):Response
+    {
     $order = $or->findOneByOrderingReference($reference);
-  
 
     $YOUR_DOMAIN = 'http://127.0.0.1:8000';
     $productsForStripe = [];
-    
+
     foreach($order->getProductOrderings()->getValues() as $cartLine){
-      $productsForStripe[] = [
+        $productsForStripe[] = [
         'price_data' => [
-          'currency' => 'eur',
-          'product_data' => [
+            'currency' => 'eur',
+            'product_data' => [
             'name' => $cartLine->getProduct()->getName(),
-          ],
-          'unit_amount' => $cartLine->getProduct()->getUnitPrice()*100,
+            ],
+            'unit_amount' => $cartLine->getProduct()->getUnitPrice()*100,
         ],
         'quantity' => $cartLine->getQuantity(),
-      ];
+        ];
     }
     Stripe::setApiKey('sk_test_51HvgjELyEjuAwgbZtFkkq4UfxmsjafIAB10xIVuEjqHkQqVuHmrtBD4XvNGHPLnsOc7cKV8eL2lFxVNnVNSgyfpv00TCqiAFXL');
     $checkout_session = \Stripe\Checkout\Session::create([
@@ -57,7 +56,7 @@ class CheckoutController extends AbstractController
         $productsForStripe
       ]],
       'mode' => 'payment',
-      'success_url' => $YOUR_DOMAIN.'/success/{CHECKOUT_SESSION_ID}?paiement=ok',
+      'success_url' => $YOUR_DOMAIN.'/success/{CHECKOUT_SESSION_ID}',
       'cancel_url' => $YOUR_DOMAIN.'/error/{CHECKOUT_SESSION_ID}',
     ]);
 
@@ -75,26 +74,24 @@ class CheckoutController extends AbstractController
    */
   public function success($stripeSessionId, OrderingRepository $or,  SessionInterface $session, EntityManagerInterface $manager, Request $request, SerializerInterface $serializer):Response
   {
-    // if(!$order || $user != $this->getUser()){
-    //   return $this->redirectToRoute('home_index');
-    // }
-    if($request->query->get('paiement') && $request->query->get('paiement') == 'ok'){
-      $order = $or->findOneByStripeSessionId($stripeSessionId);
-      if($this->getUser() != $order->getUser()){
-        return $this->redirectToRoute('products_index');
-      }
-      $factureJson = $session->get('facture');
-      $facture = $serializer->deserialize($factureJson, Facture::class, 'json');
-      $facture->setOrdering($order);
-      $order->setFacture($facture);
-      $manager->persist($facture);
-      $manager->persist($order);
-      $manager->flush();
+    
+    $order = $or->findOneByStripeSessionId($stripeSessionId);
+    if($this->getUser() != $order->getUser()){
+      return $this->redirectToRoute('products_index');
     }
+    $factureJson = $session->get('facture');
+    $facture = $serializer->deserialize($factureJson, Facture::class, 'json');
+    $facture->setOrdering($order);
+    $order->setFacture($facture);
+    $manager->persist($facture);
+    $manager->persist($order);
+    $manager->flush();
+    
     $total = $order->getTotal();
     $quantityTotal = $order->getQuantityTotal();
     
     //je passe le status de la commande à payé
+    
     if($order->getOrderingStatus() == 0){
       $order->setOrderingStatus(1);
       $manager->flush();

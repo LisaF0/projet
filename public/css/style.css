@@ -54,6 +54,10 @@ form button{
 #productHeader{
     width: 100vw;
     display: flex;
+    flex-wrap: wrap;
+}
+#productTitle{
+    display: flex;
     justify-content: space-evenly;
     align-items: baseline;
 }
@@ -62,7 +66,7 @@ form button{
 
 .filterDropdown{
     width: auto;
-    margin: 0;
+    margin-bottom: 16px;
 }
  #productHeader .filterButton, .sortedButton{
     background-color: var(--inter-color);
@@ -235,7 +239,13 @@ div.address{
     
 
     /* --------- Store -------------*/
-
+    #productHeader{
+        flex-wrap: nowrap;
+    }
+    .filterDropdown{
+        width: 35%;
+        margin-bottom: 16px;
+    }
     .productContainer form{
         width: 100%;
     }
@@ -268,9 +278,6 @@ div.address{
 {
     form{
         width: 45%;
-    }
-    div.address{
-        width: 25%;
     }
     
     .addressContainer{

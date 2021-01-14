@@ -273,11 +273,11 @@ class UserController extends AbstractController
         // on stock la route
         $session->set('src',"choose_address");
         
-        $incart = [];
         $user = $this->getUser();
-    
-        $newOrder = new Ordering();
+        $incart = [];
         $cart = $session->get('cart', new Cart());
+        
+        $newOrder = new Ordering();
         $newFacture = new Facture();
         $newFacture->setUserId($user->getId());
         // set la new facture dans la new commande + permet d'afficher la facture pré rempli
@@ -312,6 +312,9 @@ class UserController extends AbstractController
             $manager->persist($newOrder);
             // on récupère ce qu'il y a dans le panier
             // pour l'ajouter à la commande
+            // if(empty($incart)){
+            //     return $this->render('bundles/TwigBundle/Exception/error404.html.twig');
+            // }
             foreach($cart->getFullCart() as $cartLine){
                 $newProductOrder = new ProductOrdering();
                 $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
