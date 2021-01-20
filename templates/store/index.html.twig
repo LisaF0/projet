@@ -57,9 +57,9 @@
                             <div class="priceAndAvailableProduct">
                                 <p class="price">{{ product.unitprice|number_format(2,',') ~ '€'}}</p>
                                 {% if product.unitstock > 0 %}
-                                {% if is_granted('ROLE_ADMIN') %}
-                                    <p class="text-center">Quantité en stock : {{ product.unitstock }}</p>
-                                {% endif %}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <p class="text-center">Quantité en stock : {{ product.unitstock }}</p>
+                                    {% endif %}
                                     <p><i class="fas fa-check text-success"></i> Disponible</p>
                                 {% else %}
                                     <p><i class="fas fa-times text-danger"></i> Indisponible</p>
@@ -77,14 +77,11 @@
                             {% endif %}
                             {% if is_granted('ROLE_ADMIN') %}
                                 <div class="adminButtonContainer">
-
                                     <a href="{{ path('edit_product', {'id': product.id }) }}" class="btn btn-primary"><i class="fas fa-pen"></i></a>
                                     <a href="{{ path('delete_product', {'id': product.id }) }}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
-                                    {% if product.activate == 0 %}
-                                        <a href="{{ path('desactive_product', {'id': product.id}) }}" class="btn btn-primary"><i class="fas fa-lock-open"></i></a>
-                                    {% else %}
-                                        <a href="{{ path('desactive_product', {'id': product.id}) }}" class="btn btn-primary"><i class="fas fa-lock"></i></a>
-                                    {% endif %}
+                                    <a href="{{ path('desactive_product', {'id': product.id}) }}" class="btn btn-primary">
+                                        {{ product.activate ? "<i class='fas fa-lock-open'></i>" : "<i class='fas fa-lock'></i>" }}
+                                    </a>
                                 </div>
                             {% endif %}
                         </div>

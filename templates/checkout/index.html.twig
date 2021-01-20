@@ -75,7 +75,7 @@
 {% block javascripts %}
     <script type="text/javascript">
         // Create an instance of the Stripe object with your publishable API key
-        var stripe = Stripe('pk_test_51HvgjELyEjuAwgbZePdTWvQMgmdhI1uAxfEmwx6zqvuSrYSVru4XukNzFhOEaSNPz6torjLLNySw1kz0JgkUNhBv00vg0FnJ8K');
+        var stripe = Stripe('{{ public_key }}');
         var checkoutButton = $('#checkout-button');
 
 

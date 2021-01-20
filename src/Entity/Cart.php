@@ -8,7 +8,8 @@ class Cart
 {
     private $incart = [];
 
-    public function getQuantity(){
+    public function getQuantity()
+    {
         if($this->incart){
             //on vérifie qu'il y ai qqchose dans le panier
             // Pour chaque ligne du panier, on fait la somme des quantités
@@ -18,11 +19,14 @@ class Cart
         }
     }
     
-    public function getFullCart(){
+    public function getFullCart()
+    {
         return $this->incart;
     }
 
-    public function add(Product $product, $qtt){
+    public function add(Product $product, $qtt)
+    {
+        // si le produit n'existe pas dans le panier
         if(!array_key_exists($product->getId(), $this->incart)){
            $this->incart[$product->getId()] = [
                "product" => $product,
@@ -31,17 +35,19 @@ class Cart
         }
         else{
             $this->incart[$product->getId()]["quantity"]+=$qtt;
-        }   
+        } 
     }  
 
-    public function remove(Product $product){
+    public function remove(Product $product)
+    {
 
         if($this->incart[$product->getId()]){
             unset($this->incart[$product->getId()]);
         }
     }
 
-    public function getTotal($incart) : float {
+    public function getTotal($incart) : float 
+    {
         $total = 0;
         foreach($incart as $cartLine){
             $totalCartLine = $cartLine['product']->getUnitPrice() * $cartLine['quantity'];
@@ -50,7 +56,8 @@ class Cart
         return $total;
     }
 
-    public function clear(){
+    public function clear()
+    {
         $this->incart = [];
     }
 

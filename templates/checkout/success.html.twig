@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Checkout{% endblock %}
+{% block title %}Commande effectuée{% endblock %}
 {% block stylesheets %}
     {{ parent() }}
 {% endblock %}
@@ -8,7 +8,7 @@
     {% block nav %}
         {{ parent() }}
     {% endblock %}
-    <section id="factureSection">
+    <section id="factureSection" class="container">
         <h1 class="h3 mb-3 font-weight-normal text-center">Votre commande a bien été effectuée</h1>
         <h2 class="h4 mb-3 font-weight-normal">Récapitulatif de la commande n° {{order.orderingReference}}</h2>
         <h2 class="h4 mb-3 font-weight-normal">Facture n° {{ order.facture.factureReference }}</h2>

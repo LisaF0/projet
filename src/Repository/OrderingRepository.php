@@ -20,7 +20,7 @@ class OrderingRepository extends ServiceEntityRepository
         parent::__construct($registry, Ordering::class);
         
     }
-    public function findByPayed(){
+    public function findByPaid(){
         return $this->createQueryBuilder('o')
         ->where('o.orderingStatus != :id')
         ->setParameter('id', '0')

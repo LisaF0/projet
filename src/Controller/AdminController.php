@@ -34,7 +34,7 @@ class AdminController extends AbstractController
     public function index(OrderingRepository $or, Request $request, PaginatorInterface $paginator, ProductRepository $pr, DomainRepository $dr):Response
     {
         
-        $donnees = $or->findByPayed();
+        $donnees = $or->findByPaid();
         $orderings = $paginator->paginate(
             $donnees, // Requête qui contient les données
             $request->query->getInt('page', 1), // Numéro de la page en cours, passé dans l'URL, 1 si aucune page
@@ -56,7 +56,6 @@ class AdminController extends AbstractController
                 'quantity' => array_pop($productLine)
             ];
         }
-        // dd($array);
         return $this->render('admin/index.html.twig', [
             'orders' => $orderings,
             'productMostSold' => $array
@@ -115,11 +114,11 @@ class AdminController extends AbstractController
         if($product){
             if($por->findByProductId($product->getId())){
                 $this->addFlash('warning', 'Ce produit ne peut pas être supprimé');
-                return $this->redirectToRoute('products_index');
+            } else {
+                $manager->remove($product);
+                $manager->flush();
+                $this->addFlash('success', 'Le produit a bien été supprimé');
             }
-            $manager->remove($product);
-            $manager->flush();
-            $this->addFlash('success', 'Le produit a bien été supprimé');
         }
         return $this->redirectToRoute('products_index'); 
     }
@@ -134,11 +133,15 @@ class AdminController extends AbstractController
      * 
      * @return Response
      */
-    public function desactivate(Product $product, EntityManagerInterface $manager):Response
+    public function desactivate(Product $product = null, EntityManagerInterface $manager):Response
     {
-        $activeState = $product->getActivate() ? false : true;
-        $product->setActivate($activeState);
-        $manager->flush();
+        if(!$product){
+            $this->addFlash('danger', 'Ce produit n\'existe pas');
+        } else {
+            $activeState = $product->getActivate() ? false : true;
+            $product->setActivate($activeState);
+            $manager->flush();
+        }
 
         return $this->redirectToRoute('products_index');
     }
@@ -160,8 +163,8 @@ class AdminController extends AbstractController
             if($status == 1){
                 $ordering->setOrderingStatus(3);
                 $manager->flush();
-                return $this->redirectToRoute('admin');
             }
         }
+        return $this->redirectToRoute('admin');
     }
 }

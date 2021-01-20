@@ -280,7 +280,8 @@ class UserController extends AbstractController
         $newOrder = new Ordering();
         $newFacture = new Facture();
         $newFacture->setUserId($user->getId());
-        // set la new facture dans la new commande + permet d'afficher la facture pré rempli
+        // set la new facture dans la new commande 
+        // + permet d'afficher la facture pré rempli
         $newOrder->setFacture($newFacture);
         // On récupère la dernière facture de l'utilisateur
         $lastFacture = $fr->findLastFacture($user->getId());

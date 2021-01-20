@@ -48,7 +48,9 @@
                             </td>
                             <td>
                                 {% for productOrder in order.productOrderings %}
-                                    {{ productOrder.product.reference ~ " " ~ productOrder.product.name ~ " domaine " ~ productOrder.product.domain.name ~ " " ~ productOrder.product.year ~ " x" ~ productOrder.quantity }} <hr>
+                                    {{ productOrder.product.reference ~ " " ~ productOrder.product.name ~ 
+                                    " domaine " ~ productOrder.product.domain.name ~ " " ~ productOrder.product.year ~ 
+                                    " x" ~ productOrder.quantity }} <hr>
                                 {% endfor %}
                                 Total: {{ order.getTotal|number_format(2,',') }}€
                             </td>
@@ -64,4 +66,5 @@
             {{ knp_pagination_render(orders, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig' )}}
         </div>
     </section>
+
 {% endblock %}

@@ -244,7 +244,7 @@ div.address{
     }
     .filterDropdown{
         width: 35%;
-        margin-bottom: 16px;
+        margin: 0;
     }
     .productContainer form{
         width: 100%;

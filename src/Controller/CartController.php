@@ -63,24 +63,21 @@ class CartController extends AbstractController
     {
         // Vérifier que le produit existe
         if(!$product){
-            $this->addFlash('warning', 'Le produit n\'existe pas');
-            return $this->redirectToRoute("products_index"); 
-        }
-        $qtt = $request->request->get("quantity");
-        // Vérifier que la quantité de produit de dépasse pas la quantité en stock et qu'elle est supérieur à 0
-    
-        if($qtt <= $product->getUnitStock() && $qtt > 0){
-
-            $this->cart->add($product, $qtt);
-            $session->set('cart', $this->cart);
-    
-            $this->addFlash('success', 'Le produit a été ajouté au panier');
-            
-            return $this->redirectToRoute("products_index");
+            $this->addFlash('warning', 'Le produit n\'existe pas'); 
         } else {
-            $this->addFlash('warning', 'La quantité de produit que vous souhaitez ajouter au panier est insuffisante par rapport au stock');
-            return $this->redirectToRoute("products_index"); 
+            $qtt = $request->request->get("quantity");
+            // Vérifier que la quantité de produit de dépasse pas la quantité en 
+            //stock et qu'elle est supérieur à 0
+            if($qtt <= $product->getUnitStock() && $qtt > 0){
+                $this->cart->add($product, $qtt);
+                $session->set('cart', $this->cart);
+                $this->addFlash('success', 'Le produit a été ajouté au panier');
+            } else {
+                $this->addFlash('warning', 'La quantité de produit que vous souhaitez 
+                ajouter au panier est insuffisante par rapport au stock');
+            }
         }
+        return $this->redirectToRoute("products_index"); 
     }
 
     /**

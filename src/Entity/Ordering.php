@@ -68,7 +68,7 @@ class Ordering
     const STATUS_ORDER = [
         0 => "en attente de paiement",
         1 => "Payée",
-        2 => "Paiement refusé",
+        2 => "Erreur lors du paiement",
         3 => "Commande envoyé",
     ];
 
