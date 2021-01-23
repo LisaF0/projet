@@ -226,6 +226,11 @@ div.address{
     margin: 1em auto;
 }
 
+/*--------- Admin Table ---------- */
+#adminOrdersSection table{
+    width: auto;
+}
+
 
 
 
