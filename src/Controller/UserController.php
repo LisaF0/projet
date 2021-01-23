@@ -313,9 +313,10 @@ class UserController extends AbstractController
             $manager->persist($newOrder);
             // on récupère ce qu'il y a dans le panier
             // pour l'ajouter à la commande
-            // if(empty($incart)){
-            //     return $this->render('bundles/TwigBundle/Exception/error404.html.twig');
-            // }
+           
+            //Pour chaque ligne du panier, on créer un new produtOrder
+            // on l'hydrate avec le produit et sa quantité
+            // On hydrate la nouvelle commande avec chaque new ProductOrder
             foreach($cart->getFullCart() as $cartLine){
                 $newProductOrder = new ProductOrdering();
                 $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
@@ -332,6 +333,7 @@ class UserController extends AbstractController
                     'quantity' => $cartLine['quantity']
                 ];
             }
+            //on vérifie que le panier n'est pas vide
             if(empty($incart)){
                 return $this->render('bundles/TwigBundle/Exception/error404.html.twig');
             }

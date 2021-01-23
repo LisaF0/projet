@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 
 class FactureType extends AbstractType
@@ -55,7 +56,7 @@ class FactureType extends AbstractType
                     ])
                 ]
             ])
-            ->add('zipcode', TextType::class, [
+            ->add('zipcode', NumberType::class, [
                 'label' => 'Code Postal',
                 'constraints' => [
                     new NotBlank([

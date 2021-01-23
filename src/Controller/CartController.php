@@ -68,7 +68,7 @@ class CartController extends AbstractController
             $qtt = $request->request->get("quantity");
             // Vérifier que la quantité de produit de dépasse pas la quantité en 
             //stock et qu'elle est supérieur à 0
-            if($qtt <= $product->getUnitStock() && $qtt > 0){
+            if($qtt <= $product->getUnitStock() && $qtt > 0 ){
                 $this->cart->add($product, $qtt);
                 $session->set('cart', $this->cart);
                 $this->addFlash('success', 'Le produit a été ajouté au panier');

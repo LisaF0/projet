@@ -17,7 +17,7 @@
             <div class="orderContainer">
                 <p>Date de la commande : {{ order.createdAt|date('d/m/Y') }}</p>
                 <p>Référence de la commande : {{ order.orderingReference }}</p>
-                <p>Référence de la facture : {{ order.facture.factureReference }} <a href="{{ path('dl_facture', {'id': order.id}) }}">Télécharger la facture</a></p>
+                <p>Référence de la facture : {{ order.facture.factureReference }} </p>
                 <table class='table'>
                     <thead>
                         <tr>
@@ -33,7 +33,7 @@
                         <tr>
                             <td>{{ productOrder.product.name }}</td>
                             <td>{{ productOrder.quantity }}</td>
-                            <td>{{ productOrder.product.unitPrice }}€</td>
+                            <td>{{ productOrder.product.unitPrice|number_format(2,',') }}€</td>
                             <td>{{ subtotal|number_format(2,',') }}€</td>
                         </tr>
                         {% endfor %}
@@ -43,6 +43,7 @@
                     <p>Total : {{ order.getTotal|number_format(2,',') }}€</p>
                     <p>Nombre de produit total : {{ order.getQuantityTotal }}</p>
                 </div>
+                <a href="{{ path('dl_facture', {'id': order.id}) }}" class="btn btn-primary">Télécharger la facture</a>
             </div>
             {% endif %}
         {% endfor %}

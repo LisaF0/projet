@@ -229,7 +229,7 @@ div.address{
 
 
 
-/* -----------------------------Responsive ------------------- */
+/* -----------------------------Responsive Tablette  ------------------- */
  @media (min-width:900px)
 {
 
@@ -273,6 +273,10 @@ div.address{
     }
 
 } 
+
+
+
+/* -----------------------------Responsive Desktop  ------------------- */
  @media (min-width:1450px)
 
 {

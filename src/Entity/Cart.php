@@ -34,7 +34,7 @@ class Cart
            ];
         }
         else{
-            $this->incart[$product->getId()]["quantity"]+=$qtt;
+            $this->incart[$product->getId()]["quantity"]+=$qtt; 
         } 
     }  
 
