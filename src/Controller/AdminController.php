@@ -99,7 +99,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/deleteProduct/{id}", name="delete_product")
+     * @Route("/admin/deleteProduct", name="delete_product")
      * 
      * Fonction permettant à l'admin de delete un produit
      * 
@@ -109,11 +109,15 @@ class AdminController extends AbstractController
      * 
      * @return Response
      */
-    public function deleteProduct(Product $product = null, EntityManagerInterface $manager, ProductOrderingRepository $por):Response
+    public function deleteProduct(Request $request, EntityManagerInterface $manager, ProductOrderingRepository $por):Response
     {
-        if($product){
-            if($por->findByProductId($product->getId())){
-                $this->addFlash('warning', 'Ce produit ne peut pas être supprimé');
+       
+        if(!$request->query->get("id")){
+            $this->addFlash('warning', 'Requête non valide');
+        } else {
+            $product = $manager->getRepository(Product::class)->findOneBy(['id' => $request->query->get("id")]);
+            if(!$product || $por->findByProductId($product->getId())){
+                $this->addFlash('warning', 'Ce produit ne peut pas être supprimé ou n\'existe pas');
             } else {
                 $manager->remove($product);
                 $manager->flush();

@@ -39,7 +39,30 @@
                 {{ form(formUserPassword) }}
             </section>
             <section>
-                <a href="{{ path('account_delete', {'id': app.user.id }) }}" class="btn btn-danger" onclick="return confirm('Voulez vous supprimer votre compte ?')">Supprimer votre compte</a>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmModalCenter">
+                Supprimer votre compte
+                </button>
+
+                <div class="modal fade" id="confirmModalCenter" tabindex="-1" role="dialog" aria-labelledby="confirmModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmModalLongTitle">Confirmation</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            Êtes-vous sûr de vouloir supprimer votre compte?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Annuler</button>
+                            <a href="{{ path('account_delete', {'id': app.user.id }) }}" class="btn btn-danger">Supprimer votre compte</a>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
             </section>
         </section>
     </div>

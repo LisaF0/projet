@@ -191,6 +191,9 @@ input{
     display: block;
     margin: auto;
 }
+#confirmModalCenter .modal-footer a{
+    margin: 0;
+}
 
 .adressesContainer{
     width: 100%;
