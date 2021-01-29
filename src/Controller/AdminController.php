@@ -19,7 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class AdminController extends AbstractController
 {
     /**
-     * @Route("/admin", name="admin")
+     * @Route("/admin/orders", name="show_orders")
      * 
      * Fonction permettant d'afficher toute les commandes pour l'admin
      * 
@@ -31,7 +31,7 @@ class AdminController extends AbstractController
      * 
      * @return Response
      */
-    public function index(OrderingRepository $or, Request $request, PaginatorInterface $paginator, ProductRepository $pr, DomainRepository $dr):Response
+    public function showOrders(OrderingRepository $or, Request $request, PaginatorInterface $paginator, ProductRepository $pr, DomainRepository $dr):Response
     {
         
         $donnees = $or->findByPaid();
@@ -56,7 +56,7 @@ class AdminController extends AbstractController
                 'quantity' => array_pop($productLine)
             ];
         }
-        return $this->render('admin/index.html.twig', [
+        return $this->render('admin/orders.html.twig', [
             'orders' => $orderings,
             'productMostSold' => $array
         ]);
@@ -83,14 +83,14 @@ class AdminController extends AbstractController
         // On vérifie que le produit n'appartient pas déjà à une commande
         if($por->findByProductId($product->getId())){
             $this->addFlash('warning', 'Ce produit ne peut pas être modifié');
-            return $this->redirectToRoute('products_index');
+            return $this->redirectToRoute('products_show');
         }
         $formProduct = $this->createForm(ProductType::class, $product);
         $formProduct->handleRequest($request);
         if($formProduct->isSubmitted() && $formProduct->isValid()){
             $manager->persist($product);
             $manager->flush();
-            return $this->redirectToRoute('products_index');
+            return $this->redirectToRoute('products_show');
         }
         return $this->render('admin/addProduct.html.twig',[
             'formProduct' => $formProduct->createView(),
@@ -126,7 +126,7 @@ class AdminController extends AbstractController
                 $this->addFlash('success', 'Le produit a bien été supprimé');
             }
         }
-        return $this->redirectToRoute('products_index'); 
+        return $this->redirectToRoute('products_show'); 
     }
 
     /**
@@ -149,7 +149,7 @@ class AdminController extends AbstractController
             $manager->flush();
         }
 
-        return $this->redirectToRoute('products_index');
+        return $this->redirectToRoute('products_show');
     }
 
     /**

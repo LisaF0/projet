@@ -80,7 +80,7 @@ class CheckoutController extends AbstractController
         $order = $or->findOneByStripeSessionId($stripeSessionId);
         // On vérifie que l'utilisateur est le bon
         if($this->getUser() != $order->getUser()){
-            return $this->redirectToRoute('products_index');
+            return $this->redirectToRoute('products_show');
         }
 
         if($order->getOrderingStatus() == 0){
@@ -184,7 +184,7 @@ class CheckoutController extends AbstractController
         $order = $or->findOneByStripeSessionId($stripeSessionId);
         $user = $ur->findOneById($order->getUser()->getId());
         if(!$order || $user != $this->getUser()){
-            return $this->redirectToRoute('home_index');
+            return $this->redirectToRoute('home');
         }
 
         if($order->getOrderingStatus() == 0){

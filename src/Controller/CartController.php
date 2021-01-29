@@ -19,7 +19,7 @@ class CartController extends AbstractController
         $this->cart = $session->get('cart', new Cart());
     }
     /**
-     * @Route("/cart", name="cart_index")
+     * @Route("/cart", name="cart_show")
      * 
      * Fonction permettant d'afficher le panier
      * 
@@ -27,7 +27,7 @@ class CartController extends AbstractController
      * 
      * @return Response
      */
-    public function index(DomainRepository $dr):Response
+    public function showCart(DomainRepository $dr):Response
     {
         
         $incart = $this->cart->getIncart();
@@ -40,7 +40,7 @@ class CartController extends AbstractController
         
         $total = $this->cart->getTotal($incart);
 
-        return $this->render('cart/index.html.twig', [
+        return $this->render('cart/cart.html.twig', [
             'items' => $incart,
             'total' => $total,
         ]);
@@ -92,7 +92,7 @@ class CartController extends AbstractController
         }    
         else $this->addFlash('warning', 'Le produit n\'existe pas'); 
         
-        return $this->redirectToRoute("products_index"); 
+        return $this->redirectToRoute("products_show"); 
     }
 
 
@@ -117,7 +117,7 @@ class CartController extends AbstractController
         }
         else $this->addFlash('warning', 'Le produit que vous souhaitez supprimer n\'existe pas');
 
-        return $this->redirectToRoute("cart_index");
+        return $this->redirectToRoute("cart_show");
     }
 
 
@@ -133,6 +133,6 @@ class CartController extends AbstractController
     {
         $this->cart->clear($this->cart->getIncart());
 
-        return $this->redirectToRoute('cart_index');
+        return $this->redirectToRoute('cart_show');
     }
 }

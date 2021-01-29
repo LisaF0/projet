@@ -25,7 +25,7 @@
                     {% for item in items %}
                     {% set subtotal = item.product.unitprice * item.quantity %}
                         <tr>
-                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.product.name ~ " " ~ item.product.year ~ " Domaine " ~ item.product.domain.name|title }}</td>
                             <td>{{ item.product.unitprice|number_format(2,',') ~ '€' }}</td>
                             <td>{{ item.quantity }}</td>
                             <td>{{ subtotal|number_format(2, ',') ~ '€' }}</td>

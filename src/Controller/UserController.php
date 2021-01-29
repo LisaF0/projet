@@ -15,15 +15,10 @@ use App\Form\UserPasswordType;
 use App\Entity\ProductOrdering;
 use App\Repository\FactureRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
@@ -32,11 +27,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
-    // private $route;
-
-    // public function __construct(SessionInterface $session){
-    //     $this->route = $session->get('route', null);
-    // }
+    
     /**
      * @Route("/profil/infos", name="profil_infos")
      * 
@@ -210,7 +201,7 @@ class UserController extends AbstractController
             $this->container->get('security.token_storage')->setToken(null);
             // on efface la session avant de rediriger l'user
             $this->addFlash('success', 'Votre compte utilisateur a bien été supprimé !');
-            return $this->redirectToRoute('home_index'); 
+            return $this->redirectToRoute('home'); 
         }
     }
 
@@ -333,7 +324,7 @@ class UserController extends AbstractController
                 return $this->render('bundles/TwigBundle/Exception/error404.html.twig');
             }
             $total = $cart->getTotal($incart);
-            return $this->render('checkout/index.html.twig', [
+            return $this->render('checkout/recap.html.twig', [
                 'items' => $incart,
                 'total' => $total,
                 'order' => $newOrder,

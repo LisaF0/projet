@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class StoreController extends AbstractController
 {
     /**
-     * @Route("/products/", name="products_index")
+     * @Route("/products/", name="products_show")
      * 
      * Fonction permettant d'afficher la liste des produits, et de les filtrer
      * 
@@ -34,7 +34,7 @@ class StoreController extends AbstractController
         $productsActive = $pr->findByFilterAndActivate($filter);
         $allProducts = $pr->findByFilter($filter);
         
-        return $this->render('store/index.html.twig', [
+        return $this->render('store/products.html.twig', [
             'allProducts' => $allProducts,
             'productsActive' => $productsActive,
             'formFilter' => $formFilter->createView()

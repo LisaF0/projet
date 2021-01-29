@@ -29,7 +29,7 @@
             <div id="wrapper">
                 {% block nav %}
                     <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-light sticky-top" id="menu">
-                        <a class="nav-a btn text-light font-weight-bold text-uppercase " href="{{ path('home_index')}}">Caveau d'Aloxe-Corton</a>
+                        <a class="nav-a btn text-light font-weight-bold text-uppercase " href="{{ path('home')}}">Caveau d'Aloxe-Corton</a>
                         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#nav">
                             <span class="navbar-toggler-icon"></span>
                         </button>
@@ -37,11 +37,11 @@
                             <ul class="navbar-nav text-right">
                                 {% if is_granted("ROLE_ADMIN") %}
                                     <li class="nav-item">
-                                    <a href="{{ path('admin') }}" class="nav-a nav-link text-light font-weight-bold ">Commande</a>
+                                    <a href="{{ path('show_orders') }}" class="nav-a nav-link text-light font-weight-bold ">Commande</a>
                                     </li>
                                 {% endif %}
                                 <li class="nav-item">
-                                    <a href="{{ path('products_index') }}" class="nav-a nav-link text-light font-weight-bold">
+                                    <a href="{{ path('products_show') }}" class="nav-a nav-link text-light font-weight-bold">
                                         Produits <i class="fas fa-wine-bottle"></i>
                                     </a>
                                 </li>
@@ -57,7 +57,7 @@
                                     {% endif %}
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ path('cart_index') }}" class="nav-a nav-link text-light font-weight-bold" id="cart-button">
+                                    <a href="{{ path('cart_show') }}" class="nav-a nav-link text-light font-weight-bold" id="cart-button">
                                         Panier <i class="fas fa-shopping-cart">
                                         {% if app.session.get('cart') %} 
                                         {# on vérifie que le panier n'est pas null #}

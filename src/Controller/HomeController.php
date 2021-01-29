@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     /**
-     * @Route("/accueil", name="home_index")
+     * @Route("/accueil", name="home")
      * 
      * Fonction qui affiche la page d'accueil
      * 
@@ -17,7 +17,7 @@ class HomeController extends AbstractController
      */
     public function home(): Response
     {
-        return $this->render('home/index.html.twig', [
+        return $this->render('home/home.html.twig', [
             'controller_name' => 'HomeController',
         ]);
     }

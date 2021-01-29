@@ -31,7 +31,7 @@
                         {% for productOrder in order.productOrderings %}
                         {% set subtotal = productOrder.quantity * productOrder.product.unitPrice %}
                         <tr>
-                            <td>{{ productOrder.product.name }}</td>
+                            <td>{{ productOrder.product.name ~ " " ~ productOrder.product.year ~ " Domaine " ~ productOrder.product.domain.name|title }}</td>
                             <td>{{ productOrder.quantity }}</td>
                             <td>{{ productOrder.product.unitPrice|number_format(2,',') }}€</td>
                             <td>{{ subtotal|number_format(2,',') }}€</td>
