@@ -78,7 +78,6 @@
                             {% if is_granted('ROLE_ADMIN') %}
                                 <div class="adminButtonContainer">
                                     <a href="{{ path('edit_product', {'id': product.id }) }}" class="btn btn-primary"><i class="fas fa-pen"></i></a>
-                                    {# <a href="{{ path('delete_product', {'id': product.id }) }}" class="btn btn-danger"><i class="fas fa-trash"></i></a> #}
                                     <button type="button" class="btn btn-danger deleteProduct" data-toggle="modal" data-target="#confirmModalCenter" data-productId="{{ product.id }}">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -127,14 +126,19 @@
 {% block javascripts %}
     {{ parent() }}  
     <script>
+        //un fois le document prêt
         $(document).ready(function(){
+            // on définit les boutons, le bouton dans la modal et son url de base
             let btns = $(".deleteProduct")
             let link = $("#confirmModalCenter").find(".modal-footer").children("a")
             let baseurl = link.attr("href")
-
+            // lorsqu'on clique sur le bouton
             btns.click(function(){
+                // on récupère l'attribut qui contient l'id du produit de ce bouton
                 let productId = $(this).attr("data-productId")
+                // on créer l'url avec la base et le paramètre de requête contenant l'Id du produit
                 let url = baseurl + "?id=" + productId
+                // on remplace le href du bouton dans la modal par cet url
                 link.attr("href", url)
             })
         })

@@ -111,11 +111,13 @@ class AdminController extends AbstractController
      */
     public function deleteProduct(Request $request, EntityManagerInterface $manager, ProductOrderingRepository $por):Response
     {
-       
+       // On vérifie que la requête est valide
         if(!$request->query->get("id")){
             $this->addFlash('warning', 'Requête non valide');
         } else {
+            // on récupère le produit avec l'ID
             $product = $manager->getRepository(Product::class)->findOneBy(['id' => $request->query->get("id")]);
+            //si le produit n'existe pas ou si le produit a déjà été commandé
             if(!$product || $por->findByProductId($product->getId())){
                 $this->addFlash('warning', 'Ce produit ne peut pas être supprimé ou n\'existe pas');
             } else {

@@ -18,6 +18,10 @@ class Cart
             });
         }
     }
+
+    public function getQuantityOfProduct(Product $product){
+        return $this->incart[$product->getId()]["quantity"];
+    }
     
     public function getFullCart()
     {
@@ -61,4 +65,12 @@ class Cart
         $this->incart = [];
     }
 
+
+    /**
+     * Get the value of incart
+     */ 
+    public function getIncart()
+    {
+        return $this->incart;
+    }
 }
