@@ -62,8 +62,7 @@ class UserController extends AbstractController
         
         // Modifier l'email de l'user
         if($formEmail->isSubmitted() && $formEmail->isValid()){
-            dd($formEmail->getData());
-            // $manager->flush();
+            $manager->flush();
             $this->addFlash('success', 'Votre email a bien été modifié');
             return $this->redirectToRoute("profil_infos");
         }
@@ -258,7 +257,8 @@ class UserController extends AbstractController
      * @Route("/chooseAdd", name="choose_address")
      * @IsGranted("ROLE_USER")
      * 
-     * Fonction permettant à l'utilisateur de choisir son adresse de livraison et de facturation pour sa commande avant le paiement
+     * Fonction permettant à l'utilisateur de choisir son adresse de livraison 
+     * et de facturation pour sa commande avant le paiement
      * 
      * @param Request $request
      * @param EntityManagerInterface $manager
@@ -280,12 +280,10 @@ class UserController extends AbstractController
         $newOrder = new Ordering();
         $newFacture = new Facture();
         $newFacture->setUserId($user->getId());
-        // set la new facture dans la new commande 
-        // + permet d'afficher la facture pré rempli
+        // set la nouvelle facture dans la nouvelle commande 
         $newOrder->setFacture($newFacture);
         // On récupère la dernière facture de l'utilisateur
         $lastFacture = $fr->findLastFacture($user->getId());
-        
         // pour pré remplir la nouvelle facture si elle existe
         if($lastFacture){
             $newFacture->setUserId($lastFacture->getUserId());
@@ -309,14 +307,11 @@ class UserController extends AbstractController
             // on récupère l'user qu'on stock dans la facture
             $newOrder->setUser($this->getUser());
             
-            // on persist à ce moment pour pouvoir addPorudctOrdering sur qq chose de "réel"
+            // on persist à ce moment pour pouvoir addProductOrdering 
             $manager->persist($newOrder);
+
             // on récupère ce qu'il y a dans le panier
             // pour l'ajouter à la commande
-           
-            //Pour chaque ligne du panier, on créer un new produtOrder
-            // on l'hydrate avec le produit et sa quantité
-            // On hydrate la nouvelle commande avec chaque new ProductOrder
             foreach($cart->getFullCart() as $cartLine){
                 $newProductOrder = new ProductOrdering();
                 $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());

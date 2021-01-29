@@ -65,8 +65,9 @@ class CartController extends AbstractController
         if(!$product){
             $this->addFlash('warning', 'Le produit n\'existe pas'); 
         } else {
+            //On récupère la quantité du formulaire
             $qtt = $request->request->get("quantity");
-            // Vérifier que la quantité de produit de dépasse pas la quantité en 
+            //Vérifier que la quantité de produit ne dépasse pas la quantité en 
             //stock et qu'elle est supérieur à 0
             if($qtt <= $product->getUnitStock() && $qtt > 0 ){
                 $this->cart->add($product, $qtt);

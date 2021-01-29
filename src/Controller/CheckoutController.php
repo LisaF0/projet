@@ -36,9 +36,8 @@ class CheckoutController extends AbstractController
         $YOUR_DOMAIN = 'http://127.0.0.1:8000';
         $productsForStripe = [];
 
-        // Pour chaque ligne de produit dans le panier 
-        // On récuppère le nom du produit et son prix
-        // Et la quantité de produit
+        // Permet d'afficher les informations relatives aux produits
+        // Sur la page de paiement
         foreach($order->getProductOrderings()->getValues() as $cartLine){
             $productsForStripe[] = [
             'price_data' => [
@@ -112,7 +111,7 @@ class CheckoutController extends AbstractController
             $cart->clear();
         }
         // je récupère le total de la commande
-        // et la quantité d eproduit total
+        // et la quantité de produit total
         $total = $order->getTotal();
         $quantityTotal = $order->getQuantityTotal();
         
