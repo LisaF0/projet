@@ -80,7 +80,8 @@ class CartController extends AbstractController
                         $session->set('cart', $this->cart);
                         $this->addFlash('success', 'Le produit a été ajouté au panier');
                     } 
-                    else $this->addFlash('warning', 'La quantité de produit en stock est insuffisante par rapport à la quantité de produit que vous souhaitez ajouter au panier');
+                    else $this->addFlash('warning', 'La quantité de produit en stock est insuffisante 
+                        par rapport à la quantité de produit que vous souhaitez ajouter au panier');
                 }
                 else{
                     $this->cart->add($product, $qtt);
@@ -88,7 +89,8 @@ class CartController extends AbstractController
                     $this->addFlash('success', 'Le produit a été ajouté au panier');
                 }
             }
-            else $this->addFlash('warning', 'La quantité de produit en stock est insuffisante par rapport à la quantité de produit que vous souhaitez ajouter au panier');
+            else $this->addFlash('warning', 'La quantité de produit en stock est insuffisante par 
+                rapport à la quantité de produit que vous souhaitez ajouter au panier');
         }    
         else $this->addFlash('warning', 'Le produit n\'existe pas'); 
         
