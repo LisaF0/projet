@@ -11,7 +11,6 @@ use App\Entity\Facture;
 use App\Repository\UserRepository;
 use App\Repository\OrderingRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -83,14 +82,13 @@ class CheckoutController extends AbstractController
             return $this->redirectToRoute('products_show');
         }
 
-        if($order->getOrderingStatus() == 0){
+        if($order->getOrderingStatus() === 0){
             //je récupère la facture
             $factureJson = $session->get('facture');
             $facture = $serializer->deserialize($factureJson, Facture::class, 'json');
             $facture->setOrdering($order);
             $order->setFacture($facture);
             $manager->persist($facture);
-            $manager->persist($order);
             $manager->flush();
     
             //je passe le status de la commande à payé
@@ -187,7 +185,7 @@ class CheckoutController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
-        if($order->getOrderingStatus() == 0){
+        if($order->getOrderingStatus() === 0){
             $order->setOrderingStatus(2);
             $manager->flush();
         }

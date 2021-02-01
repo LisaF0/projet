@@ -6,8 +6,8 @@ use App\Entity\Product;
 use App\Entity\Ordering;
 use App\Form\ProductType;
 use App\Repository\DomainRepository;
-use App\Repository\OrderingRepository;
 use App\Repository\ProductRepository;
+use App\Repository\OrderingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Repository\ProductOrderingRepository;
@@ -166,11 +166,11 @@ class AdminController extends AbstractController
     {
         if($ordering){
             $status = $ordering->getOrderingStatus();
-            if($status == 1){
+            if($status === 1){
                 $ordering->setOrderingStatus(3);
                 $manager->flush();
             }
         }
-        return $this->redirectToRoute('admin');
+        return $this->redirectToRoute('show_orders');
     }
 }

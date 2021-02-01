@@ -53,6 +53,7 @@ class ProductRepository extends ServiceEntityRepository
             ->join('p.appellation', 'a')
             ->join('p.domain', 'd')
             ->join('p.type', 't')
+            ->orderBy('p.name')
         ;
 
         if(!empty($filter->appellations)){

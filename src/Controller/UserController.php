@@ -265,8 +265,9 @@ class UserController extends AbstractController
         $session->set('src',"choose_address");
         
         $user = $this->getUser();
-        $incart = [];
+        
         $cart = $session->get('cart', new Cart());
+        $incart = $cart->getIncart();
         
         $newOrder = new Ordering();
         $newFacture = new Facture();
@@ -290,7 +291,10 @@ class UserController extends AbstractController
         
         if($formOrder->isSubmitted() && $formOrder->isValid()){
             // on encode la facture
-            $jsonFacture = $serializer->serialize($newFacture, 'json',[AbstractNormalizer::IGNORED_ATTRIBUTES => ['id']]);
+            $jsonFacture = $serializer->serialize(
+                $newFacture, 
+                'json',[AbstractNormalizer::IGNORED_ATTRIBUTES => ['id']]
+            );
             // on stock la facture en session
             $session->set('facture', $jsonFacture);
             //on met la facture de la nouvelle commande à null
@@ -305,20 +309,17 @@ class UserController extends AbstractController
             // pour l'ajouter à la commande
             foreach($cart->getFullCart() as $cartLine){
                 $newProductOrder = new ProductOrdering();
-                $product = $this->getDoctrine()->getRepository(Product::class)->find($cartLine['product']->getId());
+                $product = $this->getDoctrine()
+                    ->getRepository(Product::class)
+                    ->find($cartLine['product']
+                    ->getId());
                 $newProductOrder->setProduct($product);
                 $newProductOrder->setQuantity($cartLine['quantity']);
                 $newOrder->addProductOrdering($newProductOrder);
                 $manager->persist($newProductOrder);
             }
             $manager->flush();
-            // on récupère le panier pour l'afficher
-            foreach($cart->getFullCart() as $cartLine){
-                $incart[] = [
-                    'product' => $cartLine['product'],
-                    'quantity' => $cartLine['quantity']
-                ];
-            }
+            
             //on vérifie que le panier n'est pas vide
             if(empty($incart)){
                 return $this->render('bundles/TwigBundle/Exception/error404.html.twig');

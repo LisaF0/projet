@@ -65,7 +65,7 @@ class CartController extends AbstractController
             $qtt = $request->request->get("quantity");
             // On récupère la quantité de ce produit en stock
             $qttInStock = $product->getUnitStock();
-            // Vérifier que la quantité de produit ne dépasse pas la quantité en stock
+            // On Vérifie que la quantité de produit ne dépasse pas la quantité en stock
             // Et qu'elle est supérieur à 0
             // Et que le produit est actif & disponible
             if($qtt <= $qttInStock && $qtt > 0 && $product->getActivate() && $product->getAvailable()){
