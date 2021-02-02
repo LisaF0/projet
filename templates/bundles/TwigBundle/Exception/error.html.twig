@@ -6,5 +6,5 @@
             {{ parent() }}
         {% endblock %}
     <h1>Error</h1>
-    <p>Une erreur est survenue.</p>
+    <p>Une erreur est survenue : {{ exception.message }} </p>
 {% endblock %}

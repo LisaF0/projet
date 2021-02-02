@@ -89,11 +89,9 @@ class CheckoutController extends AbstractController
             $facture->setOrdering($order);
             $order->setFacture($facture);
             $manager->persist($facture);
-            $manager->flush();
     
             //je passe le status de la commande à payé
             $order->setOrderingStatus(1);
-            $manager->flush();
             
             //je retire des stock la qte de produit qui a été vendu
             foreach($order->getProductOrderings() as $productLine){

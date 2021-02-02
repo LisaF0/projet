@@ -19,7 +19,8 @@ class Cart
         }
     }
 
-    public function getQuantityOfProduct(Product $product){
+    public function getQuantityOfProduct(Product $product)
+    {
         return $this->incart[$product->getId()]["quantity"];
     }
     
