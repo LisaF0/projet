@@ -322,7 +322,6 @@ class UserController extends AbstractController
             
             //on vérifie que le panier n'est pas vide
             if(empty($incart)){
-                // return $this->render('bundles/TwigBundle/Exception/error404.html.twig');
                 throw new \Exception("Votre panier est vide");
             }
             $total = $cart->getTotal($incart);
