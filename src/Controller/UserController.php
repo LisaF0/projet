@@ -131,7 +131,6 @@ class UserController extends AbstractController
             $form->handleRequest($request);
             //modification de l'adresse
             if($form->isSubmitted() && $form->isValid()){
-                dd($form->getData());
                 $manager->flush();
                 $this->addFlash('success', 'Cette adresse a bien été modifiée');
                 return $this->redirectToRoute('profil_infos');

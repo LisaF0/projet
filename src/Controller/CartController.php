@@ -93,7 +93,6 @@ class CartController extends AbstractController
                 rapport à la quantité de produit que vous souhaitez ajouter au panier');
         }    
         else $this->addFlash('warning', 'Le produit n\'existe pas'); 
-        
         return $this->redirectToRoute("products_show"); 
     }
 
