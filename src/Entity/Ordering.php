@@ -211,6 +211,9 @@ class Ordering
         return $this;
     }
 
+    /**
+     * Méthode permettant de retourner le prix total de la commande
+     */
     public function getTotal(){
         $total = 0;
         foreach($this->productOrderings as $product){
@@ -220,6 +223,9 @@ class Ordering
         return $total;
     }
 
+    /**
+     * Méthode permettant de retourner la quantité total de produit dans la commande
+     */
     public function getQuantityTotal(){
         $totalQuantity = 0;
         foreach($this->productOrderings as $product){

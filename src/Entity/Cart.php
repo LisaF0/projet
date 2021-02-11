@@ -9,7 +9,7 @@ class Cart
     private $incart = [];
 
     /**
-     * Méthode permettant de récupérer la quantité d'un produit dans le panier
+     * Méthode permettant de récupérer la quantité total de produit dans le panier
      */
     public function getQuantity()
     {
@@ -23,7 +23,7 @@ class Cart
     }
 
     /**
-     * Méthode permettant de retourner la quantité d'un certain produit
+     * Méthode permettant de retourner la quantité d'un certain produit dans le panier
      */
     public function getQuantityOfProduct(Product $product)
     {
@@ -66,6 +66,9 @@ class Cart
         }
     }
 
+    /**
+     * Méthode permettant de retourner le prix total du panier
+     */
     public function getTotal($incart) : float 
     {
         $total = 0;

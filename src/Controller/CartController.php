@@ -71,7 +71,7 @@ class CartController extends AbstractController
             if($qtt <= $qttInStock && $qtt > 0 && $product->getActivate() && $product->getAvailable()){
                 // On vérifie que le produit existe déjà dans le panier
                 if(array_key_exists($product->getId(), $this->cart->getIncart())){
-                    // On récupère la quantité de produit dans le panier
+                    // On récupère la quantité de ce produit dans le panier
                     $qttInCart = $this->cart->getQuantityOfProduct($product);
                     // On vérifie que la quantité du formulaire + la quantité dans le panier
                     // ne dépasse pas la quantité du produit en stock
