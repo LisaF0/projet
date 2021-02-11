@@ -128,7 +128,7 @@ class CheckoutController extends AbstractController
     public function dlPDF($id, OrderingRepository $or):Response
     {
         $order = $or->findOneById($id);
-        // $user = $ur->findOneById($order->getUser()->getId());
+        
         $total = $order->getTotal();
         $quantityTotal = $order->getQuantityTotal();
         // Configure Dompdf according to your needs
