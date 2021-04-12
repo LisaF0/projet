@@ -14,8 +14,7 @@
     integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous"> #}
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" 
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" 
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
             
 
 {% endblock %}
@@ -23,44 +22,56 @@
     {% block nav %}
         {{ parent() }}
     {% endblock %}
-    <div id="banner">
-    </div>
+    <div id="banner"></div>
     <main>
-        <section id="presentation">
-            <article>
-                <img src="{{ ('img/caveauAloxeCorton.jpg') }}" alt="Photo du caveau d'Aloxe-Corton">
-                <div>
-                    <h2>Le Caveau d'Aloxe-Corton</h2>
-                    <p>Le caveau d’Aloxe-Corton est né en 1975 de la volonté de plusieurs vignerons de se regrouper afin d’avoir un lieu commun au centre du village. 
-                        Ce caveau représente 5 domaines sur le village d’Aloxe-Corton : le <strong>domaine Chapuis</strong>, le <strong>domaine Meuneveaux</strong>, <strong>le domaine Colin</strong>, 
-                        le <strong>domaine Follin-Arbelet</strong> et le <strong>domaine Poisot</strong>.
-                    </p>
-                    <p>Nous proposons à la vente et à la dégustation une large gamme de vins rouges et de vins blancs du village et des communes environnantes. 
-                        Nous proposons également des conseils sur le vin, son potentiel de garde, les accords mets et vins et des explications sur les terroirs, 
-                        les appellations de Bourgogne, ainsi que les techniques de bases de dégustation. Pour en savoir plus nos vins, 
-                        rendez-vous sur notre <a href="{{ path('products_show') }}">boutique en ligne</a>
-                    </p>
+        <div class="card mb-6">
+            <div class="row g-0">
+                <div class="col-md-4">
+                <img id="imgCard" src="{{ ('img/caveauAloxeCorton.jpg') }}" alt="Caveau d'Aloxe-Corton">
                 </div>
-            </article>
-        </section>
-        <section id="informations">
-            <section id="contact">
-                <h2>Contact</h2>
-                <div class="flex">
-                    <p>03 80 26 49 85</p>
-                    <span><i class="fa fa-phone fa-2x"></i></span>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">Le Caveau d'Aloxe-Corton</h5>
+                        <p class="card-text">
+                            Le caveau d’Aloxe-Corton est né en 1975 de la volonté de plusieurs vignerons de se regrouper afin d’avoir un lieu commun au centre du village. 
+                            Ce caveau représente 5 domaines sur le village d’Aloxe-Corton : le <strong>domaine Chapuis</strong>, le <strong>domaine Meuneveaux</strong>, <strong>le domaine Colin</strong>, 
+                            le <strong>domaine Follin-Arbelet</strong> et le <strong>domaine Poisot</strong>.
+                        </p>
+                        <p class="card-text">
+                                Nous proposons à la vente et à la dégustation une large gamme de vins rouges et de vins blancs du village et des communes environnantes. 
+                                Nous proposons également des conseils sur le vin, son potentiel de garde, les accords mets et vins et des explications sur les terroirs, 
+                                les appellations de Bourgogne, ainsi que les techniques de bases de dégustation. Pour en savoir plus nos vins, 
+                                rendez-vous sur notre <a href="{{ path('products_show') }}">boutique en ligne</a>
+                        </p>
+                    </div>
                 </div>
-                <div class="flex">
-                    <p>denis@caveauac.fr</p>
-                    <span><i class="fa fa-envelope fa-2x"></i></span>
+            </div>
+        </div>
+        <div class="flex">
+            <div class="card text-dark bg-light mb-3" style="max-width: 30rem;">
+                <div class="card-header">Informations</div>
+                <div class="card-body">
+                    <h5 class="card-title">Contact</h5>
+                    
+                    <div class="flex">
+                        <p>03 80 26 49 85</p>
+                        <span><i class="fa fa-phone fa-2x"></i></span>
+                    </div>
+                    <div class="flex">
+                        <p>denis@caveauac.fr</p>
+                        <span><i class="fa fa-envelope fa-2x"></i></span>
+                    </div>
+                    <div class="flex">
+                        <p>Aloxe-Corton 21420, 1 Place du Chapitre</p>
+                        <span><i class="fa fa-location-arrow fa-2x"></i></span>
+                    </div>          
                 </div>
-                <div class="flex">
-                    <p>Aloxe-Corton 21420, 1 Place du Chapitre</p>
-                    <span><i class="fa fa-location-arrow fa-2x"></i></span>
-                </div>
-            </section>
-            <section id="horaire">
-                <h2>Horaire</h2>
+            </div>
+        </div>
+        <div class="card text-dark bg-light mb-3" style="max-width: 30rem;">
+            <div class="card-header">Informations</div>
+            <div class="card-body">
+                <h5 class="card-title">Horaire d'ouverture</h5>
                 <p>Le caveau d'Aloxe-Corton vous accueille d'avril à novembre ainsi que les jours fériés. Fermé de décembre à mars.</p>
                 <div>
                     <ul>
@@ -87,9 +98,12 @@
                         </li>
                     </ul>
                 </div>
-            </section>
-        </section>
-        <section id="gallery">
+            </div>
+        </div>
+    
+
+    
+        {# <section id="gallery">
             <h2>Galerie Photo</h2>
             <div id="gallery-imgs">
                 <figure class="fig-img">
@@ -115,9 +129,9 @@
                 </figure>
             </div>
         </section>
-    </main>
+    </main> #}
     <footer>
-        <div id="socialNetworks">
+        {# <div id="socialNetworks">
             <nav>
                 <ul>
                     <li>Domaine Chapuis :</li>
@@ -154,37 +168,39 @@
         <div id="legalMention">
             <p>L'abus d'alcool est dangereux pour la santé. À consommer avec modération.</p>
             <p><a href="">Mentions Légales</a>  & <a href="">Politique de confidentialité des données.</a></p>
-        </div>
+        </div>#}
     </footer>
-    <div id="modal">
+    {# <div id="modal">
         <figure id="modal-content">
             <img class="modal-img" src="" alt="">
             <span class="modal-close">&times;</span>
         </figure>
-    </div>
+    </div>  #}
 {% endblock %}
 {% block javascripts %}
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" 
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"
     integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
     crossorigin="anonymous"></script>
-    <script>
-        $(document).ready(function() {
-            $('.modal-mini').click(function() {
-                let src = $(this).attr('src')
-                let alt = $(this).attr('alt')
-                $('#modal').addClass('modal-active')
-                $('.modal-img').attr('src', src)
-                $('.modal-img').attr('alt', alt)
-            })
-            $('.modal-close').click(function(){
-                $('#modal').removeClass('modal-active')
-            })
-            $("#modal").click(function(event){
-                if(event.target === this){
-                    $("#modal").removeClass("modal-active")
-                }
-            })
-        })
-    </script>
+    {#<script> 
+    //     $(document).ready(function() {
+    //         $('.modal-mini').click(function() {
+    //             let src = $(this).attr('src')
+    //             let alt = $(this).attr('alt')
+    //             $('#modal').addClass('modal-active')
+    //             $('.modal-img').attr('src', src)
+    //             $('.modal-img').attr('alt', alt)
+    //         })
+    //         $('.modal-close').click(function(){
+    //             $('#modal').removeClass('modal-active')
+    //         })
+    //         $("#modal").click(function(event){
+    //             if(event.target === this){
+    //                 $("#modal").removeClass("modal-active")
+    //             }
+    //         })
+    //     })
+    // </script> #}
 
 {% endblock %}

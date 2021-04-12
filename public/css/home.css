@@ -36,13 +36,16 @@
 #menu>.nav-a{
     font-size: 14px;
 }
-
+#imgCard{
+    width: 100%;
+    height: auto;
+}
 
 /* ------------------ BANNER ------------- */
 #banner{
     display:none;
     width: 100vw;
-    background-image: url("../img/caveau.jpg");
+    background-image: url("../img/1.jpg");
     background-size: cover;
     background-position: center;
     height : 40vh;
@@ -53,23 +56,6 @@ h1, h2{
     font-size: 28px;
 }
 
-/* ------------------ SECTION PRESENTATION ------------- */
-
-#presentation article img{
-    width: 100vw;
-}
-#presentation article div{
-    padding: 15px;
-    text-align: center;
-}
-#presentation div p>a{
-    color: var(--inter-color);
-    font-weight: bold;
-    text-transform: uppercase;
-}
-#presentation div p>a:hover{
-    color:var(--dark-color);
-}
 
 /* ------------------ SECTION INFORMATIONS ------------- */
 #informations{
